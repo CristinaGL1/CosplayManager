@@ -13,7 +13,7 @@ El cosplay es una afición que requiere una planificación meticulosa, desde la 
 💯 Estado del cosplay: Indicar si está en proceso, terminado, o cualquier otro estado personalizado.</br>
 🖼️ Galería de fotos: Subir imágenes del proceso o del cosplay finalizado.</br>
 
-## Las tecnologías que podría usar (no estoy segura todavía de ellas) son:</br>
+## Las tecnologías que podría usar son:</br>
 🌐 Frontend: HTML, CSS y JavaScript con un framework como Vue.js (kanban para la gestión de proyectos)</br>
 🔐 Base de datos y autenticación: Firebase</br>
 🖼️ Almacenamiento de imágenes: Firebase Storage</br>
