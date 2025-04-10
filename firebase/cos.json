@@ -1,0 +1,13 @@
+{
+  "__collections__": {
+    "cosplays": {
+      "cosplayid": {
+        "name": "Saku",
+        "status": "En proceso",
+        "cost": 120,
+        "imgURL": "https://link-a-la-imagen.jpg",
+        "__collections__": {}
+      }
+    }
+  }
+}
