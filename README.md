@@ -18,3 +18,9 @@ El cosplay es una afición que requiere una planificación meticulosa, desde la 
 🔐 Base de datos y autenticación: Firebase</br>
 🖼️ Almacenamiento de imágenes: Firebase Storage</br>
 🌍 Hosting: Firebase Hosting o GitHub Pages</br>
+
+### Compile and Minify for Production
+
+```sh
+npm run build
+```
