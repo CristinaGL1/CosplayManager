@@ -21,6 +21,3 @@ El cosplay es una afición que requiere una planificación meticulosa, desde la 
 
 ### Compile and Minify for Production
 
-```sh
-npm run build
-```
