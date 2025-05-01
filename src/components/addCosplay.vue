@@ -35,26 +35,30 @@
       return // Detiene la función si el nombre está vacío
   }
   
-    try {
-      await addDoc(collection(db, 'cosplays'), {
-        nombre: nombre.value,
-        estado: estado.value,
-        descripcion: descripcion.value,
-        fechaInicio: fechaInicio.value,
-        fechaFin: fechaFin.value,
-        userId: user.uid,
-        creadoEn: serverTimestamp()
-      })
-      alert('Cosplay agregado ✅')
-      // Limpia los campos
-      nombre.value = ''
-      estado.value = ''
-      descripcion.value = ''
-      fechaInicio.value = ''
-      fechaFin.value = ''
-    } catch (error) {
-      console.error('Error al agregar cosplay:', error)
-    }
+  const cosplayData = {
+    nombre: nombre.value,
+    estado: estado.value,
+    descripcion: descripcion.value,
+    fechaInicio: fechaInicio.value,
+    fechaFin: fechaFin.value,
+    userId: user.uid,
+    creadoEn: serverTimestamp()
   }
+
+  console.log("Datos del cosplay a agregar:", cosplayData)  // Verifica qué datos estás enviando
+
+  try {
+    await addDoc(collection(db, 'cosplays'), cosplayData)
+    alert('Cosplay agregado ✅')
+    // Limpiar los campos
+    nombre.value = ''
+    estado.value = ''
+    descripcion.value = ''
+    fechaInicio.value = ''
+    fechaFin.value = ''
+  } catch (error) {
+    console.error('Error al agregar cosplay:', error)
+  }
+}
   </script>
   

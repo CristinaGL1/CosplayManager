@@ -2,7 +2,6 @@
   <div id="app">
     <h1>Cosplay Manager 👗</h1>
     <LoginRegister /> 
-    <addCosplay v-if="user" />
     <div v-if="!user">
       <p>Debes iniciar sesión para agregar nuevos cosplays.</p>
     </div>
