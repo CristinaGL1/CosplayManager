@@ -3,15 +3,23 @@
     <h2>Tablero de Cosplays</h2>
     <div class="kanban-board">
       <div class="kanban-column" v-for="(cosplaysInThisState, state) in groupedCosplays" :key="state">
-        <h3>{{ state }}</h3>
-        <div class="kanban-card" v-for="cosplay in cosplaysInThisState" :key="cosplay.id">
-          <strong>{{ cosplay.nombre }}</strong>
-          <p class="cosplay-description">{{ cosplay.descripcion }}</p>
-          <div class="options-buttons">
-            <button @click="verDetalles(cosplay.id)"class="details-button">Ver Detalles</button>
-            <button @click="eliminarCosplay(cosplay.id)"class="details-button">Eliminar</button>
+        <div class="cardSection-title">
+          <div class="cardSection-tittle-bg"></div>
+          <h3>{{ state }}</h3>
+        </div>
+
+        <div class="kanban-cardSection">
+          <div class="cardSection-bg"></div>
+          <div class="kanban-card" v-for="cosplay in cosplaysInThisState" :key="cosplay.id">
+            <strong>{{ cosplay.nombre }}</strong>
+            <p class="cosplay-description">{{ cosplay.descripcion }}</p>
+            <div class="options-buttons">
+              <button @click="verDetalles(cosplay.id)"class="details-button">Ver Detalles</button>
+              <button @click="eliminarCosplay(cosplay.id)"class="details-button">Eliminar</button>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
     <div v-if="mostrarMensajeEliminar" class="notification">
@@ -97,11 +105,9 @@ const eliminarCosplay = async (id) => {
   flex: 0 0 auto;
   /* No se estiren ni se encojan, ancho automático */
   width: 300px;
-  /* Ancho fijo para cada columna */
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  min-height: 50vh;
   padding: 1rem;
-  background-color: #f9f9f9;
+  background-color: none;
   display: flex;
   /* Convertimos la columna en un contenedor flex */
   flex-direction: column;
@@ -110,11 +116,6 @@ const eliminarCosplay = async (id) => {
   /* Estiramos los elementos hijos horizontalmente */
 }
 
-.kanban-column h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  text-align: center;
-}
 
 .kanban-card {
   background-color: white;
@@ -139,6 +140,57 @@ const eliminarCosplay = async (id) => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
+
+}
+
+.cardSection-title{
+  border: 2px solid black;
+  padding: 0.5rem;
+  background-color: #bfd8f1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  margin-bottom: 2rem;
+  position: relative;
+
+  height: 3rem;
+  width: 100%;
+}
+
+.cardSection-tittle-bg{
+  border: 2px solid black;
+  background-color: #ffffff;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 15px;
+  left: 15px;
+  z-index: -1;
+}
+
+.cardSection-title h3{
+  font-weight: 600;
+}
+
+.kanban-cardSection{
+  padding: 1rem 1rem;
+  border: 2px solid black;
+  background-color: rgb(255, 255, 255);
+  position: relative;
+}
+
+.cardSection-bg{
+  border: 2px solid black;
+  background-color: #bfd8f1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 15px;
+  left: 15px;
+  z-index: -1;
 
 }
 

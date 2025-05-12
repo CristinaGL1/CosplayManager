@@ -4,10 +4,10 @@
       <input v-model="nombre" placeholder="Nombre del Cosplay" required />
       <select v-model="estado" required>
       <option value="" disabled>Selecciona un estado</option>
+      <option value="Sin empezar">Sin empezar</option>
       <option value="En proceso">En proceso</option>
       <option value="Finalizado">Finalizado</option>
-      <option value="Sin empezar">Sin empezar</option>
-      </select>
+    </select>
       <input v-model="descripcion" placeholder="Descripción" />
       <input v-model="fechaInicio" type="date" />
       <input v-model="fechaFin" type="date" />
