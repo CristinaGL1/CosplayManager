@@ -1,6 +1,13 @@
 <template>
   <div class="container">
-    <h1 class="app-title">Cosplay Manager</h1>
+       <!-- BARRA DE NAVEGACIÓN -->
+       <nav class="navbar">
+      <div class="navbar-title">CosplayManager</div>
+      <button @click="logout" class="logout-icon" title="Cerrar sesión">
+      <img src="/public/icons/salida.svg" alt="Cerrar sesión" />
+    </button>
+    </nav>
+
     <div class="login-page" v-if="!userLogged">
       <template v-if="!showRegister">
         <div class="form-box login-box">
@@ -153,6 +160,7 @@ const handleCosplayEliminado = (idEliminado) => {
 </script>
 
 <style>
+
 body {
   margin: 0;
   background: linear-gradient(to right, #ffdee9, #b5fffc);
@@ -186,6 +194,50 @@ body {
   font-weight: normal;
   margin-top: -10px;
 }
+
+.navbar {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;  
+  top: 0;
+  z-index: 999;
+}
+
+
+.navbar-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.8em;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.logout-icon img {
+  width: 20px;         /* Tamaño del icono */
+  height: 20px;
+  filter: brightness(0); /* Negro puro por defecto */
+  transition: filter 0.3s ease; /* Añade una transición suave */
+}
+
+.logout-icon:hover img {
+  filter: brightness(0) saturate(100%) hue-rotate(180deg); /* Tono azul al pasar el ratón */
+}
+
+.logout-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+} 
 
 .login-page {
   padding: 2rem;
