@@ -192,7 +192,8 @@ body {
   white-space: nowrap;
   font-family: 'Pacifico', cursive;
   font-weight: normal;
-  margin-top: -10px;
+  margin-top: -10px; 
+  
 }
 
 .navbar {
