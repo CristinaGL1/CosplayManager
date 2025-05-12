@@ -158,6 +158,7 @@ const eliminarCosplay = async (id) => {
 
   height: 3rem;
   width: 100%;
+  
 }
 
 .cardSection-tittle-bg{
