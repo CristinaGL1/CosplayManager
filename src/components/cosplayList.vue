@@ -7,8 +7,10 @@
         <div class="kanban-card" v-for="cosplay in cosplaysInThisState" :key="cosplay.id">
           <strong>{{ cosplay.nombre }}</strong>
           <p class="cosplay-description">{{ cosplay.descripcion }}</p>
-          <button @click="verDetalles(cosplay.id)" class="details-button">Ver Detalles</button>
-          <button @click="eliminarCosplay(cosplay.id)">Eliminar</button>
+          <div class="options-buttons">
+            <button @click="verDetalles(cosplay.id)"class="details-button">Ver Detalles</button>
+            <button @click="eliminarCosplay(cosplay.id)"class="details-button">Eliminar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -86,20 +88,26 @@ const eliminarCosplay = async (id) => {
 .kanban-board {
   display: flex;
   gap: 1rem;
-  overflow-x: auto; /* Para que sea scrollable horizontalmente si hay muchos estados */
+  overflow-x: auto;
+  /* Para que sea scrollable horizontalmente si hay muchos estados */
   padding: 1rem;
 }
 
 .kanban-column {
-  flex: 0 0 auto; /* No se estiren ni se encojan, ancho automático */
-  width: 300px; /* Ancho fijo para cada columna */
+  flex: 0 0 auto;
+  /* No se estiren ni se encojan, ancho automático */
+  width: 300px;
+  /* Ancho fijo para cada columna */
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 1rem;
   background-color: #f9f9f9;
-  display: flex; /* Convertimos la columna en un contenedor flex */
-  flex-direction: column; /* Alineamos los elementos verticalmente */
-  align-items: stretch; /* Estiramos los elementos hijos horizontalmente */
+  display: flex;
+  /* Convertimos la columna en un contenedor flex */
+  flex-direction: column;
+  /* Alineamos los elementos verticalmente */
+  align-items: stretch;
+  /* Estiramos los elementos hijos horizontalmente */
 }
 
 .kanban-column h3 {
@@ -116,45 +124,54 @@ const eliminarCosplay = async (id) => {
   margin-bottom: 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: relative;
-  padding-bottom: 2rem; /* Espacio para el botón */
-   height: 100px; /* Establece una altura fija - ajusta este valor */
-  overflow: hidden; /* Oculta el contenido que se desborda */
+  /* Espacio para el botón */
+
+  overflow: hidden;
+  /* Oculta el contenido que se desborda */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .kanban-card strong {
   display: block;
   margin-bottom: 0.5rem;
+  font-weight: 600;
+
 }
 
 .cosplay-description {
   margin-top: 0.25rem;
   font-size: 0.9em;
   color: #555;
-  margin-bottom: 1.5rem; /* Añadimos espacio para el botón */
+  margin-bottom: 1.5rem;
+  /* Añadimos espacio para el botón */
+  width: 100%;
+  min-height: 10px;
+}
+
+.options-buttons{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
 }
 
 .kanban-card button {
-  position: absolute;
-  bottom: 0.1rem; /* Ajusta este valor para mover el botón verticalmente */
-  right: 0.5rem;
   padding: 0;
   border: none;
   border-radius: 0;
   background-color: transparent;
   color: #ff69b4;
   cursor: pointer;
-  font-size: 0.7em;
+  font-size: 0.8em;
 }
 
-.kanban-card button:hover {
-  background-color: transparent;
-  text-decoration: underline;
-}
 
 .details-button {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  margin: 0%;
   padding: 0.25rem 0.5rem;
   border: 1px solid #007bff;
   border-radius: 5px;
@@ -166,6 +183,11 @@ const eliminarCosplay = async (id) => {
 
 .details-button:hover {
   background-color: #e0f7fa;
+}
+
+.kanban-card button:hover {
+  background-color: transparent;
+  text-decoration: underline;
 }
 
 .notification {

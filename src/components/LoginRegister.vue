@@ -155,7 +155,6 @@ const handleCosplayEliminado = (idEliminado) => {
 <style>
 body {
   margin: 0;
-/*padding-left:500px; */
   background: linear-gradient(to right, #ffdee9, #b5fffc);
   font-family: 'Poppins', sans-serif;
   color: black;
@@ -164,13 +163,17 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content:center;
+ 
 }
 
+#app{
+  display: flex;
+}
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  
 }
 
 .app-title {
