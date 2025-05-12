@@ -25,9 +25,12 @@
       </template>
       <template v-else>
         <div class="form-box register-box">
+          <div class="form-box-bg"></div>
           <h2>Regístrate</h2>
-          <input type="email" v-model="email" placeholder="Correo" />
-          <input type="password" v-model="password" placeholder="Contraseña" />
+          <div class="formInputs">
+            <input type="email" v-model="email" placeholder="Correo" />
+            <input type="password" v-model="password" placeholder="Contraseña" />
+          </div>
           <button class="registerButton" @click="register">Registrarse</button>
           <p class="login-link">
             ¿Ya tienes cuenta? <a href="#" @click.prevent="showRegister = false">Inicia sesión</a>
@@ -333,7 +336,7 @@ input {
 .registerButton {
   padding: 0.5rem 1rem;
   border-style: solid;
-  border: 1px soild black;
+  border: 1px solid black;
   background-color: #f7ecf2;
   color: #000000;
   font-weight: bold;
@@ -368,7 +371,7 @@ input {
 
 .register-link a:hover,
 .login-link a:hover {
-  background-color: #000000;
+  background-color: #fae6f6;
   text-decoration: underline;
 }
 
