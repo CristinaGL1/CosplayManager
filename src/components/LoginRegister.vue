@@ -1,20 +1,23 @@
 <template>
   <div class="container">
-       <!-- BARRA DE NAVEGACIÓN -->
-       <nav class="navbar">
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav class="navbar">
       <div class="navbar-title">CosplayManager</div>
       <button @click="logout" class="logout-icon" title="Cerrar sesión">
-      <img src="/public/icons/salida.svg" alt="Cerrar sesión" />
-    </button>
+        <img src="/public/icons/salida.svg" alt="Cerrar sesión" />
+      </button>
     </nav>
 
     <div class="login-page" v-if="!userLogged">
       <template v-if="!showRegister">
         <div class="form-box login-box">
+          <div class="form-box-bg"></div>
           <h2>Iniciar sesión</h2>
-          <input type="email" v-model="loginEmail" placeholder="Correo" />
-          <input type="password" v-model="loginPassword" placeholder="Contraseña" />
-          <button @click="login">Iniciar sesión</button>
+          <div class="formInputs">
+            <input type="email" v-model="loginEmail" placeholder="Correo" />
+            <input type="password" v-model="loginPassword" placeholder="Contraseña" />
+          </div>
+          <button class="registerButton" @click="login">Iniciar sesión</button>
           <p class="register-link">
             ¿No tienes cuenta? <a href="#" @click.prevent="showRegister = true">Regístrate aquí</a>
           </p>
@@ -25,7 +28,7 @@
           <h2>Regístrate</h2>
           <input type="email" v-model="email" placeholder="Correo" />
           <input type="password" v-model="password" placeholder="Contraseña" />
-          <button @click="register">Registrarse</button>
+          <button class="registerButton" @click="register">Registrarse</button>
           <p class="login-link">
             ¿Ya tienes cuenta? <a href="#" @click.prevent="showRegister = false">Inicia sesión</a>
           </p>
@@ -37,7 +40,7 @@
         {{ showAddCosplay ? 'Ocultar Formulario' : 'Agregar Nuevo Cosplay' }}
       </button>
       <AddCosplay v-if="showAddCosplay" @cosplay-agregado="loadCosplays" />
-    
+
       <CosplayList :cosplays="cosplayList" @cosplay-eliminado="handleCosplayEliminado" />
       <button @click="logout" class="logout-button">Cerrar sesión</button>
     </div>
@@ -160,7 +163,6 @@ const handleCosplayEliminado = (idEliminado) => {
 </script>
 
 <style>
-
 body {
   margin: 0;
   background: linear-gradient(to right, #ffdee9, #b5fffc);
@@ -170,18 +172,31 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content:center;
- 
+  justify-content: center;
+
+  padding-bottom:12rem;
+
 }
 
-#app{
+#app {
   display: flex;
+  width: 100%;
+  margin: 0%;
+  padding: 0%;
+
 }
+
+.app {
+  width: 100%;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+  width: 100%;
+  padding: 0%;
+
 }
 
 .app-title {
@@ -192,21 +207,22 @@ body {
   white-space: nowrap;
   font-family: 'Pacifico', cursive;
   font-weight: normal;
-  margin-top: -10px; 
-  
+  margin-top: -10px;
+
 }
 
 .navbar {
   width: 100%;
   background-color: white;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: fixed;  
+
+  padding: 0.7rem 2rem;
+  position: fixed;
+  border-bottom: 2px solid black;
   top: 0;
-  z-index: 999;
 }
 
 
@@ -221,24 +237,24 @@ body {
 }
 
 .logout-icon img {
-  width: 20px;         /* Tamaño del icono */
+  width: 20px;
+  /* Tamaño del icono */
   height: 20px;
-  filter: brightness(0); /* Negro puro por defecto */
-  transition: filter 0.3s ease; /* Añade una transición suave */
+  filter: brightness(0);
+  /* Negro puro por defecto */
+  transition: filter 0.3s ease;
+  /* Añade una transición suave */
 }
 
-.logout-icon:hover img {
-  filter: brightness(0) saturate(100%) hue-rotate(180deg); /* Tono azul al pasar el ratón */
-}
 
 .logout-icon {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
   display: flex;
   align-items: center;
-} 
+  justify-content: center;
+}
 
 .login-page {
   padding: 2rem;
@@ -252,30 +268,56 @@ body {
 
 .form-box {
   background-color: white;
+
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  width: 120%;
   margin-bottom: 1rem;
-  border: 1px solid #eee;
+
+  width: 25rem;
+  height: 17rem;
+
+  border: 2px solid #000000;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
   transition: box-shadow 0.3s ease;
-  display: flex; /* Convertimos el form-box en un contenedor flex */
-  flex-direction: column; /* Alineamos los elementos verticalmente */
-  align-items: center; /* Centramos horizontalmente los elementos hijos */
 }
 
 .form-box h2 {
   font-family: 'Poppins', sans-serif;
   font-weight: bold;
-  margin-top: 0;
+
   margin-bottom: 1rem;
   text-align: center;
-  font-size: 1.1rem;
-  color: #333;
+  font-size: 1.3rem;
+  color: #000000;
 }
 
-.form-box:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.formInputs {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.form-box-bg {
+  border: 2px solid black;
+  background-color: #fcebf8;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 15px;
+  left: 15px;
+  z-index: -1;
+
+  transition: background-color 0.25s ease, top 0.25s ease, left 0.25s ease;
+}
+
+.form-box:hover .form-box-bg {
+  background-color: #d1fffd;
+  top: 18px;
+  left: 18px
 }
 
 input {
@@ -283,43 +325,50 @@ input {
   width: 100%;
   margin-bottom: 0.75rem;
   padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #000000;
+
   font-size: 1rem;
 }
 
-button {
-  padding: 0.5rem 1rem; /* Reducimos el padding vertical y horizontal */
-  margin-top: 0.5rem;
-  border: none;
-  background-color: #ff69b4;
-  color: white;
-  border-radius: 5px;
+.registerButton {
+  padding: 0.5rem 1rem;
+  border-style: solid;
+  border: 1px soild black;
+  background-color: #f7ecf2;
+  color: #000000;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
-  width: auto; /* El ancho se ajustará al contenido */
-  font-size: 0.9em; /* Reducimos el tamaño de la fuente del botón */
+  transition: background-color 0.3s;
+  width: auto;
+  font-size: 0.9em;
 }
 
-button:hover {
-  background-color: #ff85c1;
+.logout-icon:hover {
+  background-color: #f7ecf2;
 }
 
-.register-link, .login-link {
+.registerButton:hover {
+  background-color: #ffdef0;
+}
+
+.register-link,
+.login-link {
   margin-top: 1rem;
   text-align: center;
   font-size: 0.8rem;
 }
 
-.register-link a, .login-link a {
-  color: #ff69b4;
+.register-link a,
+.login-link a {
+  color: #ff73c5;
   text-decoration: none;
   font-weight: bold;
   margin-top: 0.25rem;
 }
 
-.register-link a:hover, .login-link a:hover {
+.register-link a:hover,
+.login-link a:hover {
+  background-color: #000000;
   text-decoration: underline;
 }
 
@@ -329,20 +378,24 @@ button:hover {
   color: black;
   border: 2px solid #ff69b4;
 }
+
 .cosplay-area {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
-  width: 90%;
-  max-width: 800px; /* Ajusta el ancho máximo según necesites */
+  margin-top: 7rem;
+
+  width: 100%;
+
+  /* Ajusta el ancho máximo según necesites */
 }
 
 .cosplay-area button {
   padding: 0.5rem 1.5rem;
   margin-bottom: 1rem;
   border: none;
-  background-color: #70b2f8; /* Un color azul para el botón */
+  background-color: #70b2f8;
+  /* Un color azul para el botón */
   color: white;
   border-radius: 5px;
   cursor: pointer;
@@ -356,6 +409,7 @@ button:hover {
 .cosplay-area h2 {
   margin-top: 2rem;
 }
+
 .notification {
   position: fixed;
   top: 20px;
