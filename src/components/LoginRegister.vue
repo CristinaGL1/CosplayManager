@@ -2,11 +2,19 @@
   <div class="container">
     <!-- BARRA DE NAVEGACIÓN -->
     <nav class="navbar">
-      <div class="navbar-title">CosplayManager</div>
-      <button @click="logout" class="logout-icon" title="Cerrar sesión">
-        <img src="/public/icons/salida.svg" alt="Cerrar sesión" />
-      </button>
-    </nav>
+  <div class="navbar-title">CosplayManager</div>
+  <div class="navbar-actions" v-if="userLogged">
+    <button @click="showAddCosplay = !showAddCosplay" class="add-cosplay-icon-button" title="Agregar Cosplay">
+      <img src="/src/icons/agregarCosplay.svg" alt="Agregar Cosplay" class="navbar-icon" />
+    </button>
+    <button @click="logout" class="logout-icon">
+      <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
+    </button>
+  </div>
+  <button v-else @click="logout" class="logout-icon hidden" title="Cerrar sesión">
+    <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
+  </button>
+</nav>
 
     <div class="login-page" v-if="!userLogged">
       <template v-if="!showRegister">
@@ -39,14 +47,9 @@
       </template>
     </div>
     <div v-else class="cosplay-area">
-      <button @click="showAddCosplay = !showAddCosplay">
-        {{ showAddCosplay ? 'Ocultar Formulario' : 'Agregar Nuevo Cosplay' }}
-      </button>
-      <AddCosplay v-if="showAddCosplay" @cosplay-agregado="loadCosplays" />
-
-      <CosplayList :cosplays="cosplayList" @cosplay-eliminado="handleCosplayEliminado" />
-      <button @click="logout" class="logout-button">Cerrar sesión</button>
-    </div>
+  <AddCosplay v-if="showAddCosplay" @cosplay-agregado="loadCosplays" @ocultar-formulario="showAddCosplay = false" />
+  <CosplayList :cosplays="cosplayList" @cosplay-eliminado="handleCosplayEliminado" />
+</div>
     <div v-if="mostrarMensajeLogout" class="notification">
       {{ mensajeLogout }}
     </div>
@@ -176,9 +179,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   padding-bottom:12rem;
-
 }
 
 #app {
@@ -186,7 +187,6 @@ body {
   width: 100%;
   margin: 0%;
   padding: 0%;
-
 }
 
 .app {
@@ -199,7 +199,6 @@ body {
   align-items: center;
   width: 100%;
   padding: 0%;
-
 }
 
 .app-title {
@@ -211,23 +210,19 @@ body {
   font-family: 'Pacifico', cursive;
   font-weight: normal;
   margin-top: -10px;
-
 }
 
 .navbar {
   width: 100%;
   background-color: white;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 0.7rem 2rem;
   position: fixed;
   border-bottom: 2px solid black;
   top: 0;
 }
-
 
 .navbar-title {
   font-family: 'Pacifico', cursive;
@@ -239,16 +234,47 @@ body {
   align-items: center;
 }
 
-.logout-icon img {
-  width: 20px;
-  /* Tamaño del icono */
-  height: 20px;
-  filter: brightness(0);
-  /* Negro puro por defecto */
-  transition: filter 0.3s ease;
-  /* Añade una transición suave */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
+.add-cosplay-icon-button,
+.logout-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 5px;
+}
+
+.add-cosplay-icon-button:hover,
+.logout-icon:hover {
+  background-color: #e0f7fa;
+}
+
+.navbar-icon {
+  width: 24px;
+  height: 24px;
+  filter: grayscale(100%);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.logout-icon img.navbar-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.logout-icon img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0);
+  transition: filter 0.3s ease;
+}
 
 .logout-icon {
   background: none;
@@ -266,33 +292,27 @@ body {
   align-items: center;
   max-width: 300px;
   width: 90%;
-  margin-top: -30px;
+  margin-top: 8rem;
 }
 
 .form-box {
   background-color: white;
-
   padding: 2rem;
   margin-bottom: 1rem;
-
   width: 25rem;
   height: 17rem;
-
   border: 2px solid #000000;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-
   transition: box-shadow 0.3s ease;
 }
 
 .form-box h2 {
   font-family: 'Poppins', sans-serif;
   font-weight: bold;
-
   margin-bottom: 1rem;
   text-align: center;
   font-size: 1.3rem;
@@ -313,7 +333,6 @@ body {
   top: 15px;
   left: 15px;
   z-index: -1;
-
   transition: background-color 0.25s ease, top 0.25s ease, left 0.25s ease;
 }
 
@@ -329,14 +348,12 @@ input {
   margin-bottom: 0.75rem;
   padding: 0.5rem;
   border: 1px solid #000000;
-
   font-size: 1rem;
 }
 
 .registerButton {
   padding: 0.5rem 1rem;
-  border-style: solid;
-  border: 1px solid black;
+  border: 1px solid #888; /* Borde de 1px de grosor y color gris */
   background-color: #f7ecf2;
   color: #000000;
   font-weight: bold;
@@ -365,8 +382,8 @@ input {
 .login-link a {
   color: #ff73c5;
   text-decoration: none;
-  font-weight: bold;
   margin-top: 0.25rem;
+  transition: background-color 0.3s ease;
 }
 
 .register-link a:hover,
@@ -387,26 +404,7 @@ input {
   flex-direction: column;
   align-items: center;
   margin-top: 7rem;
-
   width: 100%;
-
-  /* Ajusta el ancho máximo según necesites */
-}
-
-.cosplay-area button {
-  padding: 0.5rem 1.5rem;
-  margin-bottom: 1rem;
-  border: none;
-  background-color: #70b2f8;
-  /* Un color azul para el botón */
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.cosplay-area button:hover {
-  background-color: #0056b3;
 }
 
 .cosplay-area h2 {

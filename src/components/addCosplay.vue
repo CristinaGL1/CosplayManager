@@ -1,40 +1,44 @@
 <template>
-    <div>
-      <h2>Agregar un nuevo Cosplay</h2>
-      <input v-model="nombre" placeholder="Nombre del Cosplay" required />
-      <select v-model="estado" required>
+  <div>
+    <h2>Agregar un nuevo Cosplay</h2>
+    <input v-model="nombre" placeholder="Nombre del Cosplay" required />
+    <select v-model="estado" required>
       <option value="" disabled>Selecciona un estado</option>
       <option value="Sin empezar">Sin empezar</option>
       <option value="En proceso">En proceso</option>
       <option value="Finalizado">Finalizado</option>
     </select>
-      <input v-model="descripcion" placeholder="Descripción" />
-      <input v-model="fechaInicio" type="date" />
-      <input v-model="fechaFin" type="date" />
-      <button @click="agregarCosplay">Guardar</button>
+    <input v-model="descripcion" placeholder="Descripción" />
+    <input v-model="fechaInicio" type="date" />
+    <input v-model="fechaFin" type="date" />
 
-      <div v-if="mostrarMensaje" class="notification">
+    <div class="form-actions">
+      <button @click="agregarCosplay">Guardar</button>
+      <button @click="$emit('ocultar-formulario')" class="hide-form-button">Ocultar Formulario</button>
+    </div>
+
+    <div v-if="mostrarMensaje" class="notification">
       {{ mensaje }}
     </div>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  import { db } from '../firebase'
-  import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-  import { getAuth } from 'firebase/auth'
+  </div>
+</template>
 
-  const emit = defineEmits(['cosplay-agregado'])
-  
-  const nombre = ref('')
-  const estado = ref('')
-  const descripcion = ref('')
-  const fechaInicio = ref('')
-  const fechaFin = ref('')
+<script setup>
+import { ref } from 'vue';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
-  const mensaje = ref(''); // Nuevo ref para el mensaje
-  const mostrarMensaje = ref(false); // Nuevo ref para controlar la visibilidad
+const emit = defineEmits(['cosplay-agregado', 'ocultar-formulario']);
+
+const nombre = ref('');
+const estado = ref('');
+const descripcion = ref('');
+const fechaInicio = ref('');
+const fechaFin = ref('');
+
+const mensaje = ref('');
+const mostrarMensaje = ref(false);
 
 const agregarCosplay = async () => {
   const auth = getAuth();
@@ -45,7 +49,7 @@ const agregarCosplay = async () => {
     setTimeout(() => {
       mostrarMensaje.value = false;
       mensaje.value = '';
-    }, 3000); // Mostrar mensaje por 3 segundos
+    }, 3000);
     return;
   }
   if (!nombre.value.trim()) {
@@ -58,7 +62,6 @@ const agregarCosplay = async () => {
     return;
   }
 
-  // Validación manual del estado
   if (!estado.value) {
     mensaje.value = 'Por favor, selecciona un estado.';
     mostrarMensaje.value = true;
@@ -68,7 +71,7 @@ const agregarCosplay = async () => {
     }, 3000);
     return;
   }
-  
+
   const cosplayData = {
     nombre: nombre.value,
     estado: estado.value,
@@ -79,7 +82,7 @@ const agregarCosplay = async () => {
     creadoEn: serverTimestamp()
   }
 
-  console.log("Datos del cosplay a agregar:", cosplayData)  // Verifica qué datos estás enviando
+  console.log("Datos del cosplay a agregar:", cosplayData)
 
   try {
     await addDoc(collection(db, 'cosplays'), cosplayData);
@@ -88,14 +91,14 @@ const agregarCosplay = async () => {
     setTimeout(() => {
       mostrarMensaje.value = false;
       mensaje.value = '';
-      emit('cosplay-agregado'); // Emitir el evento después de ocultar el mensaje
-      // Limpiar los campos
+      emit('cosplay-agregado');
       nombre.value = '';
       estado.value = '';
       descripcion.value = '';
       fechaInicio.value = '';
       fechaFin.value = '';
-    }, 3000); // Mostrar mensaje por 3 segundos
+      emit('ocultar-formulario');
+    }, 3000);
   } catch (error) {
     console.error('Error al agregar cosplay:', error);
     mensaje.value = 'Error al agregar el cosplay.';
@@ -106,8 +109,7 @@ const agregarCosplay = async () => {
     }, 3000);
   }
 };
-
-  </script>
+</script>
 
 <style scoped>
 select {
@@ -117,66 +119,56 @@ select {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-  background-color: white; /* Fondo blanco */
-  color: #999; /* Establecemos el color inicial del texto del select a gris */
-  text-align: left; /* Alineamos el texto a la izquierda */
-
+  background-color: white;
+  color: #999;
+  text-align: left;
 }
 
 select option:disabled {
-  color: #999; /* Color gris para la opción deshabilitada (placeholder) */
+  color: #999;
 }
 
-/* Forzamos el color gris cuando la primera opción (disabled) está seleccionada */
 select:focus:not(:placeholder-shown) {
-  color: #333; /* Cambia a oscuro al seleccionar una opción válida */
+  color: #333;
 }
 
 select:not(:disabled) {
-  color: #333; /* Cuando se selecciona una opción válida, el texto será oscuro */
+  color: #333;
 }
+
 input {
   display: block;
   width: 100%;
   margin-bottom: 0.75rem;
   padding: 0.5rem;
-  padding-left: 0.8rem; /* Añadimos un poco de padding a la izquierda */
+  padding-left: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
 }
 
-button {
-  padding: 0.5rem 1rem; /* Reducimos el padding vertical y horizontal */
-  margin-top: 0.5rem;
-  border: none;
-  background-color: #ff69b4;
-  color: white;
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center; /* Asegúrate de tener esta línea */
+  align-items: center; /* Esto alinea verticalmente si fuera necesario */
+}
+
+.form-actions button {
+  padding: 0.4rem 1rem;
+  border: none; /* Aseguramos que no haya borde */
+  background-color: #f7ecf2; /* Color rosa de fondo */
+  color: black; /* Texto negro */
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
-  width: auto; /* El ancho se ajustará al contenido */
-  font-size: 0.9em; /* Reducimos el tamaño de la fuente del botón */
+  transition: background-color 0.3s;
+  font-size: 0.7rem;
 }
 
-button:hover {
-  background-color: #ff85c1;
-}
-
-select {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  background-color: white; /* Fondo blanco */
-  color: #333; /* Color del texto general */
-}
-
-select option:disabled {
-  color: #999; /* Color gris para la opción deshabilitada (placeholder) */
+.form-actions button:hover {
+  background-color: #ffdef0; /* Rosa más claro al pasar el ratón */
 }
 
 .notification {
@@ -190,4 +182,3 @@ select option:disabled {
   z-index: 1000;
 }
 </style>
-  
