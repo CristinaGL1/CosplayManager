@@ -6,7 +6,7 @@ import { getStorage } from 'firebase/storage'
 
 // ✅ Tu configuración personalizada de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAgWeqo978jXnjAhiVdl4jYD-lWpEvWbiA",
+  apiKey: import.meta.env.VITE_API_KEY,
   authDomain: "cosplay-manager-123.firebaseapp.com",
   projectId: "cosplay-manager-123",
   storageBucket: "cosplay-manager-123.firebasestorage.app",
