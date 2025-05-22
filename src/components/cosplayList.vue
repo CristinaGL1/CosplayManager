@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>Tablero de Cosplays</h2>
     <div class="kanban-board">
       <div class="kanban-column" v-for="(cosplaysInThisState, state) in groupedCosplays" :key="state">
         <div class="cardSection-title">
@@ -99,6 +98,7 @@ const eliminarCosplay = async (id) => {
   overflow-x: auto;
   /* Para que sea scrollable horizontalmente si hay muchos estados */
   padding: 1rem;
+  border-radius: 10px; /* añado esto */
 }
 
 .kanban-column {
@@ -114,6 +114,7 @@ const eliminarCosplay = async (id) => {
   /* Alineamos los elementos verticalmente */
   align-items: stretch;
   /* Estiramos los elementos hijos horizontalmente */
+  border-radius: 10px; /* añado esto */
 }
 
 
@@ -158,6 +159,7 @@ const eliminarCosplay = async (id) => {
 
   height: 3rem;
   width: 100%;
+  border-radius: 10px; /* Añade esto */
   
 }
 
@@ -170,6 +172,7 @@ const eliminarCosplay = async (id) => {
   top: 15px;
   left: 15px;
   z-index: -1;
+   border-radius: 10px; /* Añad esto */
 }
 
 .cardSection-title h3{
@@ -181,6 +184,7 @@ const eliminarCosplay = async (id) => {
   border: 2px solid black;
   background-color: rgb(255, 255, 255);
   position: relative;
+   border-radius: 10px; /*añado esto*/
 }
 
 .cardSection-bg{
@@ -192,6 +196,7 @@ const eliminarCosplay = async (id) => {
   top: 15px;
   left: 15px;
   z-index: -1;
+  border-radius: 10px; /* Añade esto */
 
 }
 

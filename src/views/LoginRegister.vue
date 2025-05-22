@@ -1,21 +1,5 @@
 <template>
   <div class="container">
-    <!-- BARRA DE NAVEGACIÓN -->
-    <nav class="navbar">
-  <div class="navbar-title">CosplayManager</div>
-  <div class="navbar-actions" v-if="userLogged">
-    <button @click="showAddCosplay = !showAddCosplay" class="add-cosplay-icon-button" title="Agregar Cosplay">
-      <img src="/src/icons/agregarCosplay.svg" alt="Agregar Cosplay" class="navbar-icon" />
-    </button>
-    <button @click="logout" class="logout-icon">
-      <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
-    </button>
-  </div>
-  <button v-else @click="logout" class="logout-icon hidden" title="Cerrar sesión">
-    <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
-  </button>
-</nav>
-
     <div class="login-page" v-if="!userLogged">
       <template v-if="!showRegister">
         <div class="form-box login-box">
@@ -47,9 +31,9 @@
       </template>
     </div>
     <div v-else class="cosplay-area">
-  <AddCosplay v-if="showAddCosplay" @cosplay-agregado="loadCosplays" @ocultar-formulario="showAddCosplay = false" />
-  <CosplayList :cosplays="cosplayList" @cosplay-eliminado="handleCosplayEliminado" />
-</div>
+      <AddCosplay v-if="showAddCosplay" @cosplay-agregado="loadCosplays" @ocultar-formulario="showAddCosplay = false" />
+      <CosplayList :cosplays="cosplayList" @cosplay-eliminado="handleCosplayEliminado" />
+    </div>
     <div v-if="mostrarMensajeLogout" class="notification">
       {{ mensajeLogout }}
     </div>
@@ -57,50 +41,45 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import AddCosplay from './addCosplay.vue'
-import { getCosplays } from '../firestore'
-import CosplayList from './cosplayList.vue'
+import { ref, onMounted } from 'vue';
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import AddCosplay from '../components/addCosplay.vue';
+import { getCosplays } from '../firestore';
+import CosplayList from '../components/cosplayList.vue';
+import { useRouter } from 'vue-router';
 
-
-const email = ref('')
-const password = ref('')
-const loginEmail = ref('')
-const loginPassword = ref('')
-const userLogged = ref(false)
-const cosplayList = ref([])
-const showRegister = ref(false) // Nuevo estado para controlar qué formulario mostrar
-const showAddCosplay = ref(false) // Nuevo estado para mostrar/ocultar el formulario de agregar
-
-
-const mensajeLogout = ref(''); // Añade esta línea
-const mostrarMensajeLogout = ref(false); // Añade esta línea
-
-let cosplaysLoaded = false
+const email = ref('');
+const password = ref('');
+const loginEmail = ref('');
+const loginPassword = ref('');
+const userLogged = ref(false);
+const cosplayList = ref([]);
+const showRegister = ref(false);
+const showAddCosplay = ref(false);
+const mensajeLogout = ref('');
+const mostrarMensajeLogout = ref(false);
+const router = useRouter();
+let cosplaysLoaded = false;
 
 const loadCosplays = async () => {
-  console.log('Intentando cargar cosplays...');
   if (!cosplaysLoaded) {
-    cosplayList.value = await getCosplays()
-    console.log('Cosplays cargados:', cosplayList.value);
-    cosplaysLoaded = true
-  } else {
-    // Si ya se cargaron, solo recargamos para la actualización
     cosplayList.value = await getCosplays();
-    console.log('Recargando cosplays:', cosplayList.value);
+    cosplaysLoaded = true;
+  } else {
+    cosplayList.value = await getCosplays();
   }
-}
+};
 
 onMounted(() => {
-  const auth = getAuth()
+  const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
     userLogged.value = !!user;
     if (user) {
-      loadCosplays()
+      loadCosplays();
+      router.push('/dashboard'); // Redirigir al dashboard al loguearse
     }
-  })
-})
+  });
+});
 
 const login = async () => {
   if (!loginEmail.value || !loginPassword.value) {
@@ -119,8 +98,7 @@ const login = async () => {
     setTimeout(() => {
       mostrarMensajeLogout.value = false;
       mensajeLogout.value = '';
-      userLogged.value = true; // Asegúrate de tener esta línea aquí
-      console.log('Usuario logueado:', userLogged.value);
+      // La redirección ahora se hace en onAuthStateChanged
     }, 3000);
   } catch (error) {
     alert('Error al iniciar sesión: ' + error.message);
@@ -144,7 +122,7 @@ const register = async () => {
     setTimeout(() => {
       mostrarMensajeLogout.value = false;
       mensajeLogout.value = '';
-      showRegister.value = false; // Volver al inicio de sesión tras registrarse
+      showRegister.value = false;
     }, 3000);
   } catch (error) {
     alert('Error al registrarse: ' + error.message);
@@ -155,146 +133,42 @@ const logout = async () => {
   await signOut(getAuth());
   mensajeLogout.value = "Sesión cerrada";
   mostrarMensajeLogout.value = true;
-  cosplaysLoaded = false; // Resetear la bandera al cerrar sesión
+  cosplaysLoaded = false;
   setTimeout(() => {
     mostrarMensajeLogout.value = false;
     mensajeLogout.value = '';
-  }, 3000);
+    router.push('/'); // Redirigir al login al cerrar sesión
+  }, 100); // Reducción del tiempo para probar más rápido
 };
 
 const handleCosplayEliminado = (idEliminado) => {
   cosplayList.value = cosplayList.value.filter(cosplay => cosplay.id !== idEliminado);
 };
-
 </script>
 
-<style>
-body {
-  margin: 0;
-  background: linear-gradient(to right, #ffdee9, #b5fffc);
-  font-family: 'Poppins', sans-serif;
-  color: black;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-bottom:12rem;
-}
-
-#app {
-  display: flex;
-  width: 100%;
-  margin: 0%;
-  padding: 0%;
-}
-
-.app {
-  width: 100%;
-}
-
+<style scoped>
+/* Estilos relacionados SOLO con el login y registro */
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Centra horizontalmente */
   width: 100%;
-  padding: 0%;
-}
-
-.app-title {
-  font-size: 4em;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-  white-space: nowrap;
-  font-family: 'Pacifico', cursive;
-  font-weight: normal;
-  margin-top: -10px;
-}
-
-.navbar {
-  width: 100%;
-  background-color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.7rem 2rem;
-  position: fixed;
-  border-bottom: 2px solid black;
-  top: 0;
-}
-
-.navbar-title {
-  font-family: 'Pacifico', cursive;
-  font-size: 1.8em;
-}
-
-.navbar-links {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.add-cosplay-icon-button,
-.logout-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.2rem;
-  border-radius: 5px;
-}
-
-.add-cosplay-icon-button:hover,
-.logout-icon:hover {
-  background-color: #e0f7fa;
-}
-
-.navbar-icon {
-  width: 24px;
-  height: 24px;
-  filter: grayscale(100%);
-}
-
-.hidden {
-  visibility: hidden;
-}
-
-.logout-icon img.navbar-icon {
-  width: 22px;
-  height: 22px;
-}
-
-.logout-icon img {
-  width: 20px;
-  height: 20px;
-  filter: brightness(0);
-  transition: filter 0.3s ease;
-}
-
-.logout-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding-top: 8rem; /* Ajusta el espacio superior si es necesario */
+  box-sizing: border-box;
 }
 
 .login-page {
   padding: 2rem;
+  max-width: 300px;
+  width: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 300px;
-  width: 90%;
-  margin-top: 8rem;
 }
-
 .form-box {
   background-color: white;
   padding: 2rem;
@@ -308,6 +182,8 @@ body {
   align-items: center;
   position: relative;
   transition: box-shadow 0.3s ease;
+  border-radius: 10px; /* Añado esto */
+  
 }
 
 .form-box h2 {
@@ -322,6 +198,7 @@ body {
 .formInputs {
   width: 100%;
   margin-bottom: 0.5rem;
+  border-radius: 10px; /* Añado esto */
 }
 
 .form-box-bg {
@@ -334,6 +211,7 @@ body {
   left: 15px;
   z-index: -1;
   transition: background-color 0.25s ease, top 0.25s ease, left 0.25s ease;
+  border-radius: 10px; /* Añad esto */
 }
 
 .form-box:hover .form-box-bg {
@@ -349,11 +227,12 @@ input {
   padding: 0.5rem;
   border: 1px solid #000000;
   font-size: 1rem;
+  border-radius: 10px; /*añado estp */
 }
 
 .registerButton {
   padding: 0.5rem 1rem;
-  border: 1px solid #888; /* Borde de 1px de grosor y color gris */
+  border: 1px solid #888;
   background-color: #f7ecf2;
   color: #000000;
   font-weight: bold;
@@ -361,10 +240,7 @@ input {
   transition: background-color 0.3s;
   width: auto;
   font-size: 0.9em;
-}
-
-.logout-icon:hover {
-  background-color: #f7ecf2;
+  border-radius: 10px; /* Añado esto*/
 }
 
 .registerButton:hover {
@@ -390,25 +266,6 @@ input {
 .login-link a:hover {
   background-color: #fae6f6;
   text-decoration: underline;
-}
-
-.logout-button {
-  margin-top: 2rem;
-  background-color: white;
-  color: black;
-  border: 2px solid #ff69b4;
-}
-
-.cosplay-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 7rem;
-  width: 100%;
-}
-
-.cosplay-area h2 {
-  margin-top: 2rem;
 }
 
 .notification {
