@@ -30,8 +30,7 @@ const handleLogout = () => {
 
 <style scoped>
 .navbar {
-  width: 90%;
-  max-width: 1200px;
+  width: 100%;
   background-color: white;
   display: flex;
   align-items: center;

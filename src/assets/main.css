@@ -20,9 +20,7 @@ body {
   align-items: center; /* Centra horizontalmente el contenido dentro de #app */
   /* justify-content: flex-start; */ /* No forzamos la alineación vertical aquí */
   width: 100%;
-  max-width: 1280px; /* O el ancho máximo que desees */
   margin: 0 auto; /* Centra #app horizontalmente si tiene un max-width */
-  padding: 2rem;
   box-sizing: border-box;
 }
 
@@ -47,10 +45,4 @@ a,
     place-items: center;
   }
 
-  #app {
-    /* Mantén o ajusta estos estilos responsive */
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
 }
