@@ -51,8 +51,13 @@
         </label>
 
         <label>
-          URL Imagen:
+         URL Imagen:
           <input v-model="form.imagenUrl" type="text" class="border p-1 w-full" />
+          <small class="block mt-1 text-gray-600 text-sm">
+            Sube tu imagen a un servicio gratuito como
+            <a href="https://imgur.com/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline">Imgur</a>
+            y pega aquí la URL de la imagen.
+          </small>
         </label>
 
         <div class="flex gap-4">
