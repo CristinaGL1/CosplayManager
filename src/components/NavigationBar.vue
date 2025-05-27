@@ -31,7 +31,7 @@ const handleLogout = () => {
 <style scoped>
 .navbar {
   width: 100%;
-  background-color: white;
+  background-color: var(--mainColor);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -41,7 +41,7 @@ const handleLogout = () => {
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid var(--secondaryColor);
 }
 
 .navbar-title {

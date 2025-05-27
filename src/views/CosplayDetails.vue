@@ -7,7 +7,7 @@
         <div v-if="!editando" class="cosplay-info">
           <div class="cosplay-header">
             <div v-if="cosplay.imagenUrl" class="cosplay-main-image">
-              <img :src="cosplay.imagenUrl" alt="Imagen principal del cosplay" style="max-width: 100px; height: auto; border-radius: 8px; margin-right: 15px;">
+              <img :src="cosplay.imagenUrl" alt="Imagen principal del cosplay" style="max-width: 100px; max-height: 50px; border-radius: 8px; margin-right: 10px;">
             </div>
             <div class="header-info">
               <h2 class="cosplay-name">{{ cosplay.nombre }}</h2>
