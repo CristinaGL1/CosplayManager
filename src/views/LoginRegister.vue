@@ -47,6 +47,8 @@ import AddCosplay from '../components/addCosplay.vue';
 import { getCosplays } from '../firestore';
 import CosplayList from '../components/cosplayList.vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
 
 const email = ref('');
 const password = ref('');
@@ -59,24 +61,39 @@ const showAddCosplay = ref(false);
 const mensajeLogout = ref('');
 const mostrarMensajeLogout = ref(false);
 const router = useRouter();
-let cosplaysLoaded = false;
+const mysqlUserId = ref(null);
 
-const loadCosplays = async () => {
-  if (!cosplaysLoaded) {
-    cosplayList.value = await getCosplays();
-    cosplaysLoaded = true;
-  } else {
-    cosplayList.value = await getCosplays();
+
+const loadCosplays = async (userId) => {
+  if (!userId) {
+    console.warn('No se proporcionó userId para cargar cosplays.');
+    cosplayList.value = [];
+    return;
   }
+  cosplayList.value = await getCosplays(userId);
 };
 
 onMounted(() => {
   const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     userLogged.value = !!user;
     if (user) {
-      loadCosplays();
-      router.push('/dashboard'); // Redirigir al dashboard al loguearse
+      try {
+        const token = await user.getIdToken();
+        const response = await axios.get('http://localhost:3000/api/users/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        mysqlUserId.value = response.data.id;
+        loadCosplays(mysqlUserId.value);
+       router.push({ path: '/cosplayLanding', query: { userId: mysqlUserId.value } });
+      } catch (error) {
+        console.error('Error al obtener userId en onMounted:', error);
+        // Podrías manejar el error aquí
+      }
+    } else {
+      cosplayList.value = []; // Limpiar la lista si no hay usuario logueado
     }
   });
 });
@@ -88,23 +105,40 @@ const login = async () => {
     setTimeout(() => {
       mostrarMensajeLogout.value = false;
       mensajeLogout.value = '';
+     router.push({ path: '/cosplayLanding', query: { userId: mysqlUserId.value } });
     }, 3000);
     return;
   }
   try {
-    await signInWithEmailAndPassword(getAuth(), loginEmail.value, loginPassword.value);
-    mensajeLogout.value = 'Has iniciado sesión ✅';
-    mostrarMensajeLogout.value = true;
-    setTimeout(() => {
-      mostrarMensajeLogout.value = false;
-      mensajeLogout.value = '';
-      // La redirección ahora se hace en onAuthStateChanged
-    }, 3000);
+    const userCredential = await signInWithEmailAndPassword(getAuth(), loginEmail.value, loginPassword.value);
+    const user = userCredential.user;
+    if (user) {
+      const token = await user.getIdToken();
+      try {
+        const response = await axios.get('http://localhost:3000/api/users/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        mysqlUserId.value = response.data.id;
+        console.log('ID de MySQL del usuario:', mysqlUserId.value);
+        loadCosplays(mysqlUserId.value);
+        mensajeLogout.value = 'Has iniciado sesión ✅';
+        mostrarMensajeLogout.value = true;
+        setTimeout(() => {
+          mostrarMensajeLogout.value = false;
+          mensajeLogout.value = '';
+          router.push({ path: '/cosplayLanding', query: { userId: mysqlUserId.value } });
+        }, 3000);
+      } catch (error) {
+        console.error('Error al obtener userId de MySQL:', error);
+        alert('Error al iniciar sesión completamente.');
+      }
+    }
   } catch (error) {
     alert('Error al iniciar sesión: ' + error.message);
   }
 };
-
 const register = async () => {
   if (!email.value || !password.value) {
     mensajeLogout.value = "Por favor, completa los campos para registrarte";
@@ -116,16 +150,25 @@ const register = async () => {
     return;
   }
   try {
-    await createUserWithEmailAndPassword(getAuth(), email.value, password.value);
-    mensajeLogout.value = 'Registro exitoso 🎉';
-    mostrarMensajeLogout.value = true;
-    setTimeout(() => {
-      mostrarMensajeLogout.value = false;
-      mensajeLogout.value = '';
-      showRegister.value = false;
-    }, 3000);
+    const authResult = await createUserWithEmailAndPassword(getAuth(), email.value, password.value);
+    const user = authResult.user;
+    if (user) {
+      console.log('Intentando registrar usuario en el backend:', { firebaseUid: user.uid, email: email.value });
+      const response = await axios.post('http://localhost:3000/api/users', {
+        firebaseUid: user.uid,
+        email: email.value
+      });
+      console.log('Usuario registrado en el backend:', response.data);
+      mensajeLogout.value = 'Registro exitoso 🎉';
+      mostrarMensajeLogout.value = true;
+      setTimeout(() => {
+        mostrarMensajeLogout.value = false;
+        mensajeLogout.value = '';
+        showRegister.value = false;
+      }, 3000);
+    }
   } catch (error) {
-    alert('Error al registrarse: ' + error.message);
+    alert('Error al registrarse en Firebase: ' + error.message);
   }
 };
 
@@ -151,9 +194,11 @@ const handleCosplayEliminado = (idEliminado) => {
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra horizontalmente */
+  align-items: center;
+  /* Centra horizontalmente */
   width: 100%;
-  padding-top: 8rem; /* Ajusta el espacio superior si es necesario */
+  padding-top: 8rem;
+  /* Ajusta el espacio superior si es necesario */
   box-sizing: border-box;
 }
 
@@ -169,6 +214,7 @@ const handleCosplayEliminado = (idEliminado) => {
   flex-direction: column;
   align-items: center;
 }
+
 .form-box {
   background-color: white;
   padding: 2rem;
@@ -182,8 +228,9 @@ const handleCosplayEliminado = (idEliminado) => {
   align-items: center;
   position: relative;
   transition: box-shadow 0.3s ease;
-  border-radius: 10px; /* Añado esto */
-  
+  border-radius: 10px;
+  /* Añado esto */
+
 }
 
 .form-box h2 {
@@ -198,7 +245,8 @@ const handleCosplayEliminado = (idEliminado) => {
 .formInputs {
   width: 100%;
   margin-bottom: 0.5rem;
-  border-radius: 10px; /* Añado esto */
+  border-radius: 10px;
+  /* Añado esto */
 }
 
 .form-box-bg {
@@ -211,7 +259,8 @@ const handleCosplayEliminado = (idEliminado) => {
   left: 15px;
   z-index: -1;
   transition: background-color 0.25s ease, top 0.25s ease, left 0.25s ease;
-  border-radius: 10px; /* Añad esto */
+  border-radius: 10px;
+  /* Añad esto */
 }
 
 .form-box:hover .form-box-bg {
@@ -227,7 +276,8 @@ input {
   padding: 0.5rem;
   border: 1px solid #000000;
   font-size: 1rem;
-  border-radius: 10px; /*añado estp */
+  border-radius: 10px;
+  /*añado estp */
 }
 
 .registerButton {
@@ -240,7 +290,8 @@ input {
   transition: background-color 0.3s;
   width: auto;
   font-size: 0.9em;
-  border-radius: 10px; /* Añado esto*/
+  border-radius: 10px;
+  /* Añado esto*/
 }
 
 .registerButton:hover {

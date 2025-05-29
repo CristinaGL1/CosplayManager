@@ -1,24 +1,30 @@
 <template>
   <div>
     <div class="kanban-board">
-      <div class="kanban-column" v-for="(cosplaysInThisState, state) in groupedCosplays" :key="state">
+      <div class="kanban-column" v-for="state in possibleStates" :key="state">
         <div class="cardSection-title">
           <div class="cardSection-tittle-bg"></div>
           <h3>{{ state }}</h3>
         </div>
-
         <div class="kanban-cardSection">
           <div class="cardSection-bg"></div>
-          <div class="kanban-card" v-for="cosplay in cosplaysInThisState" :key="cosplay.id">
-            <strong>{{ cosplay.nombre }}</strong>
-            <p class="cosplay-description">{{ cosplay.descripcion }}</p>
-            <div class="options-buttons">
-              <button @click="verDetalles(cosplay.id)"class="details-button">Ver Detalles</button>
-              <button @click="eliminarCosplay(cosplay.id)"class="details-button">Eliminar</button>
-            </div>
+          <div class="kanban-card" v-for="(cosplay, index) in cosplaysInState(state)" :key="cosplay ? cosplay.id : 'empty-' + state + '-' + index" :class="{ 'empty-card': !cosplay }">
+            <template v-if="cosplay">
+              <strong>{{ cosplay.nombre }}</strong>
+              <p class="cosplay-description">{{ cosplay.descripcion }}</p>
+              <div class="options-buttons">
+                <button @click="verDetalles(cosplay.id)" class="details-button">Ver Detalles</button>
+                <button @click="eliminarCosplay(cosplay.id)" class="details-button">Eliminar</button>
+              </div>
+            </template>
+            <template v-else>
+              <p style="color: #999; font-style: italic;">No hay cosplays en este estado.</p>
+            </template>
+          </div>
+          <div v-if="cosplaysInState(state).length === 0 && groupedCosplaysKeys.length > 0" class="empty-state-message">
+            No hay cosplays en este estado.
           </div>
         </div>
-
       </div>
     </div>
     <div v-if="mostrarMensajeEliminar" class="notification">
@@ -29,10 +35,9 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { db } from '../firebase';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { getAuth } from 'firebase/auth';
 
 const props = defineProps({
   cosplays: {
@@ -47,6 +52,8 @@ const router = useRouter();
 const mensajeEliminar = ref('');
 const mostrarMensajeEliminar = ref(false);
 
+const possibleStates = ['Sin empezar', 'En proceso', 'Finalizado'];
+
 const groupedCosplays = computed(() => {
   const groups = {};
   props.cosplays.forEach(cosplay => {
@@ -58,23 +65,32 @@ const groupedCosplays = computed(() => {
   return groups;
 });
 
+const groupedCosplaysKeys = computed(() => Object.keys(groupedCosplays.value));
+
+const cosplaysInState = (state) => groupedCosplays.value[state] || [];
+
 const verDetalles = (id) => {
   router.push(`/cosplay/${id}`);
 };
 
 const eliminarCosplay = async (id) => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (!user) {
-    alert('Debes estar logueado para eliminar cosplays.');
-    return;
-  }
-
   if (confirm(`¿Seguro que quieres eliminar este cosplay ?`)) {
     try {
-      await deleteDoc(doc(db, 'cosplays', id));
-      console.log('Cosplay eliminado:', id);
-      emit('cosplay-eliminado', id); // Emitir un evento para actualizar la lista en el padre
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) {
+        console.error('Usuario no autenticado.');
+        alert('No estás autenticado.');
+        return;
+      }
+      const token = await user.getIdToken();
+      await axios.delete(`http://localhost:3000/api/cosplays/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('Cosplay eliminado del backend:', id);
+      emit('cosplay-eliminado', id);
 
       mensajeEliminar.value = 'Cosplay eliminado 🗑️';
       mostrarMensajeEliminar.value = true;
@@ -84,7 +100,7 @@ const eliminarCosplay = async (id) => {
       }, 3000);
 
     } catch (error) {
-      console.error('Error al eliminar el cosplay:', error);
+      console.error('Error al eliminar el cosplay del backend:', error);
       alert('No se pudo eliminar el cosplay.');
     }
   }
@@ -257,5 +273,16 @@ const eliminarCosplay = async (id) => {
   padding: 1rem 1.5rem;
   border-radius: 5px;
   z-index: 1000;
+}
+.empty-card {
+  /* Estilos para cuando no hay cosplay en la tarjeta */
+  box-shadow: 1;
+}
+
+.empty-state-message {
+  color: #777;
+  font-style: italic;
+  padding: 0.5rem;
+  text-align: center;
 }
 </style>

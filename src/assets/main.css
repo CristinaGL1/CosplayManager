@@ -3,26 +3,32 @@
 /* Añade estos estilos */
 body {
   margin: 0;
-  background: linear-gradient(to right, #ffdee9, #b5fffc);
+  background: linear-gradient(to left, #b5fffc,#e1deff);
   font-family: 'Poppins', sans-serif;
   color: black;
   min-height: 100vh;
-  display: flex; /* Enable flexbox for body */
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically (optional, but good for overall centering) */
-  /* flex-direction: column; */ /* No necesitamos forzar la dirección aquí */
-  padding-bottom: 12rem;
+  display: flex;
+  /* Enable flexbox for body */
+  justify-content: center;
+  /* Center content horizontally */
+  align-items: center;
+  /* Center content vertically (optional, but good for overall centering) */
+  /* flex-direction: column; */
+  /* No necesitamos forzar la dirección aquí */
+
 }
 
 #app {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra horizontalmente el contenido dentro de #app */
-  /* justify-content: flex-start; */ /* No forzamos la alineación vertical aquí */
+  align-items: center;
+  /* Centra horizontalmente el contenido dentro de #app */
+  /* justify-content: flex-start; */
+  /* No forzamos la alineación vertical aquí */
   width: 100%;
-  max-width: 1280px; /* O el ancho máximo que desees */
-  margin: 0 auto; /* Centra #app horizontalmente si tiene un max-width */
-  padding: 2rem;
+  height: 100%;
+  margin: 0 auto;
+  /* Centra #app horizontalmente si tiene un max-width */
   box-sizing: border-box;
 }
 
@@ -47,10 +53,17 @@ a,
     place-items: center;
   }
 
-  #app {
-    /* Mantén o ajusta estos estilos responsive */
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+}
+
+:root {
+
+  /* Variables de color */
+  
+  /* 1. Modo Claro */
+  /* --mainColor: rgb(255, 255, 255);
+  --secondaryColor: rgb(34, 34, 34); */
+  
+  /* 2. Modo Oscuro */
+  --mainColor: rgb(34, 34, 34);
+  --secondaryColor: rgb(255, 255, 255);
 }
