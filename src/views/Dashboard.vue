@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import {onUnmounted, ref, onMounted, watch, computed, onBeforeUnmount } from 'vue';
 import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import NavigationBar from '../components/NavigationBar.vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -94,6 +94,22 @@ const addTaskModalState = ref(null);
 const newTaskName = ref('');
 const newTaskDescription = ref('');
 
+watch(route, (newRoute, oldRoute) => {
+  console.log('La ruta en Dashboard cambió de:', oldRoute, 'a:', newRoute);
+  console.trace('Cambio de ruta en Dashboard'); // Esto imprimirá la pila de llamadas
+});
+
+onBeforeUnmount(() => {
+  console.log('Dashboard.vue se va a desmontar.');
+  console.trace('Desmontaje de Dashboard');
+});
+
+
+onUnmounted(() => {
+  console.log('Dashboard.vue se ha desmontado.');
+});
+
+console.log('Dashboard.vue montado');
 
 const tasksGroupedByState = computed(() => {
   const groups = {};
@@ -201,8 +217,9 @@ const eliminarTarea = (taskId) => {
 onMounted(() => {
   onAuthStateChanged(getAuth(), (user) => {
     userLogged.value = !!user;
+    localUserId.value = route.query.userId; // Aseguramos que localUserId se actualice
+
     if (user && route.params.id && route.query.userId) {
-      localUserId.value = route.query.userId;
       loadCosplayDetails(route.params.id);
     } else if (user) {
       console.warn('ID de cosplay o userId no encontrado inicialmente en el Dashboard.');
@@ -218,6 +235,16 @@ watch(() => route.params.id, (newId) => {
     loadCosplayDetails(newId);
   } else {
     selectedCosplay.value = null;
+    if (newId) console.warn('UserId no disponible para cargar el cosplay con ID:', newId);
+  }
+});
+
+watch(localUserId, (newUserId) => {
+  if (newUserId && route.params.id) {
+    loadCosplayDetails(route.params.id);
+  } else {
+    selectedCosplay.value = null;
+    if (newUserId) console.warn('Cosplay ID no disponible para cargar con userId:', newUserId);
   }
 });
 </script>

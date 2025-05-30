@@ -105,7 +105,6 @@ const login = async () => {
     setTimeout(() => {
       mostrarMensajeLogout.value = false;
       mensajeLogout.value = '';
-     router.push({ path: '/cosplayLanding', query: { userId: mysqlUserId.value } });
     }, 3000);
     return;
   }
@@ -128,7 +127,7 @@ const login = async () => {
         setTimeout(() => {
           mostrarMensajeLogout.value = false;
           mensajeLogout.value = '';
-          router.push({ path: '/cosplayLanding', query: { userId: mysqlUserId.value } });
+          // Eliminamos la redirección de aquí
         }, 3000);
       } catch (error) {
         console.error('Error al obtener userId de MySQL:', error);

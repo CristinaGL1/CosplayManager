@@ -2,9 +2,6 @@
   <nav class="navbar">
     <div class="navbar-title">CosplayManager</div>
     <div class="navbar-actions" v-if="userLogged">
-      <button @click="emit('toggle-add-cosplay')" class="add-cosplay-icon-button" title="Agregar Cosplay">
-        <img src="/src/icons/agregarCosplay.svg" alt="Agregar Cosplay" class="navbar-icon" />
-      </button>
       <button @click="handleLogout" class="logout-icon">
         <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
       </button>

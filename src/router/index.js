@@ -17,6 +17,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
+
 router.beforeEach(async (to, from) => {
   const auth = getAuth();
   return new Promise((resolve) => {

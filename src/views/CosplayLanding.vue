@@ -82,7 +82,6 @@ const selectedCosplayIdForDetails = ref(null);
 
 const fetchCosplays = async (UserId) => {
   if (!UserId) {
-    console.warn('No se proporcionó userId para cargar cosplays en CosplayLanding.');
     cosplays.value = [];
     return;
   }
@@ -132,17 +131,11 @@ onMounted(() => {
     userLogged.value = !!user;
     if (user && route.query.userId) {
       localUserId.value = route.query.userId;
-      // Carga inicial al montar si userId ya está presente
-      fetchCosplays(localUserId.value);
+      fetchCosplays(localUserId.value); // Llamamos a fetchCosplays aquí también
     } else if (!user) {
       cosplays.value = [];
     }
   });
-  // También carga si userId está presente al montar (fuera del auth state change)
-  if (route.query.userId && getAuth().currentUser) {
-    localUserId.value = route.query.userId;
-    fetchCosplays(localUserId.value);
-  }
 });
 
 watch(
