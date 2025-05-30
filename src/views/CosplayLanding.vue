@@ -1,7 +1,7 @@
 <template>
   <nav>
     <NavigationBar :userLogged="userLogged" @toggle-add-cosplay="showAddCosplay = !showAddCosplay"
-                     @logout-user="logout" />
+                                 @logout-user="logout" />
   </nav>
   <div class="cosplay-area">
     <AddCosplay v-if="showAddCosplay" @cosplay-agregado="refetchCosplays"
@@ -49,11 +49,11 @@
   </div>
 
   <CosplayOptionsModal
-      v-if="showOptionsModal"
-      :cosplayId="selectedCosplayIdForModal"
-      @close="showOptionsModal = false"
-      @view-dashboard="goToDashboard"
-      @view-details="goToDetails"
+    v-if="showOptionsModal"
+    :cosplayId="selectedCosplayIdForModal"
+    @close="showOptionsModal = false"
+    @view-dashboard="goToDashboard"
+    @view-details="goToDetails"
   />
 </template>
 
@@ -62,54 +62,51 @@ import NavigationBar from '../components/NavigationBar.vue';
 import { ref, onMounted, watch } from 'vue';
 import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import { getCosplays } from '../firestore';
-import { useRouter, useRoute } from 'vue-router'; // Importa useRoute
+import { useRouter, useRoute } from 'vue-router';
 import AddCosplay from '../components/addCosplay.vue';
-import CosplayOptionsModal from '../components/CosplayOptionsModal.vue'; // Importa el modal
-import CosplayDetails from '../views/CosplayDetails.vue'; // Importa CosplayDetails
+import CosplayOptionsModal from '../components/CosplayOptionsModal.vue';
+import CosplayDetails from '../views/CosplayDetails.vue';
 
-const route = useRoute(); // Usa useRoute para acceder a la ruta actual
+const route = useRoute();
 const router = useRouter();
-const localUserId = ref(route.query.userId); // Obtén el userId de la query
+const localUserId = ref(route.query.userId);
 const cosplays = ref([]);
 const showAddCosplay = ref(false);
 const userLogged = ref(false);
 const mensajeLogout = ref('');
-const showOptionsModal = ref(false); // Controla la visibilidad del modal
+const showOptionsModal = ref(false);
 const selectedCosplayIdForModal = ref(null);
-const selectedCosplayId = ref(null); // Almacena el ID del cosplay clickeado
+const selectedCosplayId = ref(null);
 const showDetailsModal = ref(false);
 const selectedCosplayIdForDetails = ref(null);
 
-const fetchCosplays = async (currentUserId) => {
-  if (!currentUserId) {
+const fetchCosplays = async (UserId) => {
+  if (!UserId) {
     console.warn('No se proporcionó userId para cargar cosplays en CosplayLanding.');
     cosplays.value = [];
     return;
   }
-  console.log('Cargando cosplays para userId:', currentUserId);
+  console.log('Cargando cosplays para userId:', UserId);
   try {
-    const data = await getCosplays(currentUserId);
+    const data = await getCosplays(UserId);
     console.log('Cosplays cargados:', data);
-    cosplays.value = data; // Usamos directamente 'data' aquí
-    console.log('cosplays.value en fetchCosplays:', cosplays.value);
-    console.log('Contenido de cosplays.value:', cosplays.value);
+    cosplays.value = data;
   } catch (error) {
     console.error('Error al cargar los cosplays:', error);
   }
 };
 
 const logout = async () => {
-  console.log('Función logout en Dashboard llamada');
   await signOut(getAuth());
   mensajeLogout.value = "Sesión cerrada";
-  router.push('/'); // Redirigir al login
+  router.push('/');
 };
 
 const refetchCosplays = () => {
   if (localUserId.value) {
     fetchCosplays(localUserId.value);
   } else {
-    console.warn('No se puede recargar cosplays, userId no disponible.');
+    console.warn('No se puede recargar cosplays, userId no disponible en refetchCosplays.');
   }
 };
 
@@ -124,43 +121,43 @@ const goToDashboard = (id) => {
 };
 
 const goToDetails = (id) => {
-  showOptionsModal.value = false; // Cierra el modal de opciones
-  selectedCosplayIdForDetails.value = id; // Guarda el ID para los detalles
-  showDetailsModal.value = true; // Muestra el modal de detalles
+  showOptionsModal.value = false;
+  selectedCosplayIdForDetails.value = id;
+  showDetailsModal.value = true;
 };
 
 onMounted(() => {
-  onAuthStateChanged(getAuth(), (user) => {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
     userLogged.value = !!user;
-    if (user) {
-     //ocalUserId.value = '3'; // <---- FORZANDO EL USER ID PARA PRUEBA
+    if (user && route.query.userId) {
+      localUserId.value = route.query.userId;
+      // Carga inicial al montar si userId ya está presente
       fetchCosplays(localUserId.value);
-    } else {
+    } else if (!user) {
       cosplays.value = [];
     }
   });
-});
-
-watch(() => route.query, (newRoute) => {
-  console.log('Ruta cambiada en Landing:', newRoute);
-  if (newRoute && newRoute.query && newRoute.query.userId) {
-    localUserId.value = newRoute.query.userId;
+  // También carga si userId está presente al montar (fuera del auth state change)
+  if (route.query.userId && getAuth().currentUser) {
+    localUserId.value = route.query.userId;
     fetchCosplays(localUserId.value);
-  } else {
-    console.warn('userId no encontrado en la ruta de Landing.');
-    cosplays.value = [];
   }
 });
 
-const delayedLoadCosplays = () => {
-  setTimeout(() => {
-    if (localUserId.value) {
+watch(
+  () => route.query.userId,
+  (newUserId) => {
+    console.log('userId en la ruta cambió:', newUserId);
+    if (newUserId) {
+      localUserId.value = newUserId;
       fetchCosplays(localUserId.value);
     } else {
-      console.warn('No se puede recargar cosplays, userId no disponible.');
+      console.warn('userId se eliminó de la ruta.');
+      cosplays.value = [];
     }
-  }, 1000);
-};
+  }
+);
 </script>
 
 <style scoped>
