@@ -24,9 +24,11 @@ import { db } from './firebase'; // Importa la instancia de Firestore desde fire
 
 export async function addCosplay(cosplayData) {
   try {
-    const docRef = await addDoc(collection(db, "cosplays"), cosplayData);
-    console.log("Cosplay agregado con ID:", docRef.id);
-  } catch (e) {
-    console.error("Error al agregar cosplay:", e);
+    const response = await axios.post('http://localhost:3000/api/cosplays', cosplayData);
+    console.log("Cosplay agregado en el backend con ID:", response.data.id); // Asumiendo que tu backend devuelve el ID
+    return response.data; // Podrías querer retornar la respuesta completa o solo el ID
+  } catch (error) {
+    console.error("Error al agregar cosplay al backend:", error);
+    throw error; // Re-lanzamos el error para que el componente AddCosplay pueda manejarlo si es necesario
   }
 }

@@ -23,9 +23,6 @@
         <button @click="$emit('ocultar-formulario')" class="hide-form-button">Ocultar Formulario</button>
       </div>
 
-      <div v-if="mostrarMensaje" class="notification">
-        {{ mensaje }}
-      </div>
     </div>
   </div>
 </template>
@@ -34,6 +31,7 @@
 import { ref } from 'vue';
 import { getAuth } from 'firebase/auth';
 import axios from 'axios';
+import { addCosplay } from '../firestore'; // Importa la función addCosplay de firestore.js
 
 const emit = defineEmits(['cosplay-agregado', 'ocultar-formulario']);
 
@@ -50,7 +48,7 @@ const imagenArchivo = ref(null); // Nuevo ref para el archivo de imagen
 const handleImageUpload = (event) => {
   imagenArchivo.value = event.target.files[0];
   console.log('Archivo de imagen seleccionado:', imagenArchivo.value);
-};  
+};
 
 const agregarCosplay = async () => {
   const auth = getAuth();
@@ -98,9 +96,9 @@ const agregarCosplay = async () => {
     formData.append('imagen', imagenArchivo.value); // Append el archivo de imagen al FormData
   }
 
-   console.log("Datos del cosplay a agregar:", Object.fromEntries(formData));
+  console.log("Datos del cosplay a agregar:", Object.fromEntries(formData));
 
- try {
+  try {
     const token = await user.getIdToken();
     const response = await axios.post('http://localhost:3000/api/cosplays', formData, { // Usamos formData aquí
       headers: {
@@ -109,20 +107,15 @@ const agregarCosplay = async () => {
       },
     });
     console.log('Respuesta del backend al agregar cosplay:', response.data);
-    mensaje.value = 'Cosplay agregado ✅';
-    mostrarMensaje.value = true;
-    setTimeout(() => {
-      mostrarMensaje.value = false;
-      mensaje.value = '';
-      emit('cosplay-agregado', response.data);
-      nombre.value = '';
-      estado.value = '';
-      descripcion.value = '';
-      fechaInicio.value = '';
-      fechaFin.value = '';
-      imagenArchivo.value = null; // Limpiar el archivo después de la subida
-      emit('ocultar-formulario');
-    }, 1000);
+    // Eliminamos la parte del mensaje de éxito
+    emit('cosplay-agregado', response.data);
+    nombre.value = '';
+    estado.value = '';
+    descripcion.value = '';
+    fechaInicio.value = '';
+    fechaFin.value = '';
+    imagenArchivo.value = null; // Limpiar el archivo después de la subida
+    emit('ocultar-formulario');
   } catch (error) {
     console.error('Error al agregar cosplay al backend:', error);
     mensaje.value = 'Error al agregar el cosplay.';

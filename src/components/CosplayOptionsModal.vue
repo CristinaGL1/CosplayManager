@@ -7,11 +7,16 @@
         <button @click="$emit('view-details', cosplayId)">Ver Detalles</button>
       </div>
       <button @click="$emit('close')" class="close-button">Cerrar</button>
+      <button @click="eliminarCosplay" class="delete-button">Eliminar</button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { defineProps, defineEmits } from 'vue';
+import axios from 'axios';
+import { getAuth } from 'firebase/auth';
+
 const props = defineProps({
   cosplayId: {
     type: Number,
@@ -19,7 +24,31 @@ const props = defineProps({
   }
 });
 
-defineEmits(['close', 'view-dashboard', 'view-details']);
+const emit = defineEmits(['close', 'view-dashboard', 'view-details', 'cosplay-eliminado']);
+
+const eliminarCosplay = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) {
+    alert('Debes estar autenticado para eliminar un cosplay.');
+    return;
+  }
+
+  const token = await user.getIdToken();
+  try {
+    await axios.delete(`http://localhost:3000/api/cosplays/${props.cosplayId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    console.log(`Cosplay con ID ${props.cosplayId} eliminado.`);
+    emit('cosplay-eliminado', props.cosplayId); // Emitir evento al padre
+    emit('close'); // Cerrar el modal después de la eliminación
+  } catch (error) {
+    console.error('Error al eliminar el cosplay:', error);
+    alert('Hubo un error al intentar eliminar el cosplay.');
+  }
+};
 </script>
 
 <style scoped>
@@ -65,6 +94,10 @@ defineEmits(['close', 'view-dashboard', 'view-details']);
 
 .close-button {
   background-color: #6c757d;
+  color: white;
+}
+.delete-button {
+  background-color: #dc3545; /* Rojo */
   color: white;
 }
 </style>
