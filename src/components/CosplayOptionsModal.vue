@@ -25,6 +25,9 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'view-dashboard', 'view-details', 'cosplay-eliminado']);
 
+
+// ------------------------------------ ELIMINAR COSPLAY ------------------------------------
+
 const eliminarCosplay = async () => {
 
   try {
