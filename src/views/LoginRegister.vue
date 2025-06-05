@@ -1,193 +1,130 @@
 <template>
   <div class="container">
     <div class="login-page" v-if="!userLogged">
+
       <template v-if="!showRegister">
         <div class="form-box login-box">
           <div class="form-box-bg"></div>
           <h2>Iniciar sesión</h2>
-          <div class="formInputs">
-            <input type="email" v-model="loginEmail" placeholder="Correo" />
-            <input type="password" v-model="loginPassword" placeholder="Contraseña" />
-          </div>
-          <button class="registerButton" @click="login">Iniciar sesión</button>
-          <p class="register-link">
-            ¿No tienes cuenta? <a href="#" @click.prevent="showRegister = true">Regístrate aquí</a>
-          </p>
+          <form @submit.prevent="login">
+            <div class="formInputs">
+              <input type="email" v-model="loginEmail" placeholder="Correo" required />
+              <input type="password" v-model="loginPassword" placeholder="Contraseña" required />
+            </div>
+            <button type="submit" class="registerButton">Iniciar sesión</button>
+            <p class="register-link">¿No tienes cuenta? <a href="#" @click.prevent="showRegister = true">Regístrate
+                aquí</a>
+            </p>
+            <div v-if="loginMessage" class="mt-2 text-sm" :class="loginError ? 'text-red-500' : 'text-green-500'">
+              {{ loginMessage }}
+            </div>
+          </form>
         </div>
       </template>
+
       <template v-else>
-        <div class="form-box register-box">
-          <div class="form-box-bg"></div>
-          <h2>Regístrate</h2>
-          <div class="formInputs">
-            <input type="email" v-model="email" placeholder="Correo" />
-            <input type="password" v-model="password" placeholder="Contraseña" />
+        <form @submit.prevent="register">
+          <div class="form-box register-box">
+            <div class="form-box-bg"></div>
+            <h2>Regístrate</h2>
+            <div class="formInputs">
+              <input type="email" v-model="email" placeholder="Correo" required />
+              <input type="password" v-model="password" placeholder="Contraseña" required />
+            </div>
+            <button type="submit" class="registerButton" value="Registrarse">Registrarse</button>
+            <p class="login-link">¿Ya tienes cuenta? <a href="#" @click.prevent="showRegister = false">Inicia sesión</a>
+            </p>
+            <div v-if="registrationMessage" class="mt-2 text-sm"
+              :class="registrationError ? 'text-red-500' : 'text-green-500'">
+              {{ registrationMessage }}
+            </div>
           </div>
-          <button class="registerButton" @click="register">Registrarse</button>
-          <p class="login-link">
-            ¿Ya tienes cuenta? <a href="#" @click.prevent="showRegister = false">Inicia sesión</a>
-          </p>
-        </div>
+        </form>
       </template>
-    </div>
-    <div v-else class="cosplay-area">
-      <AddCosplay v-if="showAddCosplay" @cosplay-agregado="loadCosplays" @ocultar-formulario="showAddCosplay = false" />
-      <CosplayList :cosplays="cosplayList" @cosplay-eliminado="handleCosplayEliminado" />
-    </div>
-    <div v-if="mostrarMensajeLogout" class="notification">
-      {{ mensajeLogout }}
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import AddCosplay from '../components/addCosplay.vue';
-import { getCosplays } from '../firestore';
-import CosplayList from '../components/cosplayList.vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import Cookies from 'js-cookie' // IMPORTAR LA LIBRERIA DE COOKIES
 
+
+const router = useRouter();
 
 const email = ref('');
 const password = ref('');
 const loginEmail = ref('');
 const loginPassword = ref('');
 const userLogged = ref(false);
-const cosplayList = ref([]);
 const showRegister = ref(false);
-const showAddCosplay = ref(false);
-const mensajeLogout = ref('');
-const mostrarMensajeLogout = ref(false);
-const router = useRouter();
-const mysqlUserId = ref(null);
+const registrationMessage = ref('');
+const registrationError = ref(false);
 
+const loginMessage = ref('');
+const loginError = ref(false);
 
-const loadCosplays = async (userId) => {
-  if (!userId) {
-    console.warn('No se proporcionó userId para cargar cosplays.');
-    cosplayList.value = [];
-    return;
+function searchCookie() {
+  
+  if(Cookies.get('userID') != null || Cookies.get('userID') != undefined){
+    router.push('/cosplaylanding');
   }
-  cosplayList.value = await getCosplays(userId);
-};
+}
 
-onMounted(() => {
-  const auth = getAuth();
-  onAuthStateChanged(auth, async (user) => {
-    userLogged.value = !!user;
-    if (user) {
-      try {
-        const token = await user.getIdToken();
-        const response = await axios.get('http://localhost:3000/api/users/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        mysqlUserId.value = response.data.id;
-        loadCosplays(mysqlUserId.value);
-       router.push({ path: '/cosplayLanding', query: { userId: mysqlUserId.value } });
-      } catch (error) {
-        console.error('Error al obtener userId en onMounted:', error);
-        // Podrías manejar el error aquí
-      }
-    } else {
-      cosplayList.value = []; // Limpiar la lista si no hay usuario logueado
-    }
-  });
-});
+searchCookie();
 
-const login = async () => {
-  if (!loginEmail.value || !loginPassword.value) {
-    mensajeLogout.value = "Por favor, escribe correo y contraseña";
-    mostrarMensajeLogout.value = true;
-    setTimeout(() => {
-      mostrarMensajeLogout.value = false;
-      mensajeLogout.value = '';
-    }, 3000);
-    return;
-  }
+async function login() {
   try {
-    const userCredential = await signInWithEmailAndPassword(getAuth(), loginEmail.value, loginPassword.value);
-    const user = userCredential.user;
-    if (user) {
-      const token = await user.getIdToken();
-      try {
-        const response = await axios.get('http://localhost:3000/api/users/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        mysqlUserId.value = response.data.id;
-        console.log('ID de MySQL del usuario:', mysqlUserId.value);
-        loadCosplays(mysqlUserId.value);
-        mensajeLogout.value = 'Has iniciado sesión ✅';
-        mostrarMensajeLogout.value = true;
-        setTimeout(() => {
-          mostrarMensajeLogout.value = false;
-          mensajeLogout.value = '';
-          // Eliminamos la redirección de aquí
-        }, 3000);
-      } catch (error) {
-        console.error('Error al obtener userId de MySQL:', error);
-        alert('Error al iniciar sesión completamente.');
-      }
-    }
+    const response = await axios.post('http://localhost:3000/login', {
+      email: loginEmail.value,
+      password: loginPassword.value
+    });
+    loginMessage.value = response.data.message || 'Inicio de sesión exitoso.';
+    loginError.value = false;
+    userLogged.value = true;
+    console.log('Login exitoso:', response.data);
+
+    //Guardar el user en una Cookie
+    Cookies.set('userID', response.data.userId, { expires: 7 }); // 7 días
+
+
   } catch (error) {
-    alert('Error al iniciar sesión: ' + error.message);
+    console.error('Error al iniciar sesión:', error);
+    loginError.value = true;
+    loginMessage.value = error.response?.data?.message || 'Credenciales inválidas.';
   }
-};
-const register = async () => {
-  if (!email.value || !password.value) {
-    mensajeLogout.value = "Por favor, completa los campos para registrarte";
-    mostrarMensajeLogout.value = true;
-    setTimeout(() => {
-      mostrarMensajeLogout.value = false;
-      mensajeLogout.value = '';
-    }, 3000);
-    return;
-  }
+}
+
+async function register() {
   try {
-    const authResult = await createUserWithEmailAndPassword(getAuth(), email.value, password.value);
-    const user = authResult.user;
-    if (user) {
-      console.log('Intentando registrar usuario en el backend:', { firebaseUid: user.uid, email: email.value });
-      const response = await axios.post('http://localhost:3000/api/users', {
-        firebaseUid: user.uid,
-        email: email.value
-      });
-      console.log('Usuario registrado en el backend:', response.data);
-      mensajeLogout.value = 'Registro exitoso 🎉';
-      mostrarMensajeLogout.value = true;
-      setTimeout(() => {
-        mostrarMensajeLogout.value = false;
-        mensajeLogout.value = '';
-        showRegister.value = false;
-      }, 3000);
-    }
+    const response = await axios.post('http://localhost:3000/register', {
+      email: email.value,
+      password: password.value
+    });
+    registrationMessage.value = response.data.message || 'Registro exitoso.';
+    registrationError.value = false;
+    // Limpiar los campos después del registro exitoso
+    email.value = '';
+    password.value = '';
+    // Opcional: Mostrar un mensaje por un tiempo y luego cambiar a la vista de login
+    setTimeout(() => {
+      showRegister.value = false;
+      registrationMessage.value = '';
+    }, 2000);
   } catch (error) {
-    alert('Error al registrarse en Firebase: ' + error.message);
+    console.error('Error de registro:', error);
+    registrationError.value = true;
+    registrationMessage.value = error.response?.data?.message || 'Hubo un error al registrarse.';
   }
-};
-
-const logout = async () => {
-  await signOut(getAuth());
-  mensajeLogout.value = "Sesión cerrada";
-  mostrarMensajeLogout.value = true;
-  cosplaysLoaded = false;
-  setTimeout(() => {
-    mostrarMensajeLogout.value = false;
-    mensajeLogout.value = '';
-    router.push('/'); // Redirigir al login al cerrar sesión
-  }, 100); // Reducción del tiempo para probar más rápido
-};
-
-const handleCosplayEliminado = (idEliminado) => {
-  cosplayList.value = cosplayList.value.filter(cosplay => cosplay.id !== idEliminado);
-};
+}
 </script>
 
+<style scoped>
+/* Estilos de tu componente aquí */
+</style>
 <style scoped>
 /* Estilos relacionados SOLO con el login y registro */
 .container {

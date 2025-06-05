@@ -37,7 +37,6 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { getAuth } from 'firebase/auth';
 
 const props = defineProps({
   cosplays: {
@@ -46,65 +45,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['cosplay-eliminado']);
-const router = useRouter();
 
-const mensajeEliminar = ref('');
-const mostrarMensajeEliminar = ref(false);
-
-const possibleStates = ['Sin empezar', 'En proceso', 'Finalizado'];
-
-const groupedCosplays = computed(() => {
-  const groups = {};
-  props.cosplays.forEach(cosplay => {
-    if (!groups[cosplay.estado]) {
-      groups[cosplay.estado] = [];
-    }
-    groups[cosplay.estado].push(cosplay);
-  });
-  return groups;
-});
-
-const groupedCosplaysKeys = computed(() => Object.keys(groupedCosplays.value));
-
-const cosplaysInState = (state) => groupedCosplays.value[state] || [];
-
-const verDetalles = (id) => {
-  router.push(`/cosplay/${id}`);
-};
-
-const eliminarCosplay = async (id) => {
-  if (confirm(`¿Seguro que quieres eliminar este cosplay ?`)) {
-    try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (!user) {
-        console.error('Usuario no autenticado.');
-        alert('No estás autenticado.');
-        return;
-      }
-      const token = await user.getIdToken();
-      await axios.delete(`http://localhost:3000/api/cosplays/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log('Cosplay eliminado del backend:', id);
-      emit('cosplay-eliminado', id);
-
-      mensajeEliminar.value = 'Cosplay eliminado 🗑️';
-      mostrarMensajeEliminar.value = true;
-      setTimeout(() => {
-        mostrarMensajeEliminar.value = false;
-        mensajeEliminar.value = '';
-      }, 3000);
-
-    } catch (error) {
-      console.error('Error al eliminar el cosplay del backend:', error);
-      alert('No se pudo eliminar el cosplay.');
-    }
-  }
-};
 </script>
 
 <style scoped>

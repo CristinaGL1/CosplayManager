@@ -1,34 +1,36 @@
 <template>
   <nav class="navbar">
+
     <div class="navbar-title">CosplayManager</div>
-    <div class="navbar-actions" v-if="userLogged">
-      <button @click="handleLogout" class="logout-icon">
+
+    <div class="navbar-actions">
+      <button @click="logout" class="logout-icon">
         <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
       </button>
     </div>
-    <button v-else @click="handleLogout" class="logout-icon hidden" title="Cerrar sesión">
-      <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
-    </button>
   </nav>
+
 </template>
 
 <script setup>
-const props = defineProps({
-  userLogged: Boolean
-});
+import { useRouter } from 'vue-router';
+import Cookies from 'js-cookie'
 
-const emit = defineEmits(['toggle-add-cosplay', 'logout-user']);
+const router = useRouter();
 
-const handleLogout = () => {
-  emit('logout-user');
-  console.log('Logout emitido desde NavigationBar');
-};
+//Funcion para borrar el Local Storage y salir al login
+function logout() {
+  Cookies.remove('userID');
+  localStorage.clear();
+  console.log('Todo el Local Storage ha sido limpiado para este origen.');
+  router.push('/');
+}
 </script>
 
 <style scoped>
 .navbar {
   width: 100%;
-  background-color: var(--mainColor);
+  background-color: var(--secondaryColor);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,12 +40,13 @@ const handleLogout = () => {
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  border-bottom: 2px solid var(--secondaryColor);
+  border-bottom: 2px solid var(--mainColor);
 }
 
 .navbar-title {
   font-family: 'Pacifico', cursive;
   font-size: 1.8em;
+  color: var(--mainColor);
 }
 
 .navbar-actions {

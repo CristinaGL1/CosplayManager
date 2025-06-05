@@ -1,37 +1,37 @@
 <template>
-  <div class="add-cosplay-overlay" @click.self="$emit('ocultar-formulario')">
-    <div class="add-cosplay-form-container">
-      <h2>Agregar un nuevo Cosplay</h2>
-      <input v-model="nombre" placeholder="Nombre del Cosplay" required />
-      <select v-model="estado" required>
-        <option value="" disabled>Selecciona un estado</option>
-        <option value="Sin empezar">Sin empezar</option>
-        <option value="En proceso">En proceso</option>
-        <option value="Finalizado">Finalizado</option>
-      </select>
-      <input v-model="descripcion" placeholder="Descripción" />
-      <input v-model="fechaInicio" type="date" />
-      <input v-model="fechaFin" type="date" />
+  <form @submit.prevent="addcosplay">
+    <div class="add-cosplay-overlay" @click.self="$emit('ocultar-formulario')">
+      <div class="add-cosplay-form-container">
+        <h2>Agregar un nuevo Cosplay</h2>
+        <input v-model="nombre" placeholder="Nombre del Cosplay" required />
+        <select v-model="estado">
+          <option value="">Selecciona un estado</option>
+          <option value="Sin empezar">Sin empezar</option>
+          <option value="En proceso">En proceso</option>
+          <option value="Finalizado">Finalizado</option>
+        </select>
+        <input v-model="descripcion" placeholder="Descripción" />
+        <input v-model="fechaInicio" type="date" />
+        <input v-model="fechaFin" type="date" />
 
-       <div>
-        <label for="imagen">Imagen:</label>
-        <input type="file" id="imagen" @change="handleImageUpload">
+        <div>
+          <label for="imagen">Imagen:</label>
+          <input type="file" id="imagen" @change="handleImageUpload">
+        </div>
+
+        <div class="form-actions">
+          <input type="submit" @click="agregarCosplay" value="Guardar"></input>
+          <button @click="$emit('ocultar-formulario')" class="hide-form-button">Ocultar Formulario</button>
+        </div>
+
       </div>
-
-      <div class="form-actions">
-        <button @click="agregarCosplay">Guardar</button>
-        <button @click="$emit('ocultar-formulario')" class="hide-form-button">Ocultar Formulario</button>
-      </div>
-
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { getAuth } from 'firebase/auth';
 import axios from 'axios';
-import { addCosplay } from '../firestore'; // Importa la función addCosplay de firestore.js
 
 const emit = defineEmits(['cosplay-agregado', 'ocultar-formulario']);
 
@@ -50,168 +50,158 @@ const handleImageUpload = (event) => {
   console.log('Archivo de imagen seleccionado:', imagenArchivo.value);
 };
 
-const agregarCosplay = async () => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (!user) {
-    mensaje.value = 'Debes iniciar sesión';
-    mostrarMensaje.value = true;
-    setTimeout(() => {
-      mostrarMensaje.value = false;
-      mensaje.value = '';
-    }, 3000);
-    return;
-  }
-  if (!nombre.value.trim()) {
-    mensaje.value = 'El nombre del cosplay es obligatorio.';
-    mostrarMensaje.value = true;
-    setTimeout(() => {
-      mostrarMensaje.value = false;
-      mensaje.value = '';
-    }, 3000);
-    return;
+async function addcosplay() {
+
+  const payload = {
+  };
+
+  if(fechaInicio.value == ''){
+    fechaInicio.value = null
   }
 
-  if (!estado.value) {
-    mensaje.value = 'Por favor, selecciona un estado.';
-    mostrarMensaje.value = true;
-    setTimeout(() => {
-      mostrarMensaje.value = false;
-      mensaje.value = '';
-    }, 3000);
-    return;
+   if(fechaFin.value == ''){
+    fechaFin.value = null
   }
-
-  const formData = new FormData();
-  formData.append('nombre', nombre.value);
-  formData.append('estado', estado.value);
-  formData.append('descripcion', descripcion.value);
-  if (fechaInicio.value) {
-    formData.append('fechaInicio', fechaInicio.value);
-  }
-  if (fechaFin.value) {
-    formData.append('fechaFin', fechaFin.value);
-  }
-  if (imagenArchivo.value) {
-    formData.append('imagen', imagenArchivo.value); // Append el archivo de imagen al FormData
-  }
-
-  console.log("Datos del cosplay a agregar:", Object.fromEntries(formData));
 
   try {
-    const token = await user.getIdToken();
-    const response = await axios.post('http://localhost:3000/api/cosplays', formData, { // Usamos formData aquí
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data', // Importante para enviar archivos
-      },
+    const response = await axios.post('http://localhost:3000/addcosplay', {
+      nombre: nombre.value,
+      estado: estado.value,
+      descripcion: descripcion.value,
+      fechaInicio: fechaInicio.value,
+      fechaFin: fechaFin.value,
+      userId: localStorage.userId,
+      // imagenURL: imagenURL.value
+
     });
-    console.log('Respuesta del backend al agregar cosplay:', response.data);
-    // Eliminamos la parte del mensaje de éxito
-    emit('cosplay-agregado', response.data);
-    nombre.value = '';
-    estado.value = '';
-    descripcion.value = '';
-    fechaInicio.value = '';
-    fechaFin.value = '';
-    imagenArchivo.value = null; // Limpiar el archivo después de la subida
-    emit('ocultar-formulario');
+
+    // Limpiar los campos después del registro exitoso
+    nombre.value;
+    estado.value;
+    descripcion.value;
+    fechaInicio.value;
+    fechaFin.value;
+    // imagenURL.value;
+
+    window.location.reload()
+
   } catch (error) {
-    console.error('Error al agregar cosplay al backend:', error);
-    mensaje.value = 'Error al agregar el cosplay.';
-    mostrarMensaje.value = true;
-    setTimeout(() => {
-      mostrarMensaje.value = false;
-      mensaje.value = '';
-    }, 3000);
+    console.error('Error de registro:', error);
+
   }
-};
+}
+
 </script>
 
 
 <style scoped>
-select {
+.add-cosplay-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  background-color: white;
-  color: #999;
-  text-align: left;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  /* Centra horizontalmente */
+  align-items: center;
+  /* Centra verticalmente */
+  z-index: 1010;
+  padding-left: 21vw;
+  /* Evita la barra lateral */
+  padding-right: 1vw;
+  /* Margen derecho */
+  padding-top: 12vh;
+  /* Margen superior */
+  padding-bottom: 3vh;
+  /* Margen inferior */
+  box-sizing: border-box;
 }
 
-select option:disabled {
-  color: #999;
+.add-cosplay-form-container {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  font-family: 'Arial', sans-serif;
+  /* O la fuente que uses */
+  padding: 30px;
+  width: 102%;
+  max-width: 1200px;
+  /* Ajusta si es necesario */
+  max-height: 1000px;
+  /* Ajusta si es necesario */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  position: relative;
 }
 
-select:focus:not(:placeholder-shown) {
+h2.detail-title {
+  font-size: 2em;
+  font-weight: bold;
   color: #333;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
-select:not(:disabled) {
-  color: #333;
-}
-
-input {
+label {
   display: block;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+input[type="text"],
+input[type="date"],
+select,
+textarea,
+input[type="file"] {
   width: 100%;
-  margin-bottom: 0.75rem;
-  padding: 0.5rem;
-  padding-left: 0.8rem;
+  padding: 8px;
+  margin-top: 5px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+textarea {
+  min-height: 80px;
 }
 
 .form-actions {
+  margin-top: 20px;
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-  justify-content: center;
-  /* Asegúrate de tener esta línea */
-  align-items: center;
-  /* Esto alinea verticalmente si fuera necesario */
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .form-actions button {
-  padding: 0.4rem 1rem;
-  border: none;
-  /* Aseguramos que no haya borde */
+  padding: 0.5rem 1rem;
+  border: 1px solid #888;
   background-color: #f7ecf2;
-  /* Color rosa de fondo */
-  color: black;
-  /* Texto negro */
-  border-radius: 5px;
+  color: #000000;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: 0.7rem;
+  font-size: 0.9em;
+  border-radius: 10px;
 }
 
 .form-actions button:hover {
   background-color: #ffdef0;
-  /* Rosa más claro al pasar el ratón */
 }
 
 .notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1.2rem;
   border-radius: 5px;
-  z-index: 1000;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+  margin-bottom: 1rem;
+  z-index: 1001;
 }
 </style>

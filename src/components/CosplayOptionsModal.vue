@@ -15,7 +15,6 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 import axios from 'axios';
-import { getAuth } from 'firebase/auth';
 
 const props = defineProps({
   cosplayId: {
@@ -27,23 +26,13 @@ const props = defineProps({
 const emit = defineEmits(['close', 'view-dashboard', 'view-details', 'cosplay-eliminado']);
 
 const eliminarCosplay = async () => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (!user) {
-    alert('Debes estar autenticado para eliminar un cosplay.');
-    return;
-  }
 
-  const token = await user.getIdToken();
   try {
-    await axios.delete(`http://localhost:3000/api/cosplays/${props.cosplayId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
+    await axios.delete(`http://localhost:3000/deleteCosplays/${localStorage.selectedCosplay}`);
     console.log(`Cosplay con ID ${props.cosplayId} eliminado.`);
     emit('cosplay-eliminado', props.cosplayId); // Emitir evento al padre
     emit('close'); // Cerrar el modal después de la eliminación
+    location.reload();
   } catch (error) {
     console.error('Error al eliminar el cosplay:', error);
     alert('Hubo un error al intentar eliminar el cosplay.');

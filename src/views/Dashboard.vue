@@ -74,10 +74,8 @@
 
 <script setup>
 import {onUnmounted, ref, onMounted, watch, computed, onBeforeUnmount } from 'vue';
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import NavigationBar from '../components/NavigationBar.vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getCosplay } from '../firestore';
 
 const router = useRouter();
 const route = useRoute();

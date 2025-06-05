@@ -1,37 +1,34 @@
 <template>
-  <nav>
-    <NavigationBar :userLogged="userLogged" @toggle-add-cosplay="showAddCosplay = !showAddCosplay"
-      @logout-user="logout" />
-  </nav>
-  <div class="cosplay-area">
-    <AddCosplay v-if="showAddCosplay" @cosplay-agregado="refetchCosplays"
-      @ocultar-formulario="showAddCosplay = false" />
-  </div>
 
-  <div v-if="mensajeLogout" class="notification">{{ mensajeLogout }}</div>
-
+  <NavigationBar />
   <div class="cl">
-    <section class="lateralNav">
-      <h1>Cosplay</h1>
-      <input type="text" placeholder="Buscar cosplay" v-model="searchTerm">
-      <ul v-if="filteredCosplays.length > 0">
-        <li v-for="cosplay in filteredCosplays" :key="cosplay.id" @click="openModal(cosplay.id)" class="list-item-link">
-          {{ cosplay.nombre }}
-        </li>
-      </ul>
-      <p v-else>No hay cosplays.</p>
-    </section>
+
+    <lateralNav />
 
     <section class="cosplayGrid">
-      <div class="new-cosplay-item" style="display: flex; flex-direction: column; align-items: center;">
+
+      <!--
+      -------------------------------------------------
+      --------------- NEW COSPLAY CARD ----------------
+      ------------------------------------------------- 
+      -->
+
+      <div class="new-cosplay-item">
         <div class="new-cosplay-container" @click="showAddCosplay = true">
           <div class="plus-icon">+</div>
         </div>
-        <div class="new-cosplay-text" style="margin-top: 5px;">Nuevo Cosplay</div>
+        <div class="new-cosplay-text">Nuevo Cosplay</div>
       </div>
+
+      <!--
+      -------------------------------------------------
+      ----------------- COSPLAY CARD ------------------
+      ------------------------------------------------- 
+      -->
+
       <div v-for="cosplay in cosplays" :key="cosplay.id" class="cosplay-item" @click="openModal(cosplay.id)">
         <div class="cosplay-thumbnail">
-          <img v-if="cosplay.imagenURL" :src="'http://localhost:3000' + cosplay.imagenURL" alt="Imagen del cosplay"
+          <img v-if="cosplay.imagenURL" :src="'backend' + cosplay.imagenURL" alt="Imagen del cosplay"
             class="thumbnail-image">
           <div v-else class="no-image">Sin imagen</div>
         </div>
@@ -39,89 +36,72 @@
       </div>
     </section>
 
-    <section class="gridScroll">
+    <div class="cosplay-area">
+      <AddCosplay v-if="showAddCosplay" @cosplay-agregado="refetchCosplays"
+        @ocultar-formulario="showAddCosplay = false" />
+    </div>
 
-    </section>
+    <div v-if="showDetailsModal" class="details-modal-overlay">
+      <CosplayDetails :id="selectedCosplayIdForDetails" @close="showDetailsModal = false" />
+    </div>
+
   </div>
 
-  <div v-if="showDetailsModal" class="details-modal-overlay">
-    <CosplayDetails :id="selectedCosplayIdForDetails" @close="showDetailsModal = false" />
-  </div>
-  
-<CosplayOptionsModal
+  <CosplayOptionsModal
   v-if="showOptionsModal"
   :cosplayId="selectedCosplayIdForModal"
   @close="showOptionsModal = false"
   @view-dashboard="goToDashboard"
   @view-details="goToDetails"
-  @cosplay-eliminado="handleCosplayEliminado" />
+/>
 </template>
 
 <script setup>
-import NavigationBar from '../components/NavigationBar.vue';
-import { ref, onMounted, watch,computed } from 'vue';
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
-import { getCosplays } from '../firestore';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
+
+import NavigationBar from '../components/NavigationBar.vue';
+import lateralNav from '../components/lateralNav.vue';
 import AddCosplay from '../components/addCosplay.vue';
 import CosplayOptionsModal from '../components/CosplayOptionsModal.vue';
 import CosplayDetails from '../views/CosplayDetails.vue';
-
+import Cookies from 'js-cookie'
 
 const route = useRoute();
 const router = useRouter();
 const localUserId = ref(route.query.userId);
-const cosplays = ref([]);
 const showAddCosplay = ref(false);
-const userLogged = ref(false);
-const mensajeLogout = ref('');
 const showOptionsModal = ref(false);
 const selectedCosplayIdForModal = ref(null);
-const selectedCosplayId = ref(null);
 const showDetailsModal = ref(false);
 const selectedCosplayIdForDetails = ref(null);
-const searchTerm = ref(''); // Nuevo: Variable para el término de búsqueda
 
-const fetchCosplays = async (UserId) => {
-  if (!UserId) {
-    cosplays.value = [];
-    return;
-  }
-  console.log('Cargando cosplays para userId:', UserId);
-  try {
-    const data = await getCosplays(UserId);
-    console.log('Cosplays cargados:', data);
-    cosplays.value = data;
-  } catch (error) {
-    console.error('Error al cargar los cosplays:', error);
-  }
-};
+const cosplays = ref([]);
+const loggedInUserId = Cookies.get('userID');
 
-const logout = async () => {
-  await signOut(getAuth());
-  mensajeLogout.value = "Sesión cerrada";
-  router.push('/');
-};
 
-const handleCosplayEliminado = (idEliminado) => {
-  console.log(`Cosplay con ID ${idEliminado} fue eliminado.`);
-  // Aquí podrías simplemente recargar la lista completa de cosplays
-  refetchCosplays();
-  // O, si prefieres, podrías actualizar la lista localmente sin una recarga completa:
-  // cosplays.value = cosplays.value.filter(cosplay => cosplay.id !== idEliminado);
-};
-
-const refetchCosplays = () => {
-  if (localUserId.value) {
-    fetchCosplays(localUserId.value);
+// Recupera los cosplays para la lista
+onMounted(async () => {
+  if (loggedInUserId) {
+    try {
+      const response = await axios.get(`http://localhost:3000/cosplayList?userId=${Cookies.get('userID')}`);
+      cosplays.value = response.data;
+    } catch (error) {
+      console.error('Error al cargar los cosplays del usuario:', error);
+      // Manejar el error
+    }
   } else {
-    console.warn('No se puede recargar cosplays, userId no disponible en refetchCosplays.');
+    console.log('Usuario no logueado, no se pueden cargar los cosplays.');
+    // Opcional: Redirigir al login
   }
-};
+});
 
 const openModal = (id) => {
   selectedCosplayIdForModal.value = id;
   showOptionsModal.value = true;
+  localStorage.setItem('selectedCosplay', id);
+  console.log(localStorage.selectedCosplay)
 };
 
 const goToDashboard = (id) => {
@@ -135,37 +115,7 @@ const goToDetails = (id) => {
   showDetailsModal.value = true;
 };
 
-onMounted(() => {
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    userLogged.value = !!user;
-    if (user && route.query.userId) {
-      localUserId.value = route.query.userId;
-      fetchCosplays(localUserId.value); // Llamamos a fetchCosplays aquí también
-    } else if (!user) {
-      cosplays.value = [];
-    }
-  });
-});
 
-watch(
-  () => route.query.userId,
-  (newUserId) => {
-    console.log('userId en la ruta cambió:', newUserId);
-    if (newUserId) {
-      localUserId.value = newUserId;
-      fetchCosplays(localUserId.value);
-    } else {
-      console.warn('userId se eliminó de la ruta.');
-      cosplays.value = [];
-    }
-  }
-);
-const filteredCosplays = computed(() => { // Nuevo: Cosplays filtrados
-  return cosplays.value.filter(cosplay =>
-    cosplay.nombre.toLowerCase().includes(searchTerm.value.toLowerCase())
-  );
-});
 </script>
 
 <style scoped>
@@ -182,57 +132,7 @@ const filteredCosplays = computed(() => { // Nuevo: Cosplays filtrados
   box-sizing: border-box;
 }
 
-.lateralNav {
-  width: 20vw;
-  background-color: #222;
-  /* Fondo oscuro */
-  color: #eee;
-  border-right: 2px solid #444;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  /* Por si la lista es larga */
-}
-
-.lateralNav h1 {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-.lateralNav input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: #eee;
-  box-sizing: border-box;
-  margin-top: 20px;
-}
-
-.lateralNav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.lateralNav li {
-  padding: 10px 0;
-  border-bottom: 1px solid #444;
-  cursor: pointer;
-}
-
-.lateralNav li:last-child {
-  border-bottom: none;
-}
-
-.list-item-link {
-  cursor: pointer;
-}
-
-
-.grdiScroll {
+.gridScroll {
   width: 10vw;
   background-color: var(--mainColor);
   border-right: 2px solid var(--secondaryColor);
@@ -242,6 +142,10 @@ const filteredCosplays = computed(() => { // Nuevo: Cosplays filtrados
   display: flex;
   width: 80vw;
   /* El ancho restante */
+}
+
+.cosplay-area{
+  background-color: var(--mainColor);
 }
 
 .cosplayGrid {

@@ -7,7 +7,7 @@
         <div v-if="!editando" class="cosplay-info">
           <div class="cosplay-header">
             <div v-if="cosplay.imagenURL" class="cosplay-main-image">
-              <img :src="'http://localhost:3000' + cosplay.imagenURL" alt="Imagen principal del cosplay"
+              <img :src="'backend' + cosplay.imagenURL" alt="Imagen principal del cosplay"
                 style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; margin-right: 20px;">
             </div>
             <div class="header-info">
@@ -31,60 +31,60 @@
             </div>
           </div>
         </div>
+
+        <!-- ---------------------------------- PESTAÑA DE EDICION ---------------------------------- -->
         <div v-else class="edit-section">
-          <label>
-            Nombre:
-            <input v-model="form.nombre" type="text" />
-          </label>
+          <form @submit.prevent="guardarEdicion">
+            <label>
+              Nombre:
+              <input v-model="formNombre" type="text" />
+            </label>
 
-          <label>
-            Estado:
-            <select v-model="form.estado">
-              <option>Sin empezar</option>
-              <option>En proceso</option>
-              <option>Finalizado</option>
-            </select>
-          </label>
+            <label>
+              Estado:
+              <select v-model="formEstado">
+                <option>Sin empezar</option>
+                <option>En proceso</option>
+                <option>Finalizado</option>
+              </select>
+            </label>
 
-          <label>
-            Descripción:
-            <textarea v-model="form.descripcion" rows="3"></textarea>
-          </label>
+            <label>
+              Descripción:
+              <textarea v-model="formDescripcion" rows="3"></textarea>
+            </label>
 
-          <label>
-            Fecha de Inicio:
-            <input v-model="form.fechaInicio" type="date" />
-          </label>
+            <label>
+              Fecha de Inicio:
+              <input v-model="formFechaInicio" type="date" />
+            </label>
 
-          <label>
-            Fecha de Fin:
-            <input v-model="form.fechaFin" type="date" />
-          </label>
+            <label>
+              Fecha de Fin:
+              <input v-model="formFechaFin" type="date" />
+            </label>
 
-          <label>
-            URL Imagen (opcional):
-            <input v-model="form.imagenUrl" type="text" class="border p-1 w-full" />
-            <small class="block mt-1 text-gray-600 text-sm">
-              Si prefieres usar una URL externa.
-            </small>
-          </label>
+            <label>
+              URL Imagen (opcional):
+              <input v-model="formImagenUrl" type="text" class="border p-1 w-full" />
+              <small class="block mt-1 text-gray-600 text-sm">
+                Si prefieres usar una URL externa.
+              </small>
+            </label>
 
-          <label>
-            Subir Imagen:
-            <input type="file" @change="handleImageUpload" accept="image/*" class="border p-1 w-full" />
-            <small class="block mt-1 text-gray-600 text-sm">
-              Selecciona un archivo de imagen para subir.
-            </small>
-          </label>
+            <label>
+              Subir Imagen:
+              <input type="file" @change="handleImageUpload" accept="image/*" class="border p-1 w-full" />
+              <small class="block mt-1 text-gray-600 text-sm">
+                Selecciona un archivo de imagen para subir.
+              </small>
+            </label>
 
-          <div class="edit-button-group">
-            <button @click="guardarEdicion" class="registerButton">
-              Guardar
-            </button>
-            <button @click="cancelarEdicion" class="registerButton">
-              Cancelar
-            </button>
-          </div>
+            <div class="edit-button-group">
+              <button @click="cancelarEdicion" class="registerButton">Cancelar</button>
+              <input type="submit" @click="guardarEdicion" class="registerButton" value="Guardar"></input>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -114,6 +114,24 @@ const cosplay = ref(null);
 const editando = ref(false);
 const uploadedImage = ref(null); // Para almacenar el archivo de imagen seleccionado
 
+
+const selectedCosplay = {
+  nombre: "",
+  estado: "",
+  descripcion: "",
+  fechaInicio: "",
+  fechaFin: "",
+  imagenURL: ""
+}
+
+const formNombre = ref('');
+const formEstado = ref('');
+const formDescripcion = ref('');
+const formFechaInicio = ref('');
+const formFechaFin = ref('');
+const formImagenURL = ref('');
+
+
 const form = reactive({
   nombre: '',
   estado: '',
@@ -132,29 +150,37 @@ const formatFecha = (fechaStr) => {
   return fecha.toLocaleDateString();
 };
 
+
 const loadCosplayDetailsFromBackend = async () => {
-  const idToLoad = route.params.id || props.id; // Prioriza el parámetro de la ruta si existe
-  if (idToLoad) {
-    try {
-      const response = await axios.get(`http://localhost:3000/api/cosplays/${idToLoad}`);
-      cosplay.value = response.data;
-      console.log('Detalles del cosplay cargados:', cosplay.value);
-      form.nombre = cosplay.value.nombre || '';
-      form.estado = cosplay.value.estado || '';
-      form.descripcion = cosplay.value.descripcion || '';
-      form.fechaInicio = cosplay.value.fechaInicio ? new Date(cosplay.value.fechaInicio).toISOString().split('T')[0] : '';
-      form.fechaFin = cosplay.value.fechaFin ? new Date(cosplay.value.fechaFin).toISOString().split('T')[0] : '';
-      form.imagenUrl = cosplay.value.imagenUrl || '';
-    } catch (error) {
-      console.error('Error al obtener el cosplay desde el backend:', error);
-    }
-  } else {
-    console.warn('No se proporcionó un ID de cosplay para cargar.');
+
+  try {
+    const response = await axios.get(`http://localhost:3000/api/cosplays/${localStorage.selectedCosplay}`);
+    cosplay.value = response.data[0];
+
+    selectedCosplay.nombre = cosplay.value.nombre;
+    selectedCosplay.estado = cosplay.value.estado;
+    selectedCosplay.descripcion = cosplay.value.descripcion;
+    selectedCosplay.fechaInicio = cosplay.value.fechaInicio;
+    selectedCosplay.fechaFin = cosplay.value.fechaFin;
+    selectedCosplay.imagenURL = cosplay.value.imagenURL;
+
+    console.log(selectedCosplay)
+  } catch (error) {
+    console.error('Error al obtener el cosplay desde el backend:', error);
   }
+
 };
 
 const iniciarEdicion = () => {
   editando.value = true;
+
+  formNombre.value = selectedCosplay.nombre;
+  formEstado.value = selectedCosplay.estado;
+  formDescripcion.value = selectedCosplay.descripcion;
+  formFechaInicio.value = selectedCosplay.fechaInicio;
+  formFechaFin.value = selectedCosplay.fechaFin;
+  formImagenURL.value = selectedCosplay.imagenURL;
+
 };
 
 const cancelarEdicion = () => {
@@ -168,29 +194,28 @@ const handleImageUpload = (event) => {
 };
 
 
+
+
 const guardarEdicion = async () => {
-  const formData = new FormData();
-  formData.append('nombre', form.nombre);
-  formData.append('estado', form.estado);
-  formData.append('descripcion', form.descripcion);
-  if (form.fechaInicio) {
-    formData.append('fechaInicio', form.fechaInicio);
+
+  if (formFechaInicio.value == '') {
+    formFechaInicio.value = null;
   }
-  if (form.fechaFin) {
-    formData.append('fechaFin', form.fechaFin);
+
+  if (formFechaFin.value == '') {
+    formFechaFin.value = null;
   }
-  formData.append('imagenUrl', form.imagenUrl); // También enviamos la URL por si el usuario la usó
-  if (uploadedImage.value) {
-    formData.append('imagenFile', uploadedImage.value); // Append el archivo si se seleccionó
-  }
-  console.log('ID del cosplay a actualizar (desde props):', props.id);
 
   try {
-    const response = await axios.put(`http://localhost:3000/api/cosplays/${props.id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+    const response = await axios.put(`http://localhost:3000/changecosplay/${localStorage.selectedCosplay}`, {
+      nombre: formNombre.value,
+      estado: formEstado.value,
+      descripcion: formDescripcion.value,
+      fechaInicio: formFechaInicio.value,
+      fechaFin: formFechaFin.value,
+      imagenURL: formImagenURL.value
     });
+
     cosplay.value = response.data;
     editando.value = false;
     alert('Cosplay actualizado correctamente');
@@ -200,14 +225,6 @@ const guardarEdicion = async () => {
   }
 };
 
-const props = defineProps({
-  id: {
-    type: [String, Number],
-    required: true
-  }
-});
-
-console.log('ID recibido en CosplayDetails:', props.id);
 
 onMounted(loadCosplayDetailsFromBackend);
 </script>
@@ -295,7 +312,7 @@ onMounted(loadCosplayDetailsFromBackend);
 
 .header-info {
   flex-grow: 1;
-  
+
 
 }
 
@@ -317,7 +334,7 @@ onMounted(loadCosplayDetailsFromBackend);
 
 .info-value {
   color: #333;
-  
+
 }
 
 .detail-body {

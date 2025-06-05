@@ -11,8 +11,6 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
-  import { db } from '@/firebase'; // Asegúrate de la ruta correcta a tu instancia de Firestore
-  import { collection, query, where, getDocs } from 'firebase/firestore';
   import { useRoute } from 'vue-router'; // Si estás usando Vue Router para navegar entre cosplays
   
   const route = useRoute();
