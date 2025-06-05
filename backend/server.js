@@ -264,11 +264,10 @@ app.delete('/deleteCosplays/:id', async (req, res) => {
 });
 
 
-// Recuperar las task de un cosplay
-
-app.get('api/getTask/:id', async (req, res) => {
+// Recuperar las task sin empezar de un cosplay
+app.get('/api/getTask0/:id', async (req, res) => {
     const cosplayId = req.params.id;
-    connection.query('SELECT * FROM tasks WHERE cosplayID = ? AND status = ?', [cosplayId], (error, results) => {
+    connection.query('SELECT * FROM tasks WHERE cosplayID = ? AND estado = 0', [cosplayId], (error, results) => {
         if (error) {
             console.error('Error al obtener las tareas:', error);
             res.status(500).json({ error: 'Error al obtener las tareas' });
@@ -276,6 +275,64 @@ app.get('api/getTask/:id', async (req, res) => {
         }
         res.json(results);
     });
+});
+
+// Recuperar las task en proceso de un cosplay
+app.get('/api/getTask1/:id', async (req, res) => {
+    const cosplayId = req.params.id;
+    connection.query('SELECT * FROM tasks WHERE cosplayID = ? AND estado = 1', [cosplayId], (error, results) => {
+        if (error) {
+            console.error('Error al obtener las tareas:', error);
+            res.status(500).json({ error: 'Error al obtener las tareas' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Recuperar las task finalizadas de un cosplay
+app.get('/api/getTask2/:id', async (req, res) => {
+    const cosplayId = req.params.id;
+    connection.query('SELECT * FROM tasks WHERE cosplayID = ? AND estado = 2', [cosplayId], (error, results) => {
+        if (error) {
+            console.error('Error al obtener las tareas:', error);
+            res.status(500).json({ error: 'Error al obtener las tareas' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/addTask', (req, res) => {
+
+    const { nombre, estado, cosplayID } = req.body;
+    const descripcion = req.body.descripcion || null;
+
+    console.log(nombre, cosplayID, estado)
+
+    try {
+        const sql = 'INSERT INTO tasks (nombre, descripcion, estado, cosplayID) VALUES (?, ?, ?, ?)';
+        connection.query(sql, [nombre, descripcion, estado, cosplayID], (err, result) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    return res.status(409).json({ message: 'ERROR 409: Ya existe un cosplay con este nombre o ID duplicado.' });
+                }
+                console.error('Error al registrar el cosplay en la base de datos:', err);
+                return res.status(500).json({ message: 'Error interno del servidor al guardar en DB.' });
+            }
+
+            res.status(201).json({
+                message: 'Tarea registrada exitosamente.'
+            });
+        });
+    } catch (error) {
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+        console.error('Error general en el proceso de registro del cosplay:', error);
+        res.status(500).json({ message: 'Error interno del servidor en el catch principal.' });
+    }
+
 });
 
 // Iniciar el servidor

@@ -3,18 +3,19 @@
     <NavigationBar />
     <div class="cl">
         <lateralNav />
+        <addTask />
         <section class="kanban">
             <div class="kabanBox">
                 <div class="kanbanBox-titleBox">
-                    <h3 class="kanbanBox-titleBox-title"> SIN EMPEZAR</h3>
-                    <button class="kanbanBox-titleBox-addButton">+</button>
+                    <h3 class="kanbanBox-titleBox-title">SIN EMPEZAR</h3>
+                    <button class="kanbanBox-titleBox-addButton" onclick="openAddTask()">+</button>
                 </div>
-                <div class="kanbanBox-taskBox">
+                <div class="kanbanBox-taskBox" v-for="task in taskStartList" :key="task.id">
                     <div class="kanbanBox-card">
-                        <span class="kanbanBox-card-title">Peluca</span>
+                        <span class="kanbanBox-card-title">{{ task.nombre }}</span>
                         <div class="kanbanBox-card-buttonBox">
-                            <button class="kanbanBox-card-button">x</button>
                             <button class="kanbanBox-card-button">o</button>
+                            <button class="kanbanBox-card-button">x</button>
                         </div>
                         <div class="kanbanBox-card-cardColor"></div>
                     </div>
@@ -26,8 +27,15 @@
                     <h3 class="kanbanBox-titleBox-title">EN PROCESO</h3>
                     <button class="kanbanBox-titleBox-addButton">+</button>
                 </div>
-                <div class="kanbanBox-taskBox">
-
+                <div class="kanbanBox-taskBox" v-for="task in taskInProcessList" :key="task.id">
+                    <div class="kanbanBox-card">
+                        <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+                        <div class="kanbanBox-card-buttonBox">
+                            <button class="kanbanBox-card-button">o</button>
+                            <button class="kanbanBox-card-button">x</button>
+                        </div>
+                        <div class="kanbanBox-card-cardColor"></div>
+                    </div>
                 </div>
             </div>
 
@@ -36,8 +44,15 @@
                     <h3 class="kanbanBox-titleBox-title">FINALIZADO</h3>
                     <button class="kanbanBox-titleBox-addButton">+</button>
                 </div>
-                <div class="kanbanBox-taskBox">
-
+                <div class="kanbanBox-taskBox" v-for="task in taskFinishList" :key="task.id">
+                    <div class="kanbanBox-card">
+                        <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+                        <div class="kanbanBox-card-buttonBox">
+                            <button class="kanbanBox-card-button">o</button>
+                            <button class="kanbanBox-card-button">x</button>
+                        </div>
+                        <div class="kanbanBox-card-cardColor"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -53,6 +68,7 @@ import axios from 'axios';
 
 import NavigationBar from '../components/NavigationBar.vue';
 import lateralNav from '../components/lateralNav.vue';
+import addTask from '../components/addTask.vue';
 
 
 const taskStartList = ref([]);
@@ -61,17 +77,42 @@ const taskFinishList = ref([]);
 
 onMounted(async () => {
 
+    recoverTasks();
+
+});
+
+async function recoverTasks() {
+    //Recuperar las tareas sin empezar
     try {
-        // const response = await axios.get(`http://localhost:3000/api/getTask?userId=${Cookies.get('cosplayID')}`);
-        const response = await axios.get(`http://localhost:3000/api/getTask`);
+        const response = await axios.get(`http://localhost:3000/api/getTask0/${localStorage.selectedCosplay}`);
         taskStartList.value = response.data;
     } catch (error) {
-        console.error('Error al cargar los cosplays del usuario:', error);
+        console.error('Error al cargar las tareas del usuario:', error);
         // Manejar el error
     }
 
+    //Recuperar las tareas en proceso
+    try {
+        const response = await axios.get(`http://localhost:3000/api/getTask1/${localStorage.selectedCosplay}`);
+        taskInProcessList.value = response.data;
+    } catch (error) {
+        console.error('Error al cargar las tareas del usuario:', error);
+        // Manejar el error
+    }
+    //Recuperar las tareas finalizadas
+    try {
+        const response = await axios.get(`http://localhost:3000/api/getTask2/${localStorage.selectedCosplay}`);
+        taskFinishList.value = response.data;
+    } catch (error) {
+        console.error('Error al cargar las tareas del usuario:', error);
+        // Manejar el error
+    }
+}
 
-});
+async function openAddTask(){
+    
+}
+
 </script>
 
 <style scoped>
@@ -116,7 +157,8 @@ onMounted(async () => {
 
 .kanbanBox-titleBox {
     width: 100%;
-    height: 3rem;
+    min-height: 3rem;
+    max-height: 3rem;
     display: flex;
 
     border-bottom: 2px solid var(--mainColor);
@@ -128,6 +170,7 @@ onMounted(async () => {
 
 .kanbanBox-titleBox-title {
     width: 85%;
+    font-weight: 600;
 }
 
 .kanbanBox-titleBox-addButton {
@@ -154,8 +197,9 @@ onMounted(async () => {
 
 .kanbanBox-taskBox {
     /* background-color: rgba(0, 255, 255, 0.342); */
-    height: 100%;
-    width: auto;
+    width: 100%;
+
+    display: flex;
 
     margin: .25rem;
 
@@ -164,7 +208,7 @@ onMounted(async () => {
 .kanbanBox-card {
 
     height: 8rem;
-    width: auto;
+    width: 100%;
 
     margin: 1rem;
 
@@ -186,7 +230,7 @@ onMounted(async () => {
     align-items: center;
     justify-content: center;
 
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 
 
 }
