@@ -29,6 +29,10 @@ const emit = defineEmits(['close', 'view-dashboard', 'view-details', 'cosplay-el
 
 // ------------------------------------ ELIMINAR COSPLAY ------------------------------------
 
+function goToDashboard(){
+  
+}
+
 const eliminarCosplay = async () => {
 
   try {

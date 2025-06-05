@@ -106,7 +106,7 @@ const openModal = (id) => {
 
 const goToDashboard = (id) => {
   showOptionsModal.value = false;
-  router.push(`/dashboard/${id}?userId=${localUserId.value}`);
+  router.push(`/kanban`);
 };
 
 const goToDetails = (id) => {

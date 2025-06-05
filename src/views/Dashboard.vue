@@ -1,8 +1,6 @@
 <template>
   <div>
-    <NavigationBar :userLogged="userLogged" @toggle-add-cosplay="showAddCosplay = !showAddCosplay"
-      @logout-user="logout" />
-
+    <NavigationBar />
     <div class="dashboard-layout" style="padding-top: 60px;">
       <section class="lateralNav">
         <h3>Lista de Compras</h3>
@@ -212,21 +210,7 @@ const eliminarTarea = (taskId) => {
   // Aquí podrías implementar la lógica para eliminar la tarea
 };
 
-onMounted(() => {
-  onAuthStateChanged(getAuth(), (user) => {
-    userLogged.value = !!user;
-    localUserId.value = route.query.userId; // Aseguramos que localUserId se actualice
 
-    if (user && route.params.id && route.query.userId) {
-      loadCosplayDetails(route.params.id);
-    } else if (user) {
-      console.warn('ID de cosplay o userId no encontrado inicialmente en el Dashboard.');
-      selectedCosplay.value = null;
-    } else {
-      selectedCosplay.value = null;
-    }
-  });
-});
 
 watch(() => route.params.id, (newId) => {
   if (newId && localUserId.value) {

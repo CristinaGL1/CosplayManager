@@ -95,13 +95,12 @@
 </template>
 
 <script setup>
+
+
+
 import { ref, reactive, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
-const route = useRoute();
-const router = useRouter();
-const cosplayId = route.params.id;
 const cosplay = ref(null);
 const editando = ref(false);
 const uploadedImage = ref(null); // Para almacenar el archivo de imagen seleccionado
@@ -122,6 +121,12 @@ const formDescripcion = ref('');
 const formFechaInicio = ref('');
 const formFechaFin = ref('');
 const formImagenURL = ref('');
+
+// Nuevas refs para la gestión de la imagen
+const newImagenArchivo = ref(null); // Para guardar el nuevo archivo seleccionado
+const editImageInput = ref(null);   // Para resetear el input de tipo file
+const newImagePreviewUrl = ref(null); // Para mostrar una vista previa de la nueva imagen
+
 
 
 const form = reactive({
@@ -185,8 +190,16 @@ const handleImageUpload = (event) => {
   console.log('Imagen seleccionada:', file);
 };
 
-
-
+// Función para manejar la selección de una nueva imagen
+const handleEditImageUpload = (event) => {
+  newImagenArchivo.value = event.target.files[0];
+  if (newImagenArchivo.value) {
+    // Generar URL de vista previa para el usuario
+    newImagePreviewUrl.value = URL.createObjectURL(newImagenArchivo.value);
+  } else {
+    newImagePreviewUrl.value = null;
+  }
+};
 
 const guardarEdicion = async () => {
 
@@ -199,7 +212,7 @@ const guardarEdicion = async () => {
   }
 
   try {
-    const response = await axios.put(`http://localhost:3000/changecosplay/${localStorage.selectedCosplay}`, {
+    const response = await axios.put(`http://localhost:3000/changecosplay/${Cookies.get('userID')}`, {
       nombre: formNombre.value,
       estado: formEstado.value,
       descripcion: formDescripcion.value,
@@ -209,8 +222,8 @@ const guardarEdicion = async () => {
     });
 
     cosplay.value = response.data;
-    editando.value = false;
-    alert('Cosplay actualizado correctamente');
+    window.location.reload();
+    
   } catch (error) {
     console.error('Error al actualizar el cosplay en el backend:', error);
     alert('Error al guardar cambios');
@@ -218,7 +231,9 @@ const guardarEdicion = async () => {
 };
 
 
-onMounted(loadCosplayDetailsFromBackend);
+onMounted(() => {
+  loadCosplayDetailsFromBackend();
+});
 </script>
 
 <style scoped>

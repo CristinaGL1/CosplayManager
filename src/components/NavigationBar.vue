@@ -4,6 +4,9 @@
     <div class="navbar-title">CosplayManager</div>
 
     <div class="navbar-actions">
+      <button @click="home" class="logout-icon">
+        <img src="/src/icons/casa.svg" alt="Home" class="navbar-icon" />
+      </button>
       <button @click="logout" class="logout-icon">
         <img src="/src/icons/salida.svg" alt="Cerrar sesión" class="navbar-icon" />
       </button>
@@ -24,6 +27,10 @@ function logout() {
   localStorage.clear();
   console.log('Todo el Local Storage ha sido limpiado para este origen.');
   router.push('/');
+}
+
+function home() {
+  router.push('/cosplayLanding');
 }
 </script>
 

@@ -156,7 +156,7 @@ app.get('/cosplayList', async (req, res) => {
 // Ruta para el registro de cosplays
 app.post('/addCosplay', upload.single('imagenCosplay'), (req, res) => {
 
-    
+
     let imagenURL = null;
     if (req.file) {
         imagenURL = `/uploads/${req.file.filename}`;
@@ -261,6 +261,21 @@ app.delete('/deleteCosplays/:id', async (req, res) => {
         console.error('Error en el proceso de actualización:', error);
         res.status(500).json({ message: 'Error interno del servidor.' });
     }
+});
+
+
+// Recuperar las task de un cosplay
+
+app.get('api/getTask/:id', async (req, res) => {
+    const cosplayId = req.params.id;
+    connection.query('SELECT * FROM tasks WHERE cosplayID = ? AND status = ?', [cosplayId], (error, results) => {
+        if (error) {
+            console.error('Error al obtener las tareas:', error);
+            res.status(500).json({ error: 'Error al obtener las tareas' });
+            return;
+        }
+        res.json(results);
+    });
 });
 
 // Iniciar el servidor
