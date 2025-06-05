@@ -16,11 +16,11 @@
 
         <div>
           <label for="imagen">Imagen:</label>
-          <input type="file" id="imagen" @change="handleImageUpload">
+          <input type="file" id="imagen" @change="handleImageUpload" ref="imageInput">
         </div>
 
         <div class="form-actions">
-          <input type="submit" @click="agregarCosplay" value="Guardar"></input>
+          <input type="submit" value="Guardar"></input>
           <button @click="$emit('ocultar-formulario')" class="hide-form-button">Ocultar Formulario</button>
         </div>
 
@@ -32,6 +32,7 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import Cookies from 'js-cookie'
 
 const emit = defineEmits(['cosplay-agregado', 'ocultar-formulario']);
 
@@ -41,9 +42,9 @@ const descripcion = ref('');
 const fechaInicio = ref('');
 const fechaFin = ref('');
 
-const mensaje = ref('');
-const mostrarMensaje = ref(false);
-const imagenArchivo = ref(null); // Nuevo ref para el archivo de imagen
+const imagenArchivo = ref(null); // Aquí se guarda el objeto File
+const imageInput = ref(null); // Ref para el input de tipo file, para poder resetearlo
+
 
 const handleImageUpload = (event) => {
   imagenArchivo.value = event.target.files[0];
@@ -51,45 +52,59 @@ const handleImageUpload = (event) => {
 };
 
 async function addcosplay() {
+  // 1. Crear un objeto FormData
+  const formData = new FormData();
 
-  const payload = {
-  };
+  // 2. Añadir todos los campos de texto al FormData
+  formData.append('nombre', nombre.value);
+  formData.append('estado', estado.value);
+  formData.append('descripcion', descripcion.value);
+  
+  // Manejar fechas que pueden ser nulas
+  formData.append('fechaInicio', fechaInicio.value || ''); // Envía cadena vacía si es null
+  formData.append('fechaFin', fechaFin.value || '');       // El backend debe convertir '' a NULL
 
-  if(fechaInicio.value == ''){
-    fechaInicio.value = null
+  formData.append('userId', Cookies.get('userID'));
+
+  // 3. Añadir el archivo de imagen al FormData
+  // La clave 'imagenCosplay' DEBE COINCIDIR con el nombre del campo que Multer espera en tu backend (upload.single('imagenCosplay'))
+  if (imagenArchivo.value) {
+    formData.append('imagenCosplay', imagenArchivo.value, imagenArchivo.value.name);
   }
 
-   if(fechaFin.value == ''){
-    fechaFin.value = null
-  }
-
-  try {
-    const response = await axios.post('http://localhost:3000/addcosplay', {
-      nombre: nombre.value,
-      estado: estado.value,
-      descripcion: descripcion.value,
-      fechaInicio: fechaInicio.value,
-      fechaFin: fechaFin.value,
-      userId: localStorage.userId,
-      // imagenURL: imagenURL.value
-
+   try {
+    // 4. Enviar el FormData con Axios
+    // Axios automáticamente establecerá el 'Content-Type' a 'multipart/form-data'
+    // cuando detecta que le pasas un objeto FormData.
+    const response = await axios.post('http://localhost:3000/addCosplay', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
 
-    // Limpiar los campos después del registro exitoso
-    nombre.value;
-    estado.value;
-    descripcion.value;
-    fechaInicio.value;
-    fechaFin.value;
-    // imagenURL.value;
+    console.log('Respuesta del servidor:', response.data);
 
-    window.location.reload()
+    // Limpiar los campos y el input de archivo después del registro exitoso
+    nombre.value = '';
+    estado.value = '';
+    descripcion.value = '';
+    fechaInicio.value = '';
+    fechaFin.value = '';
+    imagenArchivo.value = null; // Borrar el archivo de la referencia
+    if (imageInput.value) {
+      imageInput.value.value = ''; // Esto limpia visualmente el input de tipo 'file'
+    }
+
+    // Recargar la página si es necesario, o emitir un evento
+    window.location.reload();
+    // emit('cosplay-agregado'); // Si prefieres no recargar la página completa
 
   } catch (error) {
-    console.error('Error de registro:', error);
-
+    console.error('Error de registro:', error.response?.data?.message || error.message);
+    // Aquí puedes mostrar un mensaje de error al usuario
   }
 }
+    
 
 </script>
 

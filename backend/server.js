@@ -5,14 +5,15 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const cookieParser = require('cookie-parser') // Manejo de cookies
 
 const app = express();
 const port = 3000;
 
 app.use(cors({
-  origin: 'http://localhost:5173',  // o el puerto donde está tu frontend
-  credentials: true,
+    origin: 'http://localhost:5173',  // o el puerto donde está tu frontend
+    credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser())
@@ -32,6 +33,42 @@ connection.connect((err) => {
     console.log('Conexión a MySQL exitosa!');
 });
 
+
+// ---------------------------------------------------- MANEJO DE IMAGENES ----------------------------------------------------
+
+const uploadDir = 'uploads/';
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const fileExtension = path.extname(file.originalname);
+        cb(null, file.fieldname + '-' + uniqueSuffix + fileExtension);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Tipo de archivo no permitido. Solo se permiten imágenes JPEG, PNG y GIF.'), false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024
+    }
+});
 
 // Ruta para el registro de usuarios
 app.post('/register', async (req, res) => {
@@ -89,7 +126,7 @@ app.post('/login', (req, res) => {
         const user = results[0];
 
         if (password == user.password) {
-            
+
             res.status(200).json({ message: 'Login exitoso.', userId: user.id, email: user.email });
 
         } else {
@@ -98,10 +135,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-// 
-//#region ----- API Manejo de cookies -----
-
-//#endregion
 
 app.get('/cosplayList', async (req, res) => {
     const userId = req.query.userId;
@@ -121,27 +154,53 @@ app.get('/cosplayList', async (req, res) => {
 });
 
 // Ruta para el registro de cosplays
-app.post('/addcosplay', async (req, res) => {
-    const { nombre, estado, descripcion, fechaInicio, fechaFin, userId, imagenURL } = req.body;
+app.post('/addCosplay', upload.single('imagenCosplay'), (req, res) => {
+
+    
+    let imagenURL = null;
+    if (req.file) {
+        imagenURL = `/uploads/${req.file.filename}`;
+    }
+
+    const { nombre, userId } = req.body;
+    const estado = req.body.estado || null;
+    const descripcion = req.body.descripcion || null;
+    const fechaInicio = req.body.fechaInicio || null;
+    const fechaFin = req.body.fechaFin || null;
+
+    if (!nombre || !userId) {
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+        return res.status(400).json({ message: 'Nombre, estado, descripción y ID de usuario son campos requeridos.' });
+    }
 
     try {
-
-        // Insertar el nuevo usuario en la base de datos
         const sql = 'INSERT INTO cosplays (nombre, estado, descripcion, fechaInicio, fechaFin, userId, imagenURL) VALUES (?, ?, ?, ?, ?, ?, ?)';
         connection.query(sql, [nombre, estado, descripcion, fechaInicio, fechaFin, userId, imagenURL], (err, result) => {
             if (err) {
-                if (err.code === 'ER_DUP_ENTRY') {
-                    // Si el email ya existe
-                    return res.status(409).json({ message: 'ERROR 409' });
+                if (req.file && fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
                 }
-                console.error('Error al registrar el cosplay:', err);
-                return res.status(500).json({ message: 'Error interno del servidor.' });
+                if (err.code === 'ER_DUP_ENTRY') {
+                    return res.status(409).json({ message: 'ERROR 409: Ya existe un cosplay con este nombre o ID duplicado.' });
+                }
+                console.error('Error al registrar el cosplay en la base de datos:', err);
+                return res.status(500).json({ message: 'Error interno del servidor al guardar en DB.' });
             }
-            res.status(201).json({ message: 'Cosplay registrado exitosamente.', userId: result.insertId });
+
+            res.status(201).json({
+                message: 'Cosplay registrado exitosamente.',
+                cosplayId: result.insertId,
+                imagenURL: imagenURL
+            });
         });
     } catch (error) {
-        console.error('Error en el proceso de registro:', error);
-        res.status(500).json({ message: 'Error interno del servidor.' });
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+        console.error('Error general en el proceso de registro del cosplay:', error);
+        res.status(500).json({ message: 'Error interno del servidor en el catch principal.' });
     }
 });
 

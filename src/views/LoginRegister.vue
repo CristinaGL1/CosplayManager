@@ -89,6 +89,7 @@ async function login() {
 
     //Guardar el user en una Cookie
     Cookies.set('userID', response.data.userId, { expires: 7 }); // 7 días
+    router.push('/cosplaylanding');
 
 
   } catch (error) {
