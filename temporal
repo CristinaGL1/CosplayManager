@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         10.4.32-MariaDB - mariadb.org binary distribution
+-- Versión del servidor:         8.0.42 - MySQL Community Server - GPL
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             12.10.0.7000
 -- --------------------------------------------------------
@@ -16,54 +16,59 @@
 
 
 -- Volcando estructura de base de datos para cosplaymanager
-CREATE DATABASE IF NOT EXISTS `cosplaymanager` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE IF NOT EXISTS `cosplaymanager` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `cosplaymanager`;
 
 -- Volcando estructura para tabla cosplaymanager.cosplays
 CREATE TABLE IF NOT EXISTS `cosplays` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(255) NOT NULL,
-  `estado` varchar(50) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci,
   `fechaInicio` date DEFAULT NULL,
   `fechaFin` date DEFAULT NULL,
-  `userId` int(11) NOT NULL,
-  `imagenURL` varchar(255) DEFAULT NULL,
+  `userId` int NOT NULL,
+  `imagenURL` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   CONSTRAINT `cosplays_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla cosplaymanager.cosplays: ~9 rows (aproximadamente)
 INSERT INTO `cosplays` (`id`, `nombre`, `estado`, `descripcion`, `fechaInicio`, `fechaFin`, `userId`, `imagenURL`) VALUES
-	(5, 'Nana', 'En proceso', '', NULL, NULL, 2, '/uploads/imagenFile-1748449093449-535590582.jpg'),
-	(6, 'Yamato', 'Sin empezar', '', NULL, NULL, 2, ''),
-	(8, 'sasa', 'Finalizado', '', NULL, NULL, 2, ''),
-	(40, 'uio', 'Finalizado', '', NULL, NULL, 2, ''),
-	(41, 'penelo', 'En proceso', '', NULL, NULL, 2, '/uploads/imagenFile-1748534655037-659694744.webp'),
-	(42, 'coby', 'Finalizado', '', NULL, NULL, 2, '/uploads/imagenFile-1748449907547-609525876.jpeg'),
 	(55, 'nana', 'Finalizado', '1231', NULL, NULL, 3, '/uploads/imagenFile-1748529083844-210492598.jpg'),
 	(61, 'Pain', 'Finalizado', '', NULL, NULL, 3, '/uploads/imagen-1748511720014-53236.jpg'),
-	(62, 'pain2', 'Finalizado', 'bonito ,', '2024-01-31', '2025-07-25', 3, '/uploads/imagenFile-1748525335780-544311118.jpg');
+	(62, 'pain2', 'Finalizado', 'bonito ,', '2024-01-31', '2025-07-25', 3, '/uploads/imagenFile-1748525335780-544311118.jpg'),
+	(90, 'Hola buenos dias', 'En proceso', 'xD', NULL, NULL, 2, NULL),
+	(103, '123', 'Sin empezar', '123', NULL, NULL, 2, NULL),
+	(104, '123123123', 'Sin empezar', '123', NULL, NULL, 2, NULL),
+	(105, '123', NULL, NULL, NULL, NULL, 2, NULL),
+	(109, 'Shanks', 'Sin empezar', NULL, NULL, NULL, 2, '/uploads/imagenCosplay-1749141263332-50018521.png');
 
 -- Volcando estructura para tabla cosplaymanager.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `contraseña` varchar(255) NOT NULL,
-  `fotoPerfil` varchar(255) DEFAULT NULL,
-  `creadoEn` timestamp NOT NULL DEFAULT current_timestamp(),
-  `firebase_uid` varchar(255) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `fotoPerfil` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `creadoEn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla cosplaymanager.usuarios: ~3 rows (aproximadamente)
-INSERT INTO `usuarios` (`id`, `nombre`, `email`, `contraseña`, `fotoPerfil`, `creadoEn`, `firebase_uid`) VALUES
-	(1, 'Cris', 'cristina@gmail.com', '123456', NULL, '2025-05-28 10:04:40', NULL),
-	(2, '', 'cris@gmail.com', '', NULL, '2025-05-28 10:46:33', 'A8XRddSn2mQO5zeiK3FpNNow5213'),
-	(3, '', 'correo1@gmail.com', '', NULL, '2025-05-28 16:42:37', 'mvU68T233ZfFF6Wst4AZqqXSFq53');
+-- Volcando datos para la tabla cosplaymanager.usuarios: ~9 rows (aproximadamente)
+INSERT INTO `usuarios` (`id`, `nombre`, `email`, `password`, `fotoPerfil`, `creadoEn`) VALUES
+	(1, 'Cris', 'cristina@gmail.com', '123456', NULL, '2025-05-28 10:04:40'),
+	(2, '', 'cris@gmail.com', '123456', NULL, '2025-05-28 10:46:33'),
+	(3, '', 'correo1@gmail.com', '', NULL, '2025-05-28 16:42:37'),
+	(4, NULL, 'fran4@gmail.com', '', NULL, '2025-06-01 10:06:50'),
+	(5, NULL, 'fran5@gmail.com', '', NULL, '2025-06-01 10:10:23'),
+	(6, NULL, 'fran33@gmail.com', '123456', NULL, '2025-06-01 11:54:56'),
+	(7, NULL, 'fran@gmail.com', '123456', NULL, '2025-06-01 11:56:06'),
+	(10, NULL, 'fran2@gmail.com', '123456', NULL, '2025-06-01 11:59:37'),
+	(12, NULL, 'fran6766@gmail.com', '123456', NULL, '2025-06-01 12:03:35'),
+	(14, NULL, 'fran312@gmail.com', '123456', NULL, '2025-06-01 15:42:31');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
