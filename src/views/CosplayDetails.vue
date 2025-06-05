@@ -65,14 +65,6 @@
             </label>
 
             <label>
-              URL Imagen (opcional):
-              <input v-model="formImagenUrl" type="text" class="border p-1 w-full" />
-              <small class="block mt-1 text-gray-600 text-sm">
-                Si prefieres usar una URL externa.
-              </small>
-            </label>
-
-            <label>
               Subir Imagen:
               <input type="file" @change="handleImageUpload" accept="image/*" class="border p-1 w-full" />
               <small class="block mt-1 text-gray-600 text-sm">

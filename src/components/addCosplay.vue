@@ -118,39 +118,36 @@ async function addcosplay() {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
-  /* Centra horizontalmente */
-  align-items: center;
-  /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+
+  align-items: center;/* Centra verticalmente */
   z-index: 1010;
-  padding-left: 21vw;
-  /* Evita la barra lateral */
-  padding-right: 1vw;
-  /* Margen derecho */
-  padding-top: 12vh;
-  /* Margen superior */
-  padding-bottom: 3vh;
-  /* Margen inferior */
+  padding-left: 21vw; /* Evita la barra lateral */
+  padding-right: 1vw;  /* Margen derecho */
+  padding-top: 12vh;  /* Margen superior */
+  padding-bottom: 3vh;  /* Margen inferior */
   box-sizing: border-box;
 }
 
+
 .add-cosplay-form-container {
-  background-color: #fff;
+ background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Arial', sans-serif;
-  /* O la fuente que uses */
   padding: 30px;
   width: 102%;
+  /* Casi todo el ancho */
+  height: 99%;
+  /* Casi toda la altura */
   max-width: 1200px;
-  /* Ajusta si es necesario */
   max-height: 1000px;
-  /* Ajusta si es necesario */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
+  /* Añade esta línea */
 }
 
 h2.detail-title {
@@ -195,6 +192,8 @@ textarea {
   justify-content: flex-end;
 }
 
+/* APLICAMOS ESTOS ESTILOS TANTO AL INPUT DE TIPO SUBMIT COMO A LOS BOTONES NORMALES */
+.form-actions input[type="submit"], /* ¡Aquí el cambio clave! */
 .form-actions button {
   padding: 0.5rem 1rem;
   border: 1px solid #888;
@@ -205,8 +204,12 @@ textarea {
   transition: background-color 0.3s;
   font-size: 0.9em;
   border-radius: 10px;
+  /* Reset de estilos para inputs si el navegador les añade alguno por defecto */
+  -webkit-appearance: none; /* Para Safari/Chrome */
+  -moz-appearance: none;    /* Para Firefox */
+  appearance: none;         /* Estándar */
+  line-height: normal;      /* Asegura la altura de línea */
 }
-
 .form-actions button:hover {
   background-color: #ffdef0;
 }
