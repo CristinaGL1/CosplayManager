@@ -2,7 +2,15 @@
 
     <NavigationBar />
     <div class="cl">
-        <lateralNav />
+
+        <lateralNav @openCosplayModal="openModal"></lateralNav>
+        <CosplayOptionsModal v-if="showOptionsModal" :cosplayId="selectedCosplayIdForModal"
+            @close="showOptionsModal = false" @view-dashboard="goToDashboard" @view-details="goToDetails" />
+        <div v-if="showDetailsModal" class="details-modal-overlay">
+            <CosplayDetails :id="selectedCosplayIdForDetails" @close="showDetailsModal = false" />
+        </div>
+
+
         <section class="kanban">
             <addTask v-if="showAddTaskModal" @close="toggleAddTaskModal"></addTask>
             <showOptions v-if="showTaskOptionsModal" @closeOptions="toggleTaskOptionsModal"></showOptions>
@@ -14,11 +22,6 @@
                 <div class="kanbanBox-taskBox" v-for="task in taskStartList" :key="task.id">
                     <div class="kanbanBox-card" @click="setTaskSelected(task.id); toggleTaskOptionsModal()">
                         <span class="kanbanBox-card-title">{{ task.nombre }}</span>
-                        <!-- <div class="kanbanBox-card-buttonBox">
-                            <button class="kanbanBox-card-button">o</button>
-                            <button class="kanbanBox-card-button">x</button>
-                        </div> -->
-                        <!-- <div class="kanbanBox-card-cardColor"></div> -->
                     </div>
                 </div>
             </div>
@@ -31,11 +34,6 @@
                 <div class="kanbanBox-taskBox" v-for="task in taskInProcessList" :key="task.id">
                     <div class="kanbanBox-card">
                         <span class="kanbanBox-card-title">{{ task.nombre }}</span>
-                        <!-- <div class="kanbanBox-card-buttonBox">
-                            <button class="kanbanBox-card-button">o</button>
-                            <button class="kanbanBox-card-button">x</button>
-                        </div>
-                        <div class="kanbanBox-card-cardColor"></div> -->
                     </div>
                 </div>
             </div>
@@ -48,11 +46,6 @@
                 <div class="kanbanBox-taskBox" v-for="task in taskFinishList" :key="task.id">
                     <div class="kanbanBox-card">
                         <span class="kanbanBox-card-title">{{ task.nombre }}</span>
-                        <!-- <div class="kanbanBox-card-buttonBox">
-                            <button class="kanbanBox-card-button">o</button>
-                            <button class="kanbanBox-card-button">x</button>
-                        </div>
-                        <div class="kanbanBox-card-cardColor"></div> -->
                     </div>
                 </div>
             </div>
@@ -64,20 +57,33 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
+
 
 import NavigationBar from '../components/NavigationBar.vue';
 import lateralNav from '../components/lateralNav.vue';
 import addTask from '../components/addTask.vue';
 import showOptions from '../components/taskDetails.vue';
 
+import CosplayOptionsModal from '../components/CosplayOptionsModal.vue';
+import CosplayDetails from '../views/CosplayDetails.vue';
+
 
 const taskStartList = ref([]);
 const taskInProcessList = ref([]);
 const taskFinishList = ref([]);
 
+const showOptionsModal = ref(false);
+const showDetailsModal = ref(false);
+
 const showAddTaskModal = ref(false)
 const showTaskOptionsModal = ref(false)
+const selectedCosplayIdForModal = ref(null);
+const selectedCosplayIdForDetails = ref(null);
+
+const router = useRouter();
+
 
 onMounted(async () => {
 
@@ -127,11 +133,25 @@ function setTaskSelected(id) {
     localStorage.setItem('selectedTask', id);
 }
 
+const openModal = () => {
+    showOptionsModal.value = true;
+};
+
+const goToDashboard = () => {
+    showOptionsModal.value = false;
+    router.push(`/dashboard`);
+    window.location.reload();
+};
+
+const goToDetails = (id) => {
+    showOptionsModal.value = false;
+    selectedCosplayIdForDetails.value = id;
+    showDetailsModal.value = true;
+};
 
 </script>
 
 <style scoped>
-
 #app {
     height: 100%;
     width: 100%;
@@ -182,6 +202,8 @@ function setTaskSelected(id) {
     display: flex;
 
     border-bottom: 2px solid var(--secondaryColor);
+    border-radius: 7px 7px 0 0;
+    background-color: var(--secondaryColor);
 
     text-align: center;
 }
@@ -194,7 +216,7 @@ function setTaskSelected(id) {
     align-items: center;
     font-weight: 600;
     font-size: 1.2rem;
-    color: var(--secondaryColor);
+    color: var(--mainColor);
 }
 
 .kanbanBox-titleBox-addButton {
@@ -204,23 +226,24 @@ function setTaskSelected(id) {
     background: none;
     border: none;
 
-    background-color: var(--mainColor);
+    background-color: var(--secondaryColor);
     border-left: 2px solid var(--secondaryColor);
-    color: var(--secondaryColor);
+    color: var(--mainColor);
 
     position: relative;
 
     border-radius: 0 6px 0 0;
 
     font-size: 1.5rem;
-    transition: background-color 0.25s, font-size 0.15s;
+    font-weight: 400;
+    transition: font-size 0.15s, font-weight 0.15s;
 }
 
 .kanbanBox-titleBox-addButton:hover {
     cursor: pointer;
-    background-color: var(--secondaryColor);
     color: var(--mainColor);
     font-size: 2rem;
+    font-weight: 600;
 }
 
 .kanbanBox-taskBox {

@@ -2,15 +2,57 @@
     <section class="lateralNav">
         <h1>Lista de Cosplays</h1>
         <input type="text" placeholder="Buscar cosplay"></input>
-        <ul>
-            <li></li>
-        </ul>
+        <div v-for="cosplay in cosplays" :key="cosplay.id" class="lateralCosplayBox" >
+            <div class="lateralCosplayButton" @click="setSelectedCosplay(cosplay.id); emit('openCosplayModal')">
+                <h4>{{ cosplay.nombre }}</h4>
+            </div>
+        </div>
     </section>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue';
+import { defineProps, defineEmits } from 'vue';
+
+import axios from 'axios';
+import Cookies from 'js-cookie'
+
+const cosplays = ref([]);
+const loggedInUserId = Cookies.get('userID');
+
+const emit = defineEmits(['openCosplayModal'])
+
+// Recupera los cosplays para la lista
+onMounted(async () => {
+    if (loggedInUserId) {
+        try {
+            const response = await axios.get(`http://localhost:3000/cosplayList?userId=${Cookies.get('userID')}`);
+            cosplays.value = response.data;
+            console.log(`Cosplays cargados en LateralNav:`);
+            console.log(cosplays.value);
+        } catch (error) {
+            console.error('Error al cargar los cosplays del usuario:', error);
+            // Manejar el error
+        }
+    } else {
+        console.log('Usuario no logueado, no se pueden cargar los cosplays.');
+        // Opcional: Redirigir al login
+    }
+});
+
+function setSelectedCosplay(id) {
+    localStorage.setItem('selectedCosplay', id);
+    console.log(`Selected Cosplay ID: ${localStorage.getItem("selectedCosplay")}`)
+}
+
+</script>
+
 <style scoped>
+
 .lateralNav {
-    width: 20vw;
+    min-width: 20rem;
+    width: 20rem;
+    height: auto;
     background-color: var(--mainColor);
     color: var(--secondaryColor);
     border-right: 2px solid var(--secondaryColor);
@@ -24,6 +66,7 @@
 .lateralNav h1 {
     margin-top: 0;
     margin-bottom: 5px;
+    font-size: 1.75rem;
 }
 
 .lateralNav input[type="text"] {
@@ -36,25 +79,46 @@
     color: var(--secondaryColor);
     box-sizing: border-box;
     margin-top: 5px;
+    margin-bottom: 2rem;
 }
 
-.lateralNav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.lateralCosplayBox{
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: left;
+
+    font-size: 1.2rem;
+
+    width: 100%;
+    height: auto;
 }
 
-.lateralNav li {
-    padding: 10px 0;
-    border-bottom: 1px solid #444;
+.lateralCosplayButton{
+    width: 100%;
+    height: 2rem;
+
+    margin-bottom: 0.5rem;
+    
+    background-color: var(--mainColor);
+    color: var(--secondaryColor);
+    border-bottom: 2px solid var(--secondaryColor);
+
+    transition: background-color 0.25s, border 0.25s;
+
+}
+
+.lateralCosplayButton:hover{
     cursor: pointer;
+
+    background-color: var(--secondaryColor);
+    color: var(--mainColor);
+    border: 2px solid var(--secondaryColor);
+
 }
 
-.lateralNav li:last-child {
-    border-bottom: none;
-}
-
-.list-item-link {
-    cursor: pointer;
+.lateralCosplayButton h4{
+margin-left: 0.75rem;
 }
 </style>
