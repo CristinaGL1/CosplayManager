@@ -4,7 +4,7 @@
       <div class="add-cosplay-form-container">
         <h2>Agregar un nuevo Cosplay</h2>
 
-   <div>
+        <div>
           <label for="nombre-cosplay">Nombre:</label>
           <input id="nombre-cosplay" v-model="nombre" placeholder="Nombre del Cosplay" required />
         </div>
@@ -78,7 +78,7 @@ async function addcosplay() {
   formData.append('nombre', nombre.value);
   formData.append('estado', estado.value);
   formData.append('descripcion', descripcion.value);
-  
+
   // Manejar fechas que pueden ser nulas
   formData.append('fechaInicio', fechaInicio.value || ''); // Envía cadena vacía si es null
   formData.append('fechaFin', fechaFin.value || '');       // El backend debe convertir '' a NULL
@@ -91,7 +91,7 @@ async function addcosplay() {
     formData.append('imagenCosplay', imagenArchivo.value, imagenArchivo.value.name);
   }
 
-   try {
+  try {
     // 4. Enviar el FormData con Axios
     // Axios automáticamente establecerá el 'Content-Type' a 'multipart/form-data'
     // cuando detecta que le pasas un objeto FormData.
@@ -123,7 +123,7 @@ async function addcosplay() {
     // Aquí puedes mostrar un mensaje de error al usuario
   }
 }
-    
+
 
 </script>
 
@@ -135,7 +135,8 @@ async function addcosplay() {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Oscurece más el fondo para que el modal resalte */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Oscurece más el fondo para que el modal resalte */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,7 +149,8 @@ async function addcosplay() {
 }
 
 .add-cosplay-form-container {
-  background-color: var(--complementaryColor4); /* Fondo del modal */
+  background-color: var(--complementaryColor4);
+  /* Fondo del modal */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Arial', sans-serif;
@@ -169,14 +171,16 @@ h2 {
   text-align: center;
   font-weight: bolder;
   font-size: 25px;
-  color: var(--mainColor); /* Color del título */
+  color: var(--mainColor);
+  /* Color del título */
   margin-bottom: 20px;
 }
 
 label {
   display: block;
   font-weight: bold;
-  color: var(--complementaryColor); /* Color de las etiquetas */
+  color: var(--complementaryColor);
+  /* Color de las etiquetas */
   margin-bottom: 5px;
 }
 
@@ -191,7 +195,21 @@ textarea {
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--complementaryColor4); /* Fondo para inputs */
+  background-color: var(--complementaryColor4);
+  /* Fondo para inputs */
+  color: var(--mainColor);
+}
+
+#nombre-cosplay {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid var(--complementaryColor3);
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1em;
+  background-color: var(--complementaryColor4);
+  /* Fondo para inputs */
   color: var(--mainColor);
 }
 
@@ -200,12 +218,16 @@ select {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  border: none; /* Quitamos el borde para que se vea más como los botones */
-  border-radius: 8px; /* Igual que los botones */
+  border: none;
+  /* Quitamos el borde para que se vea más como los botones */
+  border-radius: 8px;
+  /* Igual que los botones */
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--secondaryColor); /* Fondo del select, igual que los botones */
-  color: var(--mainColor); /* Color del texto del select, igual que los botones */
+  background-color: var(--secondaryColor);
+  /* Fondo del select, igual que los botones */
+  color: var(--mainColor);
+  /* Color del texto del select, igual que los botones */
   /* Propiedad para eliminar la flecha por defecto en algunos navegadores */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -219,8 +241,10 @@ select {
 
 /* Estilo para las opciones dentro del select (puede variar la implementación del navegador) */
 select option {
-  background-color: var(--secondaryColor); /* Fondo de las opciones */
-  color: var(--mainColor); /* Color del texto de las opciones */
+  background-color: var(--secondaryColor);
+  /* Fondo de las opciones */
+  color: var(--mainColor);
+  /* Color del texto de las opciones */
 }
 
 
@@ -233,7 +257,8 @@ input[type="file"] {
   background-color: transparent;
   box-sizing: border-box;
   font-size: 1em;
-  color: var(--mainColor); /* Color del texto "Ningún archivo seleccionado" */
+  color: var(--mainColor);
+  /* Color del texto "Ningún archivo seleccionado" */
 }
 
 input[type="file"]::-webkit-file-upload-button {
@@ -283,7 +308,8 @@ input[type="file"]::file-selector-button:hover {
 
 /* Estilos de enfoque para inputs, selects y textareas */
 input:focus,
-select:focus, /* Aseguramos que el select también tenga el foco del color */
+select:focus,
+/* Aseguramos que el select también tenga el foco del color */
 textarea:focus {
   border-color: var(--secondaryColor);
   box-shadow: 0 0 0 3px rgba(183, 162, 201, 0.3);
@@ -318,6 +344,8 @@ textarea {
   appearance: none;
   line-height: normal;
 }
+
+#nombre-cosplay {}
 
 .form-actions input[type="submit"]:hover,
 .form-actions button:hover {
