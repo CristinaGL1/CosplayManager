@@ -3,22 +3,41 @@
     <div class="add-cosplay-overlay" @click.self="$emit('ocultar-formulario')">
       <div class="add-cosplay-form-container">
         <h2>Agregar un nuevo Cosplay</h2>
-        <input v-model="nombre" placeholder="Nombre del Cosplay" required />
-        <select v-model="estado">
-          <option value="">Selecciona un estado</option>
-          <option value="Sin empezar">Sin empezar</option>
-          <option value="En proceso">En proceso</option>
-          <option value="Finalizado">Finalizado</option>
-        </select>
-        <input v-model="descripcion" placeholder="Descripción" />
-        <input v-model="fechaInicio" type="date" />
-        <input v-model="fechaFin" type="date" />
 
-        <div>
-          <label for="imagen">Imagen:</label>
-          <input type="file" id="imagen" @change="handleImageUpload" ref="imageInput">
+   <div>
+          <label for="nombre-cosplay">Nombre:</label>
+          <input id="nombre-cosplay" v-model="nombre" placeholder="Nombre del Cosplay" required />
         </div>
 
+        <div>
+          <label for="estado-cosplay">Estado:</label>
+          <select id="estado-cosplay" v-model="estado">
+            <option value="">Selecciona un estado</option>
+            <option value="Sin empezar">Sin empezar</option>
+            <option value="En proceso">En proceso</option>
+            <option value="Finalizado">Finalizado</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="descripcion-cosplay">Descripción:</label>
+          <textarea id="descripcion-cosplay" v-model="descripcion" placeholder="Descripción"></textarea>
+        </div>
+
+        <div>
+          <label for="fecha-inicio-cosplay">Fecha de Inicio:</label>
+          <input id="fecha-inicio-cosplay" v-model="fechaInicio" type="date" />
+        </div>
+
+        <div>
+          <label for="fecha-fin-cosplay">Fecha de Fin:</label>
+          <input id="fecha-fin-cosplay" v-model="fechaFin" type="date" />
+        </div>
+
+        <div>
+          <label for="imagen-cosplay">Subir Imagen:</label>
+          <input type="file" id="imagen-cosplay" @change="handleImageUpload" ref="imageInput">
+        </div>
         <div class="form-actions">
           <input type="submit" value="Guardar"></input>
           <button @click="$emit('ocultar-formulario')" class="hide-form-button">Ocultar Formulario</button>
@@ -116,30 +135,26 @@ async function addcosplay() {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Oscurece más el fondo para que el modal resalte */
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-
-  align-items: center;/* Centra verticalmente */
+  justify-content: center;
+  align-items: center;
   z-index: 1010;
-  padding-left: 21vw; /* Evita la barra lateral */
-  padding-right: 1vw;  /* Margen derecho */
-  padding-top: 12vh;  /* Margen superior */
-  padding-bottom: 3vh;  /* Margen inferior */
+  padding-left: 21vw;
+  padding-right: 1vw;
+  padding-top: 12vh;
+  padding-bottom: 3vh;
   box-sizing: border-box;
 }
 
-
 .add-cosplay-form-container {
- background-color: #fff;
+  background-color: var(--complementaryColor4); /* Fondo del modal */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Arial', sans-serif;
-  padding: 30px;
+  padding: 25px;
   width: 102%;
-  /* Casi todo el ancho */
   height: 99%;
-  /* Casi toda la altura */
   max-width: 1200px;
   max-height: 1000px;
   overflow-y: auto;
@@ -147,42 +162,137 @@ async function addcosplay() {
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
-  /* Añade esta línea */
+  justify-content: space-between;
 }
 
-h2.detail-title {
-  font-size: 2em;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+h2 {
   text-align: center;
+  font-weight: bolder;
+  font-size: 25px;
+  color: var(--mainColor); /* Color del título */
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
   font-weight: bold;
-  color: #333;
-  margin-top: 10px;
+  color: var(--complementaryColor); /* Color de las etiquetas */
+  margin-bottom: 5px;
 }
 
+/* Estilos generales para inputs y textareas */
 input[type="text"],
 input[type="date"],
-select,
-textarea,
-input[type="file"] {
+textarea {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--complementaryColor3);
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 1em;
+  background-color: var(--complementaryColor4); /* Fondo para inputs */
+  color: var(--mainColor);
+}
+
+/* CAMBIO CLAVE AQUÍ: Estilos para el select del estado */
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none; /* Quitamos el borde para que se vea más como los botones */
+  border-radius: 8px; /* Igual que los botones */
+  box-sizing: border-box;
+  font-size: 1em;
+  background-color: var(--secondaryColor); /* Fondo del select, igual que los botones */
+  color: var(--mainColor); /* Color del texto del select, igual que los botones */
+  /* Propiedad para eliminar la flecha por defecto en algunos navegadores */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Añadir una flecha personalizada si se desea */
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="currentColor" d="M4.5 4l3 3 3-3z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+/* Estilo para las opciones dentro del select (puede variar la implementación del navegador) */
+select option {
+  background-color: var(--secondaryColor); /* Fondo de las opciones */
+  color: var(--mainColor); /* Color del texto de las opciones */
+}
+
+
+/* Estilos específicos para el input de tipo file */
+input[type="file"] {
+  width: 100%;
+  padding: 0;
+  margin-top: 5px;
+  border: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  font-size: 1em;
+  color: var(--mainColor); /* Color del texto "Ningún archivo seleccionado" */
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  background-color: var(--secondaryColor);
+  color: var(--mainColor);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1em;
+  font-weight: bold;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: normal;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: var(--complementaryColor);
+  color: var(--complementaryColor4);
+  transform: translateY(-2px);
+}
+
+input[type="file"]::file-selector-button {
+  background-color: var(--secondaryColor);
+  color: var(--mainColor);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1em;
+  font-weight: bold;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: normal;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: var(--complementaryColor);
+  color: var(--complementaryColor4);
+  transform: translateY(-2px);
+}
+
+
+/* Estilos de enfoque para inputs, selects y textareas */
+input:focus,
+select:focus, /* Aseguramos que el select también tenga el foco del color */
+textarea:focus {
+  border-color: var(--secondaryColor);
+  box-shadow: 0 0 0 3px rgba(183, 162, 201, 0.3);
+  outline: none;
 }
 
 textarea {
-  min-height: 80px;
+  min-height: 100px;
+  resize: vertical;
 }
 
 .form-actions {
@@ -192,34 +302,33 @@ textarea {
   justify-content: flex-end;
 }
 
-/* APLICAMOS ESTOS ESTILOS TANTO AL INPUT DE TIPO SUBMIT COMO A LOS BOTONES NORMALES */
-.form-actions input[type="submit"], /* ¡Aquí el cambio clave! */
+.form-actions input[type="submit"],
 .form-actions button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #888;
-  background-color: #f7ecf2;
-  color: #000000;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: var(--secondaryColor);
+  color: var(--mainColor);
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 0.9em;
-  border-radius: 10px;
-  /* Reset de estilos para inputs si el navegador les añade alguno por defecto */
-  -webkit-appearance: none; /* Para Safari/Chrome */
-  -moz-appearance: none;    /* Para Firefox */
-  appearance: none;         /* Estándar */
-  line-height: normal;      /* Asegura la altura de línea */
-}
-.form-actions button:hover {
-  background-color: #ffdef0;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1em;
+  border-radius: 8px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: normal;
 }
 
-.notification {
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 0.8rem 1.2rem;
-  border-radius: 5px;
-  margin-bottom: 1rem;
-  z-index: 1001;
+.form-actions input[type="submit"]:hover,
+.form-actions button:hover {
+  background-color: var(--complementaryColor);
+  color: var(--complementaryColor4);
+  transform: translateY(-2px);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--complementaryColor3);
+  opacity: 0.8;
 }
 </style>

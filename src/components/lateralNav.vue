@@ -11,8 +11,8 @@
 <style scoped>
 .lateralNav {
     width: 20vw;
-    background-color: var(--secondaryColor);
-    color: var(--mainColor);
+    background-color: var(--mainColor);
+    color: var(--secondaryColor);
     border-right: 2px solid var(--mainColor);
     padding: 20px;
     box-sizing: border-box;
@@ -31,8 +31,8 @@
     margin-bottom: 15px;
     border: none;
     border-radius: 5px;
-    background-color: #444;
-    color: #eee;
+    background-color: var(--complementaryColor);
+    color: var(--secondaryColor);
     box-sizing: border-box;
     margin-top: 20px;
 }

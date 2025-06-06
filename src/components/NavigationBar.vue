@@ -37,7 +37,7 @@ function home() {
 <style scoped>
 .navbar {
   width: 100%;
-  background-color: var(--secondaryColor);
+  background-color: var(--mainColor);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,13 +47,13 @@ function home() {
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  border-bottom: 2px solid var(--mainColor);
+  border-bottom: 2px solid var(--secondaryColor);
 }
 
 .navbar-title {
   font-family: 'Pacifico', cursive;
   font-size: 1.8em;
-  color: var(--mainColor);
+  color: var(--secondaryColor);
 }
 
 .navbar-actions {
@@ -71,10 +71,7 @@ function home() {
   border-radius: 5px;
 }
 
-.add-cosplay-icon-button:hover,
-.logout-icon:hover {
-  background-color: #e0f7fa;
-}
+
 
 .navbar-icon {
   width: 24px;
@@ -99,6 +96,6 @@ function home() {
 }
 
 .logout-icon:hover {
-  background-color: #f7ecf2;
+  background-color: var(--secondaryColor);
 }
 </style>

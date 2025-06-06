@@ -55,7 +55,7 @@ const eliminarCosplay = async () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,7 +64,7 @@ const eliminarCosplay = async () => {
 }
 
 .modal-content {
-  background-color: white;
+  background-color:  var(--complementaryColor3);
   padding: 30px; /* Un poco más de padding */
   border-radius: 12px; /* Bordes más redondeados */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada y suave */
@@ -102,39 +102,39 @@ h3 {
 
 
 .options button {
-  background-color: #6a0dad; /* Un morado más oscuro, como referencia al "rosa" */
-  color: white;
+  background-color:  var(--complementaryColor2);
+  color:  var(--secondaryColor);
 }
 
 .options button:hover {
-  background-color: #7b2edc; /* Morado ligeramente más claro al pasar el ratón */
+  background-color:  var(--mainColor);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(106, 13, 173, 0.2); /* Sombra con el color del botón */
 }
 
 /* Estilo para el botón "Cerrar" (secundario) */
 .close-button {
-  background-color: #e9ecef; /* Gris claro, similar al "Ocultar Formulario" */
-  color: #495057;
-  border: 1px solid #ced4da; /* Borde suave */
+  background-color:  var(--secondaryColor);
+  color: var(--complementaryColor3);
+  border: 1px solid var(--complementaryColor3); /* Borde suave */
   margin-top: 15px; /* Espacio entre el último botón de opción y el botón cerrar */
 }
 
 .close-button:hover {
-  background-color: #dae0e5;
+  background-color:  var(--secondaryColor);
   transform: translateY(-1px);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Estilo para el botón "Eliminar" (peligro) */
 .delete-button {
-  background-color: #dc3545; /* Rojo de peligro */
-  color: white;
+  background-color:  var(--mainColor);
+  color:  var(--secondaryColor);
   margin-top: 10px; /* Espacio entre Cerrar y Eliminar */
 }
 
 .delete-button:hover {
-  background-color: #c82333; /* Rojo más oscuro al pasar el ratón */
+  background-color:  var(--complementaryColor2);
   transform: translateY(-1px);
   box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
 }

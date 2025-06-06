@@ -15,7 +15,7 @@
 
       <div class="new-cosplay-item">
         <div class="new-cosplay-container" @click="showAddCosplay = true">
-          <div class="plus-icon">+</div>
+          <span class="plus-icon">+</span>
         </div>
         <div class="new-cosplay-text">Nuevo Cosplay</div>
       </div>
@@ -47,13 +47,8 @@
 
   </div>
 
-  <CosplayOptionsModal
-  v-if="showOptionsModal"
-  :cosplayId="selectedCosplayIdForModal"
-  @close="showOptionsModal = false"
-  @view-dashboard="goToDashboard"
-  @view-details="goToDetails"
-/>
+  <CosplayOptionsModal v-if="showOptionsModal" :cosplayId="selectedCosplayIdForModal" @close="showOptionsModal = false"
+    @view-dashboard="goToDashboard" @view-details="goToDetails" />
 </template>
 
 <script setup>
@@ -144,7 +139,7 @@ const goToDetails = (id) => {
   /* El ancho restante */
 }
 
-.cosplay-area{
+.cosplay-area {
   background-color: var(--mainColor);
 }
 
@@ -169,13 +164,20 @@ const goToDetails = (id) => {
 .cosplay-details-card {
   width: 400px;
   /* Ancho de la tarjeta */
-  background-color: white;
-  border: 1px solid #ccc;
+  background-color: var(--secondaryColor);
+  border: 1px solid var(--secondaryColor);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
   margin-left: 20px;
   /* Espacio entre la grid y la tarjeta */
+}
+
+.new-cosplay-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .cosplay-item {
@@ -185,27 +187,34 @@ const goToDetails = (id) => {
   align-items: center;
   /* Centramos el thumbnail horizontalmente */
   cursor: pointer;
+
 }
 
 .new-cosplay-container,
 .cosplay-thumbnail {
   width: 220px;
   height: 220px;
-  border-radius: 20px;
+  border-radius: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
   text-align: center;
-  border: 1px solid #ccc;
+  border: 2px solid var(--secondaryColor);
+
   /* Añadimos un borde gris claro */
 
 }
 
+.new-cosplay-container:hover {
+  cursor: pointer;
+}
+
 .cosplay-thumbnail {
 
-  color: white;
+  color: var(--secondaryColor);
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: var(--secondaryColor);
   overflow: hidden;
   /* Importante para que la imagen no se salga */
 }
@@ -225,22 +234,23 @@ const goToDetails = (id) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
-  color: #888;
+  background-color: var(--secondaryColor);
+  color: var(--mainColor);
   border-radius: 20px;
 }
 
 .new-cosplay-container {
   border: 2px dashed #888;
-  color: #555;
+  color: var(--mainColor);
   font-size: 1em;
   flex-direction: column;
+  text-align: center;
 }
 
 .cosplay-name {
   margin-top: 5px;
   text-align: center;
-  color: #333;
+  color: var(--secondaryColor);
   font-size: 1.1em;
   font-weight: bold;
 }
@@ -248,13 +258,15 @@ const goToDetails = (id) => {
 .plus-icon {
   font-size: 5em;
   margin-bottom: 5px;
+  color: var(--secondaryColor);
 }
 
 .new-cosplay-text {
   margin-top: 5px;
   font-size: 1.1em;
   font-weight: bold;
-  color: #333;
+  color: var(--secondaryColor);
+
 
 }
 
@@ -292,7 +304,7 @@ const goToDetails = (id) => {
 
 /* Estilos para el formulario dentro del modal */
 .add-cosplay-form-container {
-  background-color: #fff;
+  background-color: var(--secondaryColor);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);

@@ -395,46 +395,6 @@ onMounted(() => {
 .registerButton:hover {
   background-color: #ffdef0;
 }
-
-.button-volver {
-  background-color: #6c757d;
-}
-
-.button-volver:hover {
-  background-color: #5a6268;
-}
-
-.button-editar {
-  background-color: #ffc107;
-  color: #333;
-}
-
-.button-editar:hover {
-  background-color: #e0a800;
-}
-
-.button-guardar {
-  background-color: #28a745;
-}
-
-.button-guardar:hover {
-  background-color: #218838;
-}
-
-.button-cancelar {
-  background-color: #dc3545;
-}
-
-.button-cancelar:hover {
-  background-color: #c82333;
-}
-
-.loading-message {
-  color: #777;
-  font-style: italic;
-  margin-top: 20px;
-}
-
 .edit-section {
   display: flex;
   flex-direction: column;

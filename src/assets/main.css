@@ -3,7 +3,7 @@
 /* Añade estos estilos */
 body {
   margin: 0;
-  background: linear-gradient(to left, #b5fffc,#e1deff);
+  background: linear-gradient(to left, #4f345f,#4c4a68);
   font-family: 'Poppins', sans-serif;
   color: black;
   min-height: 100vh;
@@ -64,6 +64,10 @@ a,
   --secondaryColor: rgb(34, 34, 34); */
   
   /* 2. Modo Oscuro */
-  --mainColor: rgb(34, 34, 34);
-  --secondaryColor: rgb(255, 255, 255);
+  --mainColor: #212531;
+  --secondaryColor: #b7a2c9;
+  --complementaryColor: #322f42;
+  --complementaryColor2: #4b3a70;
+  --complementaryColor3: #c5c3c4;
+  --complementaryColor4: #e3dde9;
 }
