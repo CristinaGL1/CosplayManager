@@ -214,7 +214,7 @@ function setTaskSelected(id) {
 
 .kanbanBox-titleBox-addButton:hover {
     cursor: pointer;
-    background-color: var(--complementaryColor4);
+    background-color: var(--modalColor);
     font-size: 2rem;
 }
 
@@ -241,7 +241,7 @@ function setTaskSelected(id) {
 
 .kanbanBox-card:hover {
     cursor: pointer;
-    background-color: var(--complementaryColor4);
+    background-color: var(--modalColor);
     font-size: 1.5rem;
 }
 

@@ -75,7 +75,7 @@ onMounted(() => {
     box-shadow: 0 0 10px 500rem rgba(0, 0, 0, 0.603);
     z-index: 1;
 
-    background-color: var(--complementaryColor4);
+    background-color: var(--modalColor);
 
 }
 

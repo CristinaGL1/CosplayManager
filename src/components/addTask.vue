@@ -63,7 +63,7 @@ async function addTask() {
     width: 25rem;
     height: 15rem;
 
-    background-color: var(--complementaryColor4);
+    background-color: var(--modalColor);
 
     padding: 1rem;
 }
@@ -80,7 +80,7 @@ input[type="text"] {
     border-radius: 6px;
     box-sizing: border-box;
     font-size: 1em;
-    background-color: var(--complementaryColor4);
+    background-color: var(--modalColor);
     /* Fondo para inputs */
     color: var(--mainColor);
 }
