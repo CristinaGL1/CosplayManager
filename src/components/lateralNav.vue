@@ -15,6 +15,7 @@
     color: var(--secondaryColor);
     border-right: 2px solid var(--mainColor);
     padding: 20px;
+    padding-top: 50px;
     box-sizing: border-box;
     overflow-y: auto;
     /* Por si la lista es larga */
@@ -22,7 +23,7 @@
 
 .lateralNav h1 {
     margin-top: 0;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .lateralNav input[type="text"] {
@@ -34,7 +35,7 @@
     background-color: var(--complementaryColor);
     color: var(--secondaryColor);
     box-sizing: border-box;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 .lateralNav ul {

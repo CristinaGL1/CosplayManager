@@ -64,10 +64,12 @@ a,
   --secondaryColor: rgb(34, 34, 34); */
   
   /* 2. Modo Oscuro */
-  --mainColor: #212531;
+  --mainColor: #242131;
   --secondaryColor: #b7a2c9;
   --complementaryColor: #322f42;
   --complementaryColor2: #4b3a70;
   --complementaryColor3: #c5c3c4;
-  --complementaryColor4: #e3dde9;
+  --modalColor: #e3dde9;
+
+
 }

@@ -133,9 +133,9 @@ async function addcosplay() {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100%;  
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   /* Oscurece más el fondo para que el modal resalte */
   display: flex;
   justify-content: center;
@@ -149,11 +149,11 @@ async function addcosplay() {
 }
 
 .add-cosplay-form-container {
-  background-color: var(--complementaryColor4);
+  background-color: var(--modalColor);
   /* Fondo del modal */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  font-family: 'Arial', sans-serif;
+   font-family: 'Arial', sans-serif;
   padding: 25px;
   width: 102%;
   height: 99%;
@@ -174,6 +174,7 @@ h2 {
   color: var(--mainColor);
   /* Color del título */
   margin-bottom: 20px;
+  
 }
 
 label {
@@ -184,22 +185,10 @@ label {
   margin-bottom: 5px;
 }
 
-/* Estilos generales para inputs y textareas */
+/* *** MODIFICACIÓN CLAVE AQUÍ: Invertir colores para inputs y textareas *** */
 input[type="text"],
 input[type="date"],
-textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid var(--complementaryColor3);
-  border-radius: 6px;
-  box-sizing: border-box;
-  font-size: 1em;
-  background-color: var(--complementaryColor4);
-  /* Fondo para inputs */
-  color: var(--mainColor);
-}
-
+textarea,
 #nombre-cosplay {
   width: 100%;
   padding: 10px;
@@ -208,37 +197,31 @@ textarea {
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--complementaryColor4);
-  /* Fondo para inputs */
+  background-color: var(--modalColor);
+  /* Fondo del input: crema muy pálido */
   color: var(--mainColor);
+  /* *** ¡CAMBIO AQUÍ! Color del texto: gris oscuro/marrón *** */
 }
 
-/* CAMBIO CLAVE AQUÍ: Estilos para el select del estado */
+/* Estilos para el select del estado */
 select {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
   border: none;
-  /* Quitamos el borde para que se vea más como los botones */
   border-radius: 8px;
-  /* Igual que los botones */
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--secondaryColor);
-  /* Fondo del select, igual que los botones */
-  color: var(--mainColor);
-  /* Color del texto del select, igual que los botones */
-  /* Propiedad para eliminar la flecha por defecto en algunos navegadores */
+  background-color: var(--secondaryColor); /* Fondo del select (morado/marrón claro) */
+  color: var(--mainColor); /* Color del texto del select (gris oscuro/marrón) */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  /* Añadir una flecha personalizada si se desea */
   background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="currentColor" d="M4.5 4l3 3 3-3z"/></svg>');
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 12px;
 }
-
 /* Estilo para las opciones dentro del select (puede variar la implementación del navegador) */
 select option {
   background-color: var(--secondaryColor);
@@ -261,37 +244,15 @@ input[type="file"] {
   /* Color del texto "Ningún archivo seleccionado" */
 }
 
-input[type="file"]::-webkit-file-upload-button {
-  background-color: var(--secondaryColor);
-  color: var(--mainColor);
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 1em;
-  font-weight: bold;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  line-height: normal;
-}
-
-input[type="file"]::-webkit-file-upload-button:hover {
-  background-color: var(--complementaryColor);
-  color: var(--complementaryColor4);
-  transform: translateY(-2px);
-}
-
 input[type="file"]::file-selector-button {
   background-color: var(--secondaryColor);
   color: var(--mainColor);
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 1em;
+  font-size: 0.90em;
   font-weight: bold;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -300,8 +261,8 @@ input[type="file"]::file-selector-button {
 }
 
 input[type="file"]::file-selector-button:hover {
-  background-color: var(--complementaryColor);
-  color: var(--complementaryColor4);
+  background-color: var(--complementaryColor2);
+  color: var(--modalColor);
   transform: translateY(-2px);
 }
 
@@ -330,14 +291,14 @@ textarea {
 
 .form-actions input[type="submit"],
 .form-actions button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 0.9rem;
   border: none;
   background-color: var(--secondaryColor);
   color: var(--mainColor);
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 1em;
+  font-size: 0.90em;
   border-radius: 8px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -345,12 +306,12 @@ textarea {
   line-height: normal;
 }
 
-#nombre-cosplay {}
+
 
 .form-actions input[type="submit"]:hover,
 .form-actions button:hover {
   background-color: var(--complementaryColor);
-  color: var(--complementaryColor4);
+  color: var(--modalColor);
   transform: translateY(-2px);
 }
 

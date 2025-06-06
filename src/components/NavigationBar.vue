@@ -71,12 +71,10 @@ function home() {
   border-radius: 5px;
 }
 
-
-
 .navbar-icon {
   width: 24px;
   height: 24px;
-  filter: grayscale(100%);
+  /* Ya no necesitamos grayscale(100%) aquí para los iconos de logout */
 }
 
 .hidden {
@@ -91,11 +89,25 @@ function home() {
 .logout-icon img {
   width: 20px;
   height: 20px;
-  filter: brightness(0);
-  transition: filter 0.3s ease;
+  transition: filter 0.3s ease; /* Mantener la transición suave */
+
+  /* *** MODIFICACIÓN PRINCIPAL AQUÍ: COLOREAR EL ICONO A secondaryColor *** */
+  /* Este es un método más directo para teñir iconos negros a un color específico. */
+  /* Asume que los iconos originales son NEGROS. */
+  filter:
+    invert(40%) /* Ajusta la luminosidad. Si tus iconos son muy oscuros, este valor te dará una base de gris */
+    sepia(100%) /* Añade el tono cálido (amarillento-marrón) */
+    saturate(150%) /* Aumenta la intensidad del color. Ajusta si quieres más o menos saturación */
+    hue-rotate(230deg); /* Gira el tono para alcanzar el morado claro.
+                        * Para `secondaryColor: #D1BEA8` (un morado/marrón cálido),
+                        * un valor de 270deg-290deg debería funcionar.
+                        * ¡Este valor es el que más necesitarás ajustar manualmente!
+                        */
 }
 
 .logout-icon:hover {
-  background-color: var(--secondaryColor);
+  background-color: var(--secondaryColor); /* El fondo del botón al hacer hover */
 }
+
+
 </style>

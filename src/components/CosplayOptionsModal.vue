@@ -55,7 +55,7 @@ const eliminarCosplay = async () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,7 +64,7 @@ const eliminarCosplay = async () => {
 }
 
 .modal-content {
-  background-color:  var(--complementaryColor3);
+  background-color:  var(--modalColor);
   padding: 30px; /* Un poco más de padding */
   border-radius: 12px; /* Bordes más redondeados */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada y suave */
@@ -107,7 +107,7 @@ h3 {
 }
 
 .options button:hover {
-  background-color:  var(--mainColor);
+  background-color:  var(--complementaryColor);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(106, 13, 173, 0.2); /* Sombra con el color del botón */
 }
@@ -128,13 +128,13 @@ h3 {
 
 /* Estilo para el botón "Eliminar" (peligro) */
 .delete-button {
-  background-color:  var(--mainColor);
+  background-color:  var(--complementaryColor);
   color:  var(--secondaryColor);
   margin-top: 10px; /* Espacio entre Cerrar y Eliminar */
 }
 
 .delete-button:hover {
-  background-color:  var(--complementaryColor2);
+  background-color:  var(--mainColor);
   transform: translateY(-1px);
   box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
 }

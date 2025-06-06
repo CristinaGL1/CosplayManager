@@ -269,22 +269,6 @@ const goToDetails = (id) => {
 
 
 }
-
-.details-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* Fondo oscuro semitransparente */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1010;
-  /* Asegúrate de que esté por encima de otros modales */
-}
-
 /* Estilos para el contenedor del modal */
 .add-cosplay-overlay {
   position: fixed;
@@ -293,7 +277,7 @@ const goToDetails = (id) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   /* Fondo oscuro semitransparente */
   display: flex;
   justify-content: center;

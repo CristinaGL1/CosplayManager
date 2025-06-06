@@ -68,7 +68,6 @@
               Subir Imagen:
               <input type="file" @change="handleImageUpload" accept="image/*" class="border p-1 w-full" />
               <small class="block mt-1 text-gray-600 text-sm">
-                Selecciona un archivo de imagen para subir.
               </small>
             </label>
 
@@ -243,34 +242,26 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2); /* Sombra de fondo oscura */
   display: flex;
   justify-content: center;
-  /* Centra horizontalmente */
   align-items: center;
-  /* Centra verticalmente */
   z-index: 1010;
   padding-left: 21vw;
-  /* Evita la barra lateral */
   padding-right: 1vw;
-  /* Margen derecho */
   padding-top: 12vh;
-  /* Margen superior */
   padding-bottom: 3vh;
-  /* Margen inferior */
   box-sizing: border-box;
 }
 
 .detail-container {
-  background-color: #fff;
+  background-color: var(--modalColor); /* Fondo del modal */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  font-family: 'Arial', sans-serif;
-  padding: 30px;
+  font-family: 'Arial', sans-serif; /* Consistente con otros modales */
+  padding: 20px;
   width: 102%;
-  /* Casi todo el ancho */
   height: 99%;
-  /* Casi toda la altura */
   max-width: 1200px;
   max-height: 1000px;
   overflow-y: auto;
@@ -278,174 +269,226 @@ onMounted(() => {
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
-  /* Añade esta línea */
 }
 
 .detail-title {
-  font-size: 2em;
-  font-weight: bold;
-  color: #333;
+  font-size: 25px;
+  font-weight: bolder; /* Más fuerte */
+  color: var(--mainColor); /* Color principal */
   margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  border-bottom: 1px solid var(--complementaryColor3); /* Borde sutil */
+  padding-bottom: 5px;
   text-align: center;
 }
 
-.button-group {
-  margin-top: 20px;
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  /* Alinea los botones a la derecha */
-  position: absolute;
-  bottom: 20px;
-  right: 30px;
-}
-
-.cosplay-info {
-  margin-bottom: 20px;
-}
-
-.cosplay-header {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  align-items: center;
-}
-
-.cosplay-main-image {
-  flex-shrink: 0;
-}
-
-.header-info {
-  flex-grow: 1;
-
-
-}
-
-.info-pair {
-  display: flex;
-  /* Alinea etiqueta y valor en la misma línea */
-  align-items: baseline;
-  /* Alinea la base del texto */
-  margin-bottom: 5px;
-  /* Espacio entre pares */
-}
-
-.info-label {
+/* Estilos de información del cosplay (cuando NO se está editando) */
+.cosplay-info .info-label {
   font-weight: bold;
-  color: #292929;
+  color: var(--complementaryColor); /* Color de etiquetas más oscuro */
   margin-right: 10px;
   display: block;
 }
 
-.info-value {
-  color: #333;
-
+.cosplay-info .info-value {
+  color: var(--mainColor); /* Color de valores oscuro */
 }
 
-.detail-body {
-  margin-bottom: 20px;
-}
-
-.body-title {
+.detail-body .body-title {
   font-size: 1.5em;
-  font-weight: bold;
-  color: #333;
+  font-weight: bolder; /* Más fuerte */
+  color: var(--mainColor); /* Color principal */
   margin-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--complementaryColor3); /* Borde sutil */
   padding-bottom: 5px;
 }
 
-.cosplay-elements {
-  margin-top: 10px;
-}
-
-.button-group {
-  margin-top: 20px;
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-}
-
-.button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s ease;
-}
-
-.registerButton {
-  padding: 0.5rem 1rem;
-  border: 1px solid #888;
-  background-color: #f7ecf2;
-  color: #000000;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  width: auto;
-  font-size: 0.9em;
-  border-radius: 10px;
-}
-
-.registerButton:hover {
-  background-color: #ffdef0;
-}
-.edit-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
+/* ------------------------------------------------------------- */
+/* ESTILOS PARA LA SECCIÓN DE EDICIÓN (edit-section) */
+/* ------------------------------------------------------------- */
 
 .edit-section label {
   display: block;
   font-weight: bold;
-  color: #333;
+  color: var(--complementaryColor); /* Color de etiquetas de edición */
   margin-top: 10px;
 }
 
+/* Estilos para inputs y textareas en la sección de edición */
 .edit-section input[type="text"],
 .edit-section input[type="date"],
-.edit-section select,
 .edit-section textarea {
   width: 100%;
-  padding: 8px;
+  padding: 10px; /* Consistente con otros inputs */
   margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid var(--complementaryColor3); /* Borde sutil */
+  border-radius: 6px; /* Bordes redondeados */
   box-sizing: border-box;
   font-size: 1em;
+  background-color: var(--modalColor); /* Fondo claro */
+  color: var(--mainColor); /* Texto oscuro */
 }
 
 .edit-section textarea {
-  min-height: 80px;
+  min-height: 100px; /* Para que la descripción tenga un tamaño mínimo */
+  resize: vertical;
 }
 
-.edit-button-group {
-  margin-top: 20px;
+/* Estilos para el select en la sección de edición */
+.edit-section select {
+  width: 100%;
+  padding: 10px; /* Consistente con otros inputs */
+  margin-top: 5px;
+  border: none; /* Sin borde, usa el fondo color */
+  border-radius: 8px; /* Redondeado igual que otros selects */
+  box-sizing: border-box;
+  font-size: 1em;
+  background-color: var(--secondaryColor); /* Color de fondo secundario */
+  color: var(--mainColor); /* Texto oscuro */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="currentColor" d="M4.5 4l3 3 3-3z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.edit-section select option {
+  background-color: var(--secondaryColor); /* Fondo de opciones */
+  color: var(--mainColor); /* Color de texto de opciones */
+}
+
+/* Placeholders para inputs y textareas en la sección de edición */
+.edit-section input::placeholder,
+.edit-section textarea::placeholder {
+  color: var(--complementaryColor3);
+  opacity: 0.8;
+}
+
+/* Estilos para el input de tipo file en la sección de edición */
+/* La clase 'border p-1 w-full' se mantiene en el template, esto es para añadir colores */
+.edit-section input[type="file"] {
+ border: none; /* ELIMINA EL BORDE DEL CONTENEDOR DEL INPUT FILE */
+  outline: none; /* ELIMINA EL OUTLINE DEL CONTENEDOR DEL INPUT FILE */
+  background-color: var(--modalColor); /* Fondo claro */
+  color: var(--mainColor); /* Color del texto "Ningún archivo seleccionado" */
+  padding: 8px; /* Un poco de padding para la caja del input file */
+  margin-bottom: 0; /* Asegurar que no haya margen extra */
+  font-size: 1em; /* Asegurar el tamaño del texto */
+  border-radius: 6px; /* Borde redondeado */
+  display: flex; /* Para alinear el botón y el texto */
+  align-items: center;
+  
+}
+
+/* Estilos del botón dentro del input type="file" (pseudo-elementos) */
+.edit-section input[type="file"]::-webkit-file-upload-button,
+.edit-section input[type="file"]::file-selector-button {
+  background-color: var(--secondaryColor); /* Color de botón */
+  color: var(--mainColor); /* Color de texto de botón */
+  padding: 0.5rem 1em; /* Tamaño de botón consistente */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.90em;
+  font-weight: bold;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: normal;
+  
+}
+
+.edit-section input[type="file"]::-webkit-file-upload-button:hover,
+.edit-section input[type="file"]::file-selector-button:hover {
+  background-color: var(--complementaryColor); /* Hover más oscuro */
+  color: var(--modalColor); /* Texto claro en hover */
+  transform: translateY(-2px);
+}
+
+/* Estilos para la pequeña nota de ayuda del input de archivo */
+.edit-section small.block.mt-1.text-gray-600.text-sm {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: var(--complementaryColor); /* Un color más oscuro para la nota */
+}
+
+
+/* Grupos de botones (ya existentes) */
+.button-group, .edit-button-group {
+  margin-top:auto;
   display: flex;
-  gap: 10px;
+  gap: 10px; /* Espacio consistente */
   justify-content: flex-end;
 }
 
-.edit-button-group button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #888;
-  background-color: #f7ecf2;
-  color: #000000;
+/* Estilos para los botones con la clase 'registerButton' (ya existentes) */
+.button.registerButton, /* Para el botón "Volver" */
+.registerButton, /* Para los botones "Cancelar", "Editar" */
+.edit-button-group input[type="submit"].registerButton { /* Para el input submit de "Guardar" */
+  padding: 0.5rem 1rem; /* Tamaño de botón consistente */
+  border: none; /* Quitamos el borde gris original */
+  background-color: var(--secondaryColor); /* Morado de los botones */
+  color: var(--mainColor); /* Texto oscuro */
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 0.9em;
-  border-radius: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.90em;
+  border-radius: 8px; /* Redondeado consistente */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: normal;
 }
 
-.edit-button-group button:hover {
-  background-color: #ffdef0;
+.button.registerButton:hover,
+.registerButton:hover,
+.edit-button-group input[type="submit"].registerButton:hover {
+  background-color: var(--complementaryColor); 
+  color: var(--modalColor); 
+  transform: translateY(-2px);
+}
+
+/* Otros estilos para la información visual */
+.cosplay-header {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: flex-start; /* Alinea la parte superior de la imagen y el texto */
+}
+
+.header-info {
+  flex-grow: 1;
+}
+
+/* Asegurar que las etiquetas y valores se alineen bien */
+.info-label {
+  font-weight: bold;
+  color: var(--complementaryColor);
+  margin-right: 5px; /* Espacio entre etiqueta y valor */
+  margin-bottom: 2px; /* Pequeño espacio entre cada par info */
+}
+
+.info-value {
+  color: var(--mainColor);
+  margin-bottom: 5px; /* Espacio debajo de cada valor */
+}
+
+.cosplay-info p {
+  line-height: 1.5; /* Mejor legibilidad */
+}
+
+.loading-message {
+  text-align: center;
+  color: var(--complementaryColor);
+  margin-top: 50px;
+  font-size: 1.2em;
+}
+
+/* Pequeños ajustes para la imagen */
+.cosplay-main-image img {
+    border: 1px solid var(--complementaryColor3); /* Borde sutil alrededor de la imagen */
 }
 </style>

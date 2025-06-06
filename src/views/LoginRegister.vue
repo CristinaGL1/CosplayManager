@@ -123,9 +123,7 @@ async function register() {
 }
 </script>
 
-<style scoped>
-/* Estilos de tu componente aquí */
-</style>
+
 <style scoped>
 /* Estilos relacionados SOLO con el login y registro */
 .container {
@@ -152,31 +150,31 @@ async function register() {
   align-items: center;
 }
 
+
 .form-box {
-  background-color: white;
+  background-color: var(--modalColor); /* Fondo del modal */
   padding: 2rem;
   margin-bottom: 1rem;
   width: 25rem;
   height: 17rem;
-  border: 2px solid #000000;
+  border: none; /* Quitamos el borde negro */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   transition: box-shadow 0.3s ease;
-  border-radius: 10px;
-  /* Añado esto */
-
+  border-radius: 12px; /* Mayor redondeado */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Sombra similar al otro modal */
 }
 
 .form-box h2 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: bold;
+  font-family: 'Arial', sans-serif; /* Cambiado a Arial para consistencia */
+  font-weight: bolder; /* Más fuerte */
   margin-bottom: 1rem;
   text-align: center;
-  font-size: 1.3rem;
-  color: #000000;
+  font-size: 1.5rem; /* Un poco más grande */
+  color: var(--mainColor); /* Color del título principal */
 }
 
 .formInputs {
@@ -187,8 +185,8 @@ async function register() {
 }
 
 .form-box-bg {
-  border: 2px solid black;
-  background-color: #fcebf8;
+  border: 2px solid var(--secondaryColor); /* Borde con color secundario */
+  background-color: var(--complementaryColor4); /* Mismo color que el fondo del modal principal */
   position: absolute;
   height: 100%;
   width: 100%;
@@ -196,12 +194,11 @@ async function register() {
   left: 15px;
   z-index: -1;
   transition: background-color 0.25s ease, top 0.25s ease, left 0.25s ease;
-  border-radius: 10px;
-  /* Añad esto */
+  border-radius: 12px; /* Mayor redondeado */
 }
 
 .form-box:hover .form-box-bg {
-  background-color: #d1fffd;
+  background-color: var(--secondaryColor); /* Un gris más oscuro al pasar el ratón */
   top: 18px;
   left: 18px
 }
@@ -211,7 +208,7 @@ input {
   width: 100%;
   margin-bottom: 0.75rem;
   padding: 0.5rem;
-  border: 1px solid #000000;
+  border: 1px solid var(--complementaryColor3); /* Borde sutil */
   font-size: 1rem;
   border-radius: 10px;
   /*añado estp */
@@ -220,8 +217,8 @@ input {
 .registerButton {
   padding: 0.5rem 1rem;
   border: 1px solid #888;
-  background-color: #f7ecf2;
-  color: #000000;
+  background-color: var(--secondaryColor); /* Morado de los botones */
+  color: var(--mainColor); /* Texto oscuro */
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -232,7 +229,8 @@ input {
 }
 
 .registerButton:hover {
-  background-color: #ffdef0;
+ background-color: var(--complementaryColor2); /* Color más oscuro para el texto del link*/
+  color: var(--modalColor); /* Texto claro en hover */
 }
 
 .register-link,
@@ -240,19 +238,20 @@ input {
   margin-top: 1rem;
   text-align: center;
   font-size: 0.8rem;
+  
 }
 
 .register-link a,
 .login-link a {
-  color: #ff73c5;
+ color: var(--secondaryColor); /* Color morado para el link */
   text-decoration: none;
-  margin-top: 0.25rem;
-  transition: background-color 0.3s ease;
+  font-weight: bold; /* Para que el link destaque más */
+  transition: color 0.3s ease; /* Transición para el color del texto */
 }
 
 .register-link a:hover,
 .login-link a:hover {
-  background-color: #fae6f6;
+color: var(--complementaryColor2); 
   text-decoration: underline;
 }
 
