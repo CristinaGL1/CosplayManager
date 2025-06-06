@@ -173,9 +173,32 @@ const iniciarEdicion = () => {
   formNombre.value = selectedCosplay.nombre;
   formEstado.value = selectedCosplay.estado;
   formDescripcion.value = selectedCosplay.descripcion;
-  formFechaInicio.value = selectedCosplay.fechaInicio;
-  formFechaFin.value = selectedCosplay.fechaFin;
   formImagenURL.value = selectedCosplay.imagenURL;
+
+  const fechaInicioSQL = new Date(selectedCosplay.fechaInicio);
+  const fechaFinSQL = new Date(selectedCosplay.fechaFin);
+
+  // Obtener las partes de la fecha
+  const year1 = fechaInicioSQL.getFullYear();
+  const month1 = (fechaInicioSQL.getMonth() + 1).toString().padStart(2, '0'); // getMonth() es 0-indexado, padStart para 2 dígitos
+  const day1 = fechaInicioSQL.getDate().toString().padStart(2, '0'); // padStart para 2 dígitos
+
+  const year2 = fechaFinSQL.getFullYear();
+  const month2 = (fechaFinSQL.getMonth() + 1).toString().padStart(2, '0'); // getMonth() es 0-indexado, padStart para 2 dígitos
+  const day2 = fechaFinSQL.getDate().toString().padStart(2, '0'); // padStart para 2 dígitos
+
+  // Construir el formato YYYY-MM-DD
+  const simpleDateIncio = `${year1}-${month1}-${day1}`;
+  console.log('YYYY-MM-DD:', simpleDateIncio); // Output: 2023-10-27
+
+  const simpleDateFin = `${year2}-${month2}-${day2}`;
+  console.log('YYYY-MM-DD:', simpleDateFin); // Output: 2023-10-27
+
+  formFechaInicio.value = simpleDateIncio;
+  formFechaFin.value = simpleDateFin;
+
+
+  console.log(selectedCosplay.fechaInicio)
 
 };
 
@@ -211,7 +234,7 @@ const guardarEdicion = async () => {
   }
 
   try {
-    const response = await axios.put(`http://localhost:3000/changecosplay/${Cookies.get('userID')}`, {
+    const response = await axios.put(`http://localhost:3000/changecosplay/${localStorage.selectedCosplay}`, {
       nombre: formNombre.value,
       estado: formEstado.value,
       descripcion: formDescripcion.value,
@@ -222,7 +245,7 @@ const guardarEdicion = async () => {
 
     cosplay.value = response.data;
     window.location.reload();
-    
+
   } catch (error) {
     console.error('Error al actualizar el cosplay en el backend:', error);
     alert('Error al guardar cambios');
@@ -302,9 +325,51 @@ onMounted(() => {
   padding-bottom: 5px;
 }
 
-/* ------------------------------------------------------------- */
-/* ESTILOS PARA LA SECCIÓN DE EDICIÓN (edit-section) */
-/* ------------------------------------------------------------- */
+.cosplay-elements {
+  margin-top: 10px;
+}
+
+.button-group {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.registerButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #888;
+  background-color: #f7ecf2;
+  color: #000000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: auto;
+  font-size: 0.9em;
+  border-radius: 10px;
+}
+
+.registerButton:hover {
+  background-color: #ffdef0;
+}
+
+.edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
 
 .edit-section label {
   display: block;

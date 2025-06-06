@@ -306,13 +306,12 @@ app.get('/api/getTask2/:id', async (req, res) => {
 app.post('/api/addTask', (req, res) => {
 
     const { nombre, estado, cosplayID } = req.body;
-    const descripcion = req.body.descripcion || null;
 
     console.log(nombre, cosplayID, estado)
 
     try {
-        const sql = 'INSERT INTO tasks (nombre, descripcion, estado, cosplayID) VALUES (?, ?, ?, ?)';
-        connection.query(sql, [nombre, descripcion, estado, cosplayID], (err, result) => {
+        const sql = 'INSERT INTO tasks (nombre, estado, cosplayID) VALUES (?, ?, ?)';
+        connection.query(sql, [nombre, estado, cosplayID], (err, result) => {
             if (err) {
                 if (err.code === 'ER_DUP_ENTRY') {
                     return res.status(409).json({ message: 'ERROR 409: Ya existe un cosplay con este nombre o ID duplicado.' });
@@ -333,6 +332,18 @@ app.post('/api/addTask', (req, res) => {
         res.status(500).json({ message: 'Error interno del servidor en el catch principal.' });
     }
 
+});
+
+app.get('/api/getTask/:id', async (req, res) => {
+    const taskID = req.params.id;
+    connection.query('SELECT * FROM tasks WHERE id = ?', [taskID], (error, results) => {
+        if (error) {
+            console.error('Error al obtener las tareas:', error);
+            res.status(500).json({ error: 'Error al obtener las tareas' });
+            return;
+        }
+        res.json(results);
+    });
 });
 
 // Iniciar el servidor

@@ -306,8 +306,6 @@ textarea {
   line-height: normal;
 }
 
-
-
 .form-actions input[type="submit"]:hover,
 .form-actions button:hover {
   background-color: var(--complementaryColor);

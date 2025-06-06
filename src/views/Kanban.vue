@@ -3,21 +3,22 @@
     <NavigationBar />
     <div class="cl">
         <lateralNav />
-        <addTask />
         <section class="kanban">
+            <addTask v-if="showAddTaskModal" @close="toggleAddTaskModal"></addTask>
+            <showOptions v-if="showTaskOptionsModal" @closeOptions="toggleTaskOptionsModal"></showOptions>
             <div class="kabanBox">
                 <div class="kanbanBox-titleBox">
                     <h3 class="kanbanBox-titleBox-title">SIN EMPEZAR</h3>
-                    <button class="kanbanBox-titleBox-addButton" onclick="openAddTask()">+</button>
+                    <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
                 </div>
                 <div class="kanbanBox-taskBox" v-for="task in taskStartList" :key="task.id">
-                    <div class="kanbanBox-card">
+                    <div class="kanbanBox-card" @click="setTaskSelected(task.id); toggleTaskOptionsModal()">
                         <span class="kanbanBox-card-title">{{ task.nombre }}</span>
-                        <div class="kanbanBox-card-buttonBox">
+                        <!-- <div class="kanbanBox-card-buttonBox">
                             <button class="kanbanBox-card-button">o</button>
                             <button class="kanbanBox-card-button">x</button>
-                        </div>
-                        <div class="kanbanBox-card-cardColor"></div>
+                        </div> -->
+                        <!-- <div class="kanbanBox-card-cardColor"></div> -->
                     </div>
                 </div>
             </div>
@@ -25,16 +26,16 @@
             <div class="kabanBox">
                 <div class="kanbanBox-titleBox">
                     <h3 class="kanbanBox-titleBox-title">EN PROCESO</h3>
-                    <button class="kanbanBox-titleBox-addButton">+</button>
+                    <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
                 </div>
                 <div class="kanbanBox-taskBox" v-for="task in taskInProcessList" :key="task.id">
                     <div class="kanbanBox-card">
                         <span class="kanbanBox-card-title">{{ task.nombre }}</span>
-                        <div class="kanbanBox-card-buttonBox">
+                        <!-- <div class="kanbanBox-card-buttonBox">
                             <button class="kanbanBox-card-button">o</button>
                             <button class="kanbanBox-card-button">x</button>
                         </div>
-                        <div class="kanbanBox-card-cardColor"></div>
+                        <div class="kanbanBox-card-cardColor"></div> -->
                     </div>
                 </div>
             </div>
@@ -42,16 +43,16 @@
             <div class="kabanBox">
                 <div class="kanbanBox-titleBox">
                     <h3 class="kanbanBox-titleBox-title">FINALIZADO</h3>
-                    <button class="kanbanBox-titleBox-addButton">+</button>
+                    <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
                 </div>
                 <div class="kanbanBox-taskBox" v-for="task in taskFinishList" :key="task.id">
                     <div class="kanbanBox-card">
                         <span class="kanbanBox-card-title">{{ task.nombre }}</span>
-                        <div class="kanbanBox-card-buttonBox">
+                        <!-- <div class="kanbanBox-card-buttonBox">
                             <button class="kanbanBox-card-button">o</button>
                             <button class="kanbanBox-card-button">x</button>
                         </div>
-                        <div class="kanbanBox-card-cardColor"></div>
+                        <div class="kanbanBox-card-cardColor"></div> -->
                     </div>
                 </div>
             </div>
@@ -62,24 +63,37 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 import NavigationBar from '../components/NavigationBar.vue';
 import lateralNav from '../components/lateralNav.vue';
 import addTask from '../components/addTask.vue';
+import showOptions from '../components/taskOptionsModal.vue';
 
 
 const taskStartList = ref([]);
 const taskInProcessList = ref([]);
 const taskFinishList = ref([]);
 
+const showAddTaskModal = ref(false)
+const showTaskOptionsModal = ref(false)
+
 onMounted(async () => {
 
     recoverTasks();
 
 });
+
+const toggleAddTaskModal = () => {
+    showAddTaskModal.value = !showAddTaskModal.value;
+    console.log('Estado del modal (showAddTaskModal.value):', showAddTaskModal.value);
+};
+
+const toggleTaskOptionsModal = () => {
+    showTaskOptionsModal.value = !showTaskOptionsModal.value;
+    console.log('Estado del modal (showTaskOptionsModal.value):', showTaskOptionsModal.value);
+};
 
 async function recoverTasks() {
     //Recuperar las tareas sin empezar
@@ -109,9 +123,10 @@ async function recoverTasks() {
     }
 }
 
-async function openAddTask(){
-    
+function setTaskSelected(id) {
+    localStorage.setItem('selectedTask', id);
 }
+
 
 </script>
 
@@ -119,6 +134,7 @@ async function openAddTask(){
 #app {
     height: 100%;
     width: 100%;
+
 }
 
 .cl {
@@ -130,24 +146,27 @@ async function openAddTask(){
 }
 
 .kanban {
+    position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     width: 80vw;
     min-height: 53rem;
-    height: 53rem;
+    height: auto;
     gap: 6rem;
-    padding: 2rem;
+
 
 }
 
 .kabanBox {
     background-color: var(--secondaryColor);
     width: 20rem;
-    height: 100%;
+    min-height: 50rem;
+    height: auto;
 
     border: 2px solid var(--mainColor);
     margin-top: 2rem;
+    margin-bottom: 2rem;
 
     display: flex;
     flex-direction: column;
@@ -157,20 +176,22 @@ async function openAddTask(){
 
 .kanbanBox-titleBox {
     width: 100%;
-    min-height: 3rem;
-    max-height: 3rem;
+    height: 3rem;
+
     display: flex;
 
     border-bottom: 2px solid var(--mainColor);
 
-    align-items: center;
-    text-align: left;
-    padding-left: 1rem;
+    text-align: center;
 }
 
 .kanbanBox-titleBox-title {
     width: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-weight: 600;
+    font-size: 1.5rem;
 }
 
 .kanbanBox-titleBox-addButton {
@@ -188,25 +209,21 @@ async function openAddTask(){
     border-radius: 0 10px 0 0;
 
     font-size: 1.5rem;
+    transition: background-color 0.25s, font-size 0.15s;
 }
 
 .kanbanBox-titleBox-addButton:hover {
     cursor: pointer;
-    background-color: rgb(230, 230, 230);
+    background-color: var(--complementaryColor4);
+    font-size: 2rem;
 }
 
 .kanbanBox-taskBox {
-    /* background-color: rgba(0, 255, 255, 0.342); */
     width: 100%;
-
     display: flex;
-
-    margin: .25rem;
-
 }
 
 .kanbanBox-card {
-
     height: 8rem;
     width: 100%;
 
@@ -218,11 +235,18 @@ async function openAddTask(){
     display: flex;
     flex-direction: column;
 
+    font-size: 1.25rem;
+    transition: background-color 0.25s, font-size 0.15s;
+}
 
+.kanbanBox-card:hover {
+    cursor: pointer;
+    background-color: var(--complementaryColor4);
+    font-size: 1.5rem;
 }
 
 .kanbanBox-card-title {
-    height: 75%;
+    height: 100%;
     width: 100%;
     display: flex;
 
@@ -230,8 +254,7 @@ async function openAddTask(){
     align-items: center;
     justify-content: center;
 
-    font-size: 1.2rem;
-
+    border-radius: 20px;
 
 }
 

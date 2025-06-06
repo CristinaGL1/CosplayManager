@@ -1,12 +1,9 @@
 <template>
     <section class="addTaskBox">
-
         <div>
             <form @submit.prevent="addTask">
                 <label for="">Nombre</label>
-                <input type="text" v-model="nombre" required>
-                <label for="">Descripcion</label>
-                <input type="text" v-model="descripcion">
+                <input type="text" v-model="nombre" required maxlength="50">
                 <label for="">Estado</label>
                 <select v-model="estado" required>
                     <option value="0">Sin empezar</option>
@@ -15,6 +12,7 @@
                 </select>
                 <input type="submit" value="enviar">
             </form>
+            <button @click="emit('close')">Cerrar</button>
         </div>
     </section>
 </template>
@@ -25,7 +23,8 @@ import axios from 'axios';
 
 const nombre = ref('');
 const estado = ref('');
-const descripcion = ref('');
+
+const emit = defineEmits(['close'])
 
 async function addTask() {
 
@@ -35,7 +34,6 @@ async function addTask() {
         const response = await axios.post('http://localhost:3000/api/addTask', {
             nombre: nombre.value,
             estado: parseInt(estado.value),
-            descripcion: descripcion.value,
             cosplayID: localStorage.selectedCosplay
         });
 
@@ -53,17 +51,37 @@ async function addTask() {
 <style scoped>
 .addTaskBox {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
 
     display: flex;
     flex-direction: column;
     justify-content: center;
 
-    width: 10rem;
-    height: 50rem;
+    width: 25rem;
+    height: 15rem;
+
+    background-color: var(--complementaryColor4);
+
+    padding: 1rem;
 }
 
 .addTaskBox div form {
     display: flex;
     flex-direction: column;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    background-color: var(--complementaryColor4);
+    /* Fondo para inputs */
+    color: var(--mainColor);
 }
 </style>

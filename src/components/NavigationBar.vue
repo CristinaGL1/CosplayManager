@@ -1,7 +1,10 @@
 <template>
   <nav class="navbar">
 
-    <div class="navbar-title">CosplayManager</div>
+    <div class="navbar-title">
+      <img src="/src/icons/LogoIcon.png" alt="CosplayManagerLogo">
+      <h1>CosplayManager</h1>
+    </div>
 
     <div class="navbar-actions">
       <button @click="home" class="logout-icon">
@@ -37,11 +40,12 @@ function home() {
 <style scoped>
 .navbar {
   width: 100%;
+  height: 4rem;
   background-color: var(--mainColor);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.7rem 2rem;
+  padding: 0.7rem 1.25rem;
   position: fixed;
   top: 0;
   left: 50%;
@@ -52,8 +56,28 @@ function home() {
 
 .navbar-title {
   font-family: 'Pacifico', cursive;
-  font-size: 1.8em;
   color: var(--secondaryColor);
+  height: 100%;
+
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-title img {
+  height: 100%;
+}
+
+.navbar-title h1 {
+  height: 100%;
+  font-size: 1.75rem;
+
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .navbar-actions {
