@@ -99,7 +99,7 @@ const openModal = (id) => {
 
 const goToDashboard = (id) => {
   showOptionsModal.value = false;
-  router.push(`/kanban`);
+  router.push(`/dashboard`);
 };
 
 const goToDetails = (id) => {
