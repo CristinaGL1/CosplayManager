@@ -3,14 +3,12 @@
   <NavigationBar />
   <div class="cl">
 
-    <lateralNav />
+    <lateralNav @openCosplayModal="openModal"></lateralNav>
 
     <section class="cosplayGrid">
 
       <!--
-      -------------------------------------------------
       --------------- NEW COSPLAY CARD ----------------
-      ------------------------------------------------- 
       -->
 
       <div class="new-cosplay-item">
@@ -21,12 +19,10 @@
       </div>
 
       <!--
-      -------------------------------------------------
       ----------------- COSPLAY CARD ------------------
-      ------------------------------------------------- 
       -->
 
-      <div v-for="cosplay in cosplays" :key="cosplay.id" class="cosplay-item" @click="openModal(cosplay.id)">
+      <div v-for="cosplay in cosplays" :key="cosplay.id" class="cosplay-item" @click="; setSelectedCosplay(cosplay.id); openModal()">
         <div class="cosplay-thumbnail">
           <img v-if="cosplay.imagenURL" :src="'backend' + cosplay.imagenURL" alt="Imagen del cosplay"
             class="thumbnail-image">
@@ -42,13 +38,13 @@
     </div>
 
     <div v-if="showDetailsModal" class="details-modal-overlay">
-      <CosplayDetails :id="selectedCosplayIdForDetails" @close="showDetailsModal = false" />
+      <CosplayDetails :id="selectedCosplayIdForDetails" @close="showDetailsModal = false"/>
     </div>
 
   </div>
 
   <CosplayOptionsModal v-if="showOptionsModal" :cosplayId="selectedCosplayIdForModal" @close="showOptionsModal = false"
-    @view-dashboard="goToDashboard" @view-details="goToDetails" />
+    @view-dashboard="goToDashboard" @view-details="goToDetails"/>
 </template>
 
 <script setup>
@@ -66,8 +62,8 @@ import Cookies from 'js-cookie'
 const router = useRouter();
 const showAddCosplay = ref(false);
 const showOptionsModal = ref(false);
-const selectedCosplayIdForModal = ref(null);
 const showDetailsModal = ref(false);
+const selectedCosplayIdForModal = ref(null);
 const selectedCosplayIdForDetails = ref(null);
 
 const cosplays = ref([]);
@@ -90,14 +86,11 @@ onMounted(async () => {
   }
 });
 
-const openModal = (id) => {
-  selectedCosplayIdForModal.value = id;
+const openModal = () => {
   showOptionsModal.value = true;
-  localStorage.setItem('selectedCosplay', id);
-  console.log(localStorage.selectedCosplay)
 };
 
-const goToDashboard = (id) => {
+const goToDashboard = () => {
   showOptionsModal.value = false;
   router.push(`/dashboard`);
 };
@@ -108,6 +101,12 @@ const goToDetails = (id) => {
   showDetailsModal.value = true;
 };
 
+const setSelectedCosplay = (id) => {
+  selectedCosplayIdForModal.value = id;
+  showOptionsModal.value = true;
+  localStorage.setItem('selectedCosplay', id);
+  console.log(localStorage.selectedCosplay)
+};
 
 </script>
 
@@ -267,6 +266,22 @@ const goToDetails = (id) => {
 
 
 }
+
+.details-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fondo oscuro semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1010;
+  /* Asegúrate de que esté por encima de otros modales */
+}
+
 /* Estilos para el contenedor del modal */
 .add-cosplay-overlay {
   position: fixed;
@@ -275,7 +290,7 @@ const goToDetails = (id) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
   /* Fondo oscuro semitransparente */
   display: flex;
   justify-content: center;

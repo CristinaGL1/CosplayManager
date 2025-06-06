@@ -3,8 +3,8 @@
     <div class="modal-content">
       <h3>¿Qué quieres ver?</h3>
       <div class="options">
-        <button @click="$emit('view-dashboard', cosplayId)">Ver Dashboard</button>
-        <button @click="$emit('view-details', cosplayId)">Ver Detalles</button>
+        <button @click="$emit('view-dashboard')">Ver Dashboard</button>
+        <button @click="$emit('view-details')">Ver Detalles</button>
       </div>
        <button @click="eliminarCosplay" class="delete-button">Eliminar</button>
        <button @click="$emit('close')" class="close-button">Cerrar</button>
@@ -17,22 +17,11 @@
 import { defineProps, defineEmits } from 'vue';
 import axios from 'axios';
 
-const props = defineProps({
-  cosplayId: {
-    type: Number,
-    required: true
-  }
-});
 
 
 const emit = defineEmits(['close', 'view-dashboard', 'view-details', 'cosplay-eliminado']);
 
 
-// ------------------------------------ ELIMINAR COSPLAY ------------------------------------
-
-function goToDashboard(){
-  
-}
 
 const eliminarCosplay = async () => {
 
