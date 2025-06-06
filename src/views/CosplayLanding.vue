@@ -52,8 +52,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 import NavigationBar from '../components/NavigationBar.vue';
@@ -63,9 +63,7 @@ import CosplayOptionsModal from '../components/CosplayOptionsModal.vue';
 import CosplayDetails from '../views/CosplayDetails.vue';
 import Cookies from 'js-cookie'
 
-const route = useRoute();
 const router = useRouter();
-const localUserId = ref(route.query.userId);
 const showAddCosplay = ref(false);
 const showOptionsModal = ref(false);
 const selectedCosplayIdForModal = ref(null);

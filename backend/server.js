@@ -335,6 +335,18 @@ app.post('/api/addTask', (req, res) => {
 
 });
 
+app.get('/api/getTask/:id', async (req, res) => {
+    const taskID = req.params.id;
+    connection.query('SELECT * FROM tasks WHERE id = ?', [taskID], (error, results) => {
+        if (error) {
+            console.error('Error al obtener las tareas:', error);
+            res.status(500).json({ error: 'Error al obtener las tareas' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
 // Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor Node.js escuchando en http://localhost:${port}`);

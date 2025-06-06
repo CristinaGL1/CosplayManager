@@ -345,8 +345,6 @@ textarea {
   line-height: normal;
 }
 
-#nombre-cosplay {}
-
 .form-actions input[type="submit"]:hover,
 .form-actions button:hover {
   background-color: var(--complementaryColor);
