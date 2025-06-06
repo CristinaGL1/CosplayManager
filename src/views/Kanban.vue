@@ -159,12 +159,12 @@ function setTaskSelected(id) {
 }
 
 .kabanBox {
-    background-color: var(--secondaryColor);
+    background-color: var(--mainColor);
     width: 20rem;
     min-height: 50rem;
     height: auto;
 
-    border: 2px solid var(--mainColor);
+    border: 2px solid var(--secondaryColor);
     margin-top: 2rem;
     margin-bottom: 2rem;
 
@@ -180,7 +180,7 @@ function setTaskSelected(id) {
 
     display: flex;
 
-    border-bottom: 2px solid var(--mainColor);
+    border-bottom: 2px solid var(--secondaryColor);
 
     text-align: center;
 }
@@ -188,10 +188,12 @@ function setTaskSelected(id) {
 .kanbanBox-titleBox-title {
     width: 85%;
     display: flex;
-    justify-content: center;
+    justify-content: left;
+    padding-left: 20px;
     align-items: center;
     font-weight: 600;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    color: var(--secondaryColor);
 }
 
 .kanbanBox-titleBox-addButton {
@@ -201,12 +203,13 @@ function setTaskSelected(id) {
     background: none;
     border: none;
 
-    background-color: var(--secondaryColor);
-    border-left: 2px solid var(--mainColor);
+    background-color: var(--mainColor);
+    border-left: 2px solid var(--secondaryColor);
+    color: var(--secondaryColor);
 
     position: relative;
 
-    border-radius: 0 10px 0 0;
+    border-radius: 0 6px 0 0;
 
     font-size: 1.5rem;
     transition: background-color 0.25s, font-size 0.15s;
@@ -214,7 +217,8 @@ function setTaskSelected(id) {
 
 .kanbanBox-titleBox-addButton:hover {
     cursor: pointer;
-    background-color: var(--modalColor);
+    background-color: var(--secondaryColor);
+    color: var(--mainColor);
     font-size: 2rem;
 }
 
@@ -229,20 +233,23 @@ function setTaskSelected(id) {
 
     margin: 1rem;
 
-    border: 2px solid var(--mainColor);
+    background-color: var(--secondaryColor);
     border-radius: 10px;
 
     display: flex;
     flex-direction: column;
 
+    box-shadow: 0 0 0px 0px var(--secondaryColor);
+
     font-size: 1.25rem;
-    transition: background-color 0.25s, font-size 0.15s;
+    transition: font-size 0.15s, box-shadow 0.25s;
 }
 
 .kanbanBox-card:hover {
     cursor: pointer;
-    background-color: var(--modalColor);
     font-size: 1.5rem;
+
+    box-shadow: 0 0 5px 0px var(--secondaryColor);
 }
 
 .kanbanBox-card-title {

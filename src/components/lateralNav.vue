@@ -13,7 +13,7 @@
     width: 20vw;
     background-color: var(--mainColor);
     color: var(--secondaryColor);
-    border-right: 2px solid var(--mainColor);
+    border-right: 2px solid var(--secondaryColor);
     padding: 20px;
     padding-top: 50px;
     box-sizing: border-box;
