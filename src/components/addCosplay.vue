@@ -149,7 +149,7 @@ async function addcosplay() {
 }
 
 .add-cosplay-form-container {
-  background-color: var(--modalColor);
+  background-color: var(--mainColor);
   /* Fondo del modal */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
@@ -171,7 +171,7 @@ h2 {
   text-align: center;
   font-weight: bolder;
   font-size: 25px;
-  color: var(--mainColor);
+  color: var(--secondaryColor);
   /* Color del título */
   margin-bottom: 20px;
   
@@ -180,9 +180,9 @@ h2 {
 label {
   display: block;
   font-weight: bold;
-  color: var(--complementaryColor);
+  color: var(--secondaryColor);
   /* Color de las etiquetas */
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
 /* *** MODIFICACIÓN CLAVE AQUÍ: Invertir colores para inputs y textareas *** */
@@ -192,15 +192,15 @@ textarea,
 #nombre-cosplay {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  border: 1px solid var(--complementaryColor3);
+  margin-top: 2px;
+  border: 1px solid var(--secondaryColor);
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--modalColor);
-  /* Fondo del input: crema muy pálido */
-  color: var(--mainColor);
-  /* *** ¡CAMBIO AQUÍ! Color del texto: gris oscuro/marrón *** */
+  background-color: var(--modalNuevo);
+
+  color: var(--modalRellenoColor);
+  
 }
 
 /* Estilos para el select del estado */
@@ -212,8 +212,9 @@ select {
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--secondaryColor); /* Fondo del select (morado/marrón claro) */
-  color: var(--mainColor); /* Color del texto del select (gris oscuro/marrón) */
+  border: 1px solid var(--secondaryColor);
+  background-color: var(--modalNuevo); 
+  color: var(--modalRellenoColor); 
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -224,7 +225,7 @@ select {
 }
 /* Estilo para las opciones dentro del select (puede variar la implementación del navegador) */
 select option {
-  background-color: var(--secondaryColor);
+  background-color: var(--modalRellenoColor);
   /* Fondo de las opciones */
   color: var(--mainColor);
   /* Color del texto de las opciones */
@@ -245,8 +246,8 @@ input[type="file"] {
 }
 
 input[type="file"]::file-selector-button {
-  background-color: var(--secondaryColor);
-  color: var(--mainColor);
+  background-color: var(--modalNuevo);
+  color: var(--secondaryColor);
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 8px;
@@ -261,7 +262,7 @@ input[type="file"]::file-selector-button {
 }
 
 input[type="file"]::file-selector-button:hover {
-  background-color: var(--complementaryColor2);
+  background-color: var(--complementaryColor);
   color: var(--modalColor);
   transform: translateY(-2px);
 }
@@ -293,8 +294,8 @@ textarea {
 .form-actions button {
   padding: 0.5rem 0.9rem;
   border: none;
-  background-color: var(--secondaryColor);
-  color: var(--mainColor);
+  background-color: var(--modalNuevo);
+  color: var(--secondaryColor);
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
