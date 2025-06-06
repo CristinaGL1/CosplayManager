@@ -310,7 +310,7 @@ app.post('/api/addTask', (req, res) => {
     console.log(nombre, cosplayID, estado)
 
     try {
-        const sql = 'INSERT INTO tasks (nombre, estado, cosplayID) VALUES (?, ?, ?, ?)';
+        const sql = 'INSERT INTO tasks (nombre, estado, cosplayID) VALUES (?, ?, ?)';
         connection.query(sql, [nombre, estado, cosplayID], (err, result) => {
             if (err) {
                 if (err.code === 'ER_DUP_ENTRY') {
