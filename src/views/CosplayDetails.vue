@@ -197,8 +197,15 @@ const iniciarEdicion = () => {
   formFechaInicio.value = simpleDateIncio;
   formFechaFin.value = simpleDateFin;
 
+  if (formFechaInicio.value == "1970-01-01") {
+    formFechaInicio.value = null
+  }
 
-  console.log(selectedCosplay.fechaInicio)
+  if (formFechaFin.value == "1970-01-01") {
+    formFechaFin.value = null
+  }
+
+  console.log(formFechaFin)
 
 };
 
@@ -265,7 +272,8 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2); /* Sombra de fondo oscura */
+  background-color: rgba(0, 0, 0, 0.2);
+  /* Sombra de fondo oscura */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -278,10 +286,12 @@ onMounted(() => {
 }
 
 .detail-container {
-  background-color: var(--modalColor); /* Fondo del modal */
+  background-color: var(--modalColor);
+  /* Fondo del modal */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  font-family: 'Arial', sans-serif; /* Consistente con otros modales */
+  font-family: 'Arial', sans-serif;
+  /* Consistente con otros modales */
   padding: 20px;
   width: 102%;
   height: 99%;
@@ -296,10 +306,13 @@ onMounted(() => {
 
 .detail-title {
   font-size: 25px;
-  font-weight: bolder; /* Más fuerte */
-  color: var(--mainColor); /* Color principal */
+  font-weight: bolder;
+  /* Más fuerte */
+  color: var(--mainColor);
+  /* Color principal */
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--complementaryColor3); /* Borde sutil */
+  border-bottom: 1px solid var(--complementaryColor3);
+  /* Borde sutil */
   padding-bottom: 5px;
   text-align: center;
 }
@@ -307,21 +320,26 @@ onMounted(() => {
 /* Estilos de información del cosplay (cuando NO se está editando) */
 .cosplay-info .info-label {
   font-weight: bold;
-  color: var(--complementaryColor); /* Color de etiquetas más oscuro */
+  color: var(--complementaryColor);
+  /* Color de etiquetas más oscuro */
   margin-right: 10px;
   display: block;
 }
 
 .cosplay-info .info-value {
-  color: var(--mainColor); /* Color de valores oscuro */
+  color: var(--mainColor);
+  /* Color de valores oscuro */
 }
 
 .detail-body .body-title {
   font-size: 1.5em;
-  font-weight: bolder; /* Más fuerte */
-  color: var(--mainColor); /* Color principal */
+  font-weight: bolder;
+  /* Más fuerte */
+  color: var(--mainColor);
+  /* Color principal */
   margin-bottom: 10px;
-  border-bottom: 1px solid var(--complementaryColor3); /* Borde sutil */
+  border-bottom: 1px solid var(--complementaryColor3);
+  /* Borde sutil */
   padding-bottom: 5px;
 }
 
@@ -374,7 +392,8 @@ onMounted(() => {
 .edit-section label {
   display: block;
   font-weight: bold;
-  color: var(--complementaryColor); /* Color de etiquetas de edición */
+  color: var(--complementaryColor);
+  /* Color de etiquetas de edición */
   margin-top: 10px;
 }
 
@@ -383,32 +402,43 @@ onMounted(() => {
 .edit-section input[type="date"],
 .edit-section textarea {
   width: 100%;
-  padding: 10px; /* Consistente con otros inputs */
+  padding: 10px;
+  /* Consistente con otros inputs */
   margin-top: 5px;
-  border: 1px solid var(--complementaryColor3); /* Borde sutil */
-  border-radius: 6px; /* Bordes redondeados */
+  border: 1px solid var(--complementaryColor3);
+  /* Borde sutil */
+  border-radius: 6px;
+  /* Bordes redondeados */
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--modalColor); /* Fondo claro */
-  color: var(--mainColor); /* Texto oscuro */
+  background-color: var(--modalColor);
+  /* Fondo claro */
+  color: var(--mainColor);
+  /* Texto oscuro */
 }
 
 .edit-section textarea {
-  min-height: 100px; /* Para que la descripción tenga un tamaño mínimo */
+  min-height: 100px;
+  /* Para que la descripción tenga un tamaño mínimo */
   resize: vertical;
 }
 
 /* Estilos para el select en la sección de edición */
 .edit-section select {
   width: 100%;
-  padding: 10px; /* Consistente con otros inputs */
+  padding: 10px;
+  /* Consistente con otros inputs */
   margin-top: 5px;
-  border: none; /* Sin borde, usa el fondo color */
-  border-radius: 8px; /* Redondeado igual que otros selects */
+  border: none;
+  /* Sin borde, usa el fondo color */
+  border-radius: 8px;
+  /* Redondeado igual que otros selects */
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--secondaryColor); /* Color de fondo secundario */
-  color: var(--mainColor); /* Texto oscuro */
+  background-color: var(--secondaryColor);
+  /* Color de fondo secundario */
+  color: var(--mainColor);
+  /* Texto oscuro */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -419,8 +449,10 @@ onMounted(() => {
 }
 
 .edit-section select option {
-  background-color: var(--secondaryColor); /* Fondo de opciones */
-  color: var(--mainColor); /* Color de texto de opciones */
+  background-color: var(--secondaryColor);
+  /* Fondo de opciones */
+  color: var(--mainColor);
+  /* Color de texto de opciones */
 }
 
 /* Placeholders para inputs y textareas en la sección de edición */
@@ -433,25 +465,37 @@ onMounted(() => {
 /* Estilos para el input de tipo file en la sección de edición */
 /* La clase 'border p-1 w-full' se mantiene en el template, esto es para añadir colores */
 .edit-section input[type="file"] {
- border: none; /* ELIMINA EL BORDE DEL CONTENEDOR DEL INPUT FILE */
-  outline: none; /* ELIMINA EL OUTLINE DEL CONTENEDOR DEL INPUT FILE */
-  background-color: var(--modalColor); /* Fondo claro */
-  color: var(--mainColor); /* Color del texto "Ningún archivo seleccionado" */
-  padding: 8px; /* Un poco de padding para la caja del input file */
-  margin-bottom: 0; /* Asegurar que no haya margen extra */
-  font-size: 1em; /* Asegurar el tamaño del texto */
-  border-radius: 6px; /* Borde redondeado */
-  display: flex; /* Para alinear el botón y el texto */
+  border: none;
+  /* ELIMINA EL BORDE DEL CONTENEDOR DEL INPUT FILE */
+  outline: none;
+  /* ELIMINA EL OUTLINE DEL CONTENEDOR DEL INPUT FILE */
+  background-color: var(--modalColor);
+  /* Fondo claro */
+  color: var(--mainColor);
+  /* Color del texto "Ningún archivo seleccionado" */
+  padding: 8px;
+  /* Un poco de padding para la caja del input file */
+  margin-bottom: 0;
+  /* Asegurar que no haya margen extra */
+  font-size: 1em;
+  /* Asegurar el tamaño del texto */
+  border-radius: 6px;
+  /* Borde redondeado */
+  display: flex;
+  /* Para alinear el botón y el texto */
   align-items: center;
-  
+
 }
 
 /* Estilos del botón dentro del input type="file" (pseudo-elementos) */
 .edit-section input[type="file"]::-webkit-file-upload-button,
 .edit-section input[type="file"]::file-selector-button {
-  background-color: var(--secondaryColor); /* Color de botón */
-  color: var(--mainColor); /* Color de texto de botón */
-  padding: 0.5rem 1em; /* Tamaño de botón consistente */
+  background-color: var(--secondaryColor);
+  /* Color de botón */
+  color: var(--mainColor);
+  /* Color de texto de botón */
+  padding: 0.5rem 1em;
+  /* Tamaño de botón consistente */
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -462,46 +506,59 @@ onMounted(() => {
   -moz-appearance: none;
   appearance: none;
   line-height: normal;
-  
+
 }
 
 .edit-section input[type="file"]::-webkit-file-upload-button:hover,
 .edit-section input[type="file"]::file-selector-button:hover {
-  background-color: var(--complementaryColor); /* Hover más oscuro */
-  color: var(--modalColor); /* Texto claro en hover */
+  background-color: var(--complementaryColor);
+  /* Hover más oscuro */
+  color: var(--modalColor);
+  /* Texto claro en hover */
   transform: translateY(-2px);
 }
 
 /* Estilos para la pequeña nota de ayuda del input de archivo */
 .edit-section small.block.mt-1.text-gray-600.text-sm {
-    display: block;
-    margin-top: 5px;
-    font-size: 0.85em;
-    color: var(--complementaryColor); /* Un color más oscuro para la nota */
+  display: block;
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: var(--complementaryColor);
+  /* Un color más oscuro para la nota */
 }
 
 
 /* Grupos de botones (ya existentes) */
-.button-group, .edit-button-group {
-  margin-top:auto;
+.button-group,
+.edit-button-group {
+  margin-top: auto;
   display: flex;
-  gap: 10px; /* Espacio consistente */
+  gap: 10px;
+  /* Espacio consistente */
   justify-content: flex-end;
 }
 
 /* Estilos para los botones con la clase 'registerButton' (ya existentes) */
-.button.registerButton, /* Para el botón "Volver" */
-.registerButton, /* Para los botones "Cancelar", "Editar" */
-.edit-button-group input[type="submit"].registerButton { /* Para el input submit de "Guardar" */
-  padding: 0.5rem 1rem; /* Tamaño de botón consistente */
-  border: none; /* Quitamos el borde gris original */
-  background-color: var(--secondaryColor); /* Morado de los botones */
-  color: var(--mainColor); /* Texto oscuro */
+.button.registerButton,
+/* Para el botón "Volver" */
+.registerButton,
+/* Para los botones "Cancelar", "Editar" */
+.edit-button-group input[type="submit"].registerButton {
+  /* Para el input submit de "Guardar" */
+  padding: 0.5rem 1rem;
+  /* Tamaño de botón consistente */
+  border: none;
+  /* Quitamos el borde gris original */
+  background-color: var(--secondaryColor);
+  /* Morado de los botones */
+  color: var(--mainColor);
+  /* Texto oscuro */
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   font-size: 0.90em;
-  border-radius: 8px; /* Redondeado consistente */
+  border-radius: 8px;
+  /* Redondeado consistente */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -511,8 +568,8 @@ onMounted(() => {
 .button.registerButton:hover,
 .registerButton:hover,
 .edit-button-group input[type="submit"].registerButton:hover {
-  background-color: var(--complementaryColor); 
-  color: var(--modalColor); 
+  background-color: var(--complementaryColor);
+  color: var(--modalColor);
   transform: translateY(-2px);
 }
 
@@ -521,7 +578,8 @@ onMounted(() => {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
-  align-items: flex-start; /* Alinea la parte superior de la imagen y el texto */
+  align-items: flex-start;
+  /* Alinea la parte superior de la imagen y el texto */
 }
 
 .header-info {
@@ -532,17 +590,21 @@ onMounted(() => {
 .info-label {
   font-weight: bold;
   color: var(--complementaryColor);
-  margin-right: 5px; /* Espacio entre etiqueta y valor */
-  margin-bottom: 2px; /* Pequeño espacio entre cada par info */
+  margin-right: 5px;
+  /* Espacio entre etiqueta y valor */
+  margin-bottom: 2px;
+  /* Pequeño espacio entre cada par info */
 }
 
 .info-value {
   color: var(--mainColor);
-  margin-bottom: 5px; /* Espacio debajo de cada valor */
+  margin-bottom: 5px;
+  /* Espacio debajo de cada valor */
 }
 
 .cosplay-info p {
-  line-height: 1.5; /* Mejor legibilidad */
+  line-height: 1.5;
+  /* Mejor legibilidad */
 }
 
 .loading-message {
@@ -554,6 +616,7 @@ onMounted(() => {
 
 /* Pequeños ajustes para la imagen */
 .cosplay-main-image img {
-    border: 1px solid var(--complementaryColor3); /* Borde sutil alrededor de la imagen */
+  border: 1px solid var(--complementaryColor3);
+  /* Borde sutil alrededor de la imagen */
 }
 </style>

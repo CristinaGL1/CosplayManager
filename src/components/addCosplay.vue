@@ -39,8 +39,8 @@
           <input type="file" id="imagen-cosplay" @change="handleImageUpload" ref="imageInput">
         </div>
         <div class="form-actions">
-          <input type="submit" value="Guardar"></input>
           <button @click="$emit('ocultar-formulario')" class="hide-form-button">Ocultar Formulario</button>
+          <input type="submit" value="Guardar"></input>
         </div>
 
       </div>

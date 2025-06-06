@@ -4,7 +4,7 @@ import LoginRegister from '../views/LoginRegister.vue';
 import CosplayDetails from '../views/CosplayDetails.vue'; // Crea este componente
 import Dashboard from '../views/Dashboard.vue'; // Importa el componente Dashboard
 import CosplayLanding from '@/views/CosplayLanding.vue';
-import Kanban from '@/views/Kanban.vue';
+import Kanban from '@/views/Dashboard.vue';
 
 const router = createRouter({
   history: createWebHistory(),
