@@ -4,8 +4,6 @@
             <form @submit.prevent="addTask">
                 <label for="">Nombre</label>
                 <input type="text" v-model="nombre" required maxlength="50">
-                <label for="">Descripcion</label>
-                <input type="text" v-model="descripcion">
                 <label for="">Estado</label>
                 <select v-model="estado" required>
                     <option value="0">Sin empezar</option>
@@ -25,7 +23,6 @@ import axios from 'axios';
 
 const nombre = ref('');
 const estado = ref('');
-const descripcion = ref('');
 
 const emit = defineEmits(['close'])
 
@@ -37,7 +34,6 @@ async function addTask() {
         const response = await axios.post('http://localhost:3000/api/addTask', {
             nombre: nombre.value,
             estado: parseInt(estado.value),
-            descripcion: descripcion.value,
             cosplayID: localStorage.selectedCosplay
         });
 
