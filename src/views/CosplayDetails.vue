@@ -294,7 +294,6 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
-  /* Sombra de fondo oscura */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -307,12 +306,10 @@ onMounted(() => {
 }
 
 .detail-container {
-  background-color: var(--modalColor);
-  /* Fondo del modal */
+  background-color: var(--mainColor);
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Arial', sans-serif;
-  /* Consistente con otros modales */
   padding: 0 20px 20px 20px;
   width: 102%;
   height: 99%;
@@ -328,12 +325,9 @@ onMounted(() => {
 .detail-title {
   font-size: 40px;
   font-weight: bolder;
-  /* Más fuerte */
-  color: var(--mainColor);
-  /* Color principal */
+  color: var(--secondaryColor);
   margin: 10px 0 20px 0;
-  border-bottom: 1px solid var(--complementaryColor3);
-  /* Borde sutil */
+  border-bottom: 1px solid var(--secondaryColor);
   padding-bottom: 5px;
   text-align: center;
   display: flex;
@@ -344,14 +338,13 @@ onMounted(() => {
 /* Estilos de información del cosplay (cuando NO se está editando) */
 .cosplay-info .info-label {
   font-weight: bold;
-  color: var(--complementaryColor);
-  /* Color de etiquetas más oscuro */
+  color: var(--secondaryColor);
   margin-right: 10px;
   display: block;
 }
 
 .cosplay-info .info-value {
-  color: var(--mainColor);
+  color: var(--modalNuevo);
   font-size: 1.5rem;
 
 }
@@ -360,7 +353,7 @@ onMounted(() => {
   font-size: 1.75em;
   font-weight: 600;
 
-  color: var(--mainColor);
+  color: var(--SecondaryColor);
 
   margin-bottom: 10px;
 
@@ -391,7 +384,7 @@ onMounted(() => {
 .registerButton {
   padding: 0.5rem 1rem;
   border: 1px solid #888;
-  background-color: #f7ecf2;
+  background-color: var(--complementaryColor);
   color: #000000;
   font-weight: bold;
   cursor: pointer;
@@ -415,8 +408,7 @@ onMounted(() => {
 .edit-section label {
   display: block;
   font-weight: bold;
-  color: var(--complementaryColor);
-  /* Color de etiquetas de edición */
+  color: var(--secondaryColor);
   margin-top: 10px;
 }
 
@@ -426,18 +418,13 @@ onMounted(() => {
 .edit-section textarea {
   width: 100%;
   padding: 10px;
-  /* Consistente con otros inputs */
   margin-top: 5px;
-  border: 1px solid var(--complementaryColor3);
-  /* Borde sutil */
+  border: 1px solid var(--secondaryColor);
   border-radius: 6px;
-  /* Bordes redondeados */
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--modalColor);
-  /* Fondo claro */
-  color: var(--mainColor);
-  /* Texto oscuro */
+  background-color: var(--modalNuevo);
+  color: var(--secondaryColor);
 }
 
 .edit-section textarea {
@@ -450,18 +437,13 @@ onMounted(() => {
 .edit-section select {
   width: 100%;
   padding: 10px;
-  /* Consistente con otros inputs */
   margin-top: 5px;
-  border: none;
-  /* Sin borde, usa el fondo color */
+  border: 1px solid var(--secondaryColor);
   border-radius: 8px;
-  /* Redondeado igual que otros selects */
   box-sizing: border-box;
   font-size: 1em;
-  background-color: var(--secondaryColor);
-  /* Color de fondo secundario */
-  color: var(--mainColor);
-  /* Texto oscuro */
+  background-color: var(--modalNuevo);
+  color: var(--secondaryColor);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -489,23 +471,14 @@ onMounted(() => {
 /* La clase 'border p-1 w-full' se mantiene en el template, esto es para añadir colores */
 .edit-section input[type="file"] {
   border: none;
-  /* ELIMINA EL BORDE DEL CONTENEDOR DEL INPUT FILE */
   outline: none;
-  /* ELIMINA EL OUTLINE DEL CONTENEDOR DEL INPUT FILE */
-  background-color: var(--modalColor);
-  /* Fondo claro */
+  background-color: var(--mainColor);
   color: var(--mainColor);
-  /* Color del texto "Ningún archivo seleccionado" */
   padding: 8px;
-  /* Un poco de padding para la caja del input file */
   margin-bottom: 0;
-  /* Asegurar que no haya margen extra */
   font-size: 1em;
-  /* Asegurar el tamaño del texto */
   border-radius: 6px;
-  /* Borde redondeado */
   display: flex;
-  /* Para alinear el botón y el texto */
   align-items: center;
 
 }
@@ -513,9 +486,9 @@ onMounted(() => {
 /* Estilos del botón dentro del input type="file" (pseudo-elementos) */
 .edit-section input[type="file"]::-webkit-file-upload-button,
 .edit-section input[type="file"]::file-selector-button {
-  background-color: var(--secondaryColor);
+  background-color: var(--modalNuevo);
   /* Color de botón */
-  color: var(--mainColor);
+  color: var(--secondaryColor);
   /* Color de texto de botón */
   padding: 0.5rem 1em;
   /* Tamaño de botón consistente */
@@ -541,15 +514,6 @@ onMounted(() => {
   transform: translateY(-2px);
 }
 
-/* Estilos para la pequeña nota de ayuda del input de archivo */
-.edit-section small.block.mt-1.text-gray-600.text-sm {
-  display: block;
-  margin-top: 5px;
-  font-size: 0.85em;
-  color: var(--complementaryColor);
-  /* Un color más oscuro para la nota */
-}
-
 
 /* Grupos de botones (ya existentes) */
 .button-group,
@@ -569,19 +533,14 @@ onMounted(() => {
 .edit-button-group input[type="submit"].registerButton {
   /* Para el input submit de "Guardar" */
   padding: 0.5rem 1rem;
-  /* Tamaño de botón consistente */
   border: none;
-  /* Quitamos el borde gris original */
-  background-color: var(--secondaryColor);
-  /* Morado de los botones */
-  color: var(--mainColor);
-  /* Texto oscuro */
+  background-color: var(--modalNuevo);
+  color: var(--secondaryColor);
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   font-size: 0.90em;
   border-radius: 8px;
-  /* Redondeado consistente */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;

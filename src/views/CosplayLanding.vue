@@ -145,16 +145,12 @@ const setSelectedCosplay = (id) => {
   padding: 30px;
   display: grid;
   grid-template-columns: repeat(auto-fill, 220px);
-  /* Forzamos el ancho de las columnas */
   gap: 25px;
   background-color: transparent;
   overflow-y: auto;
   justify-content: center;
-  /* Centramos los elementos horizontalmente */
   align-items: start;
-  /* Volvemos a alinear al inicio para los items */
   flex-grow: 1;
-  /* Ocupa el espacio disponible */
 }
 
 /* Estilos para la tarjeta de detalles */
@@ -180,9 +176,7 @@ const setSelectedCosplay = (id) => {
 .cosplay-item {
   display: flex;
   flex-direction: column;
-  /* Colocamos el thumbnail encima del nombre */
   align-items: center;
-  /* Centramos el thumbnail horizontalmente */
   cursor: pointer;
 
 }
@@ -273,7 +267,7 @@ const setSelectedCosplay = (id) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.1);
   /* Fondo oscuro semitransparente */
   display: flex;
   justify-content: center;
@@ -290,7 +284,7 @@ const setSelectedCosplay = (id) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   /* Fondo oscuro semitransparente */
   display: flex;
   justify-content: center;
@@ -304,6 +298,6 @@ const setSelectedCosplay = (id) => {
   background-color: var(--secondaryColor);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 </style>

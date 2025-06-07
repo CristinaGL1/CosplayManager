@@ -48,18 +48,18 @@ const eliminarCosplay = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-   z-index: 1000; /* Asegura que esté por encima de otros elementos */
+   z-index: 1000; 
 
 }
 
 .modal-content {
   background-color:  var(--modalColor);
-  padding: 30px; /* Un poco más de padding */
-  border-radius: 12px; /* Bordes más redondeados */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada y suave */
+  padding: 30px; 
+  border-radius: 12px; 
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
   text-align: center;
   width: 100%;
-  max-width: 380px; /* Un ancho máximo razonable para el modal */
+  max-width: 380px; 
   box-sizing: border-box;
 }
 
