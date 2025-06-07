@@ -135,7 +135,7 @@ async function addcosplay() {
   left: 0;
   width: 100%;  
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   /* Oscurece más el fondo para que el modal resalte */
   display: flex;
   justify-content: center;

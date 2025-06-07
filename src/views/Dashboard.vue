@@ -257,8 +257,9 @@ const goToDetails = (id) => {
 
     margin: 1rem;
 
-    background-color: var(--secondaryColor);
+    background-color: var(--modalNuevo);
     border-radius: 10px;
+    border-color: var();
 
     display: flex;
     flex-direction: column;
