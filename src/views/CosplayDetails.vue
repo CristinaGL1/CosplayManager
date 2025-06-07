@@ -298,11 +298,12 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   z-index: 1010;
-  padding-left: 21vw;
+  padding-left: 18vw;
   padding-right: 1vw;
-  padding-top: 12vh;
+  padding-top: 10vh;
   padding-bottom: 3vh;
   box-sizing: border-box;
+
 }
 
 .detail-container {
@@ -320,6 +321,7 @@ onMounted(() => {
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
+    border: 2px solid var(--secondaryColor);
 }
 
 .detail-title {
@@ -341,19 +343,26 @@ onMounted(() => {
   color: var(--secondaryColor);
   margin-right: 10px;
   display: block;
+
 }
 
 .cosplay-info .info-value {
-  color: var(--modalNuevo);
-  font-size: 1.5rem;
+  color: var(--secondaryColor);
+  font-size: 1.3rem;
 
+}
+
+.detail-body{
+  border-top: 1px solid var(--secondaryColor);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
 }
 
 .detail-body .body-title {
   font-size: 1.75em;
   font-weight: 600;
 
-  color: var(--SecondaryColor);
+  color: var(--secondaryColor);
 
   margin-bottom: 10px;
 
@@ -578,10 +587,12 @@ onMounted(() => {
 
 /* Pequeños ajustes para la imagen */
 .cosplay-main-image img {
-  border: 2px solid var(--complementaryColor3);
+  border: 2px solid var(--secondaryColor);
+  border-radius: 10px;
   height: 100%;
   width: 100%;
   object-fit: cover;
+  
 }
 
 .header-info {
@@ -603,7 +614,7 @@ onMounted(() => {
 
 .header-info-colum div {
 
-  border-bottom: 1px solid var(--complementaryColor3);
+  border-bottom: 1px solid var(--secondaryColor);
   height: 100%;
   width: 100%;
 }

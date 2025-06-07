@@ -141,9 +141,9 @@ async function addcosplay() {
   justify-content: center;
   align-items: center;
   z-index: 1010;
-  padding-left: 21vw;
+  padding-left: 18vw;
   padding-right: 1vw;
-  padding-top: 12vh;
+  padding-top: 10vh;
   padding-bottom: 3vh;
   box-sizing: border-box;
 }
@@ -165,6 +165,7 @@ async function addcosplay() {
   box-sizing: border-box;
   position: relative;
   justify-content: space-between;
+    border: 2px solid var(--secondaryColor);
 }
 
 h2 {
