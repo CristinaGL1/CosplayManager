@@ -322,7 +322,7 @@ const goToDetails = (id) => {
     height: 8rem;
     width: 100%;
 
-    margin: 1rem;
+    margin: 0.9rem;
 
     background-color: var(--modalNuevo);
     border-radius: 10px;
