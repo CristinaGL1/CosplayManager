@@ -8,14 +8,9 @@ body {
   color: black;
   min-height: 100vh;
   display: flex;
-  /* Enable flexbox for body */
   justify-content: center;
-  /* Center content horizontally */
   align-items: center;
-  /* Center content vertically (optional, but good for overall centering) */
-  /* flex-direction: column; */
-  /* No necesitamos forzar la dirección aquí */
-
+  overflow: hidden;
 }
 
 #app {

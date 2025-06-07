@@ -14,38 +14,41 @@
         <section class="kanban">
             <addTask v-if="showAddTaskModal" @close="toggleAddTaskModal"></addTask>
             <showOptions v-if="showTaskOptionsModal" @closeOptions="toggleTaskOptionsModal"></showOptions>
-            <div class="kabanBox">
-                <div class="kanbanBox-titleBox">
-                    <h3 class="kanbanBox-titleBox-title">SIN EMPEZAR</h3>
-                    <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
-                </div>
-                <div class="kanbanBox-taskBox" v-for="task in taskStartList" :key="task.id">
-                    <div class="kanbanBox-card" @click="setTaskSelected(task.id); toggleTaskOptionsModal()">
-                        <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+            <div class="cosplaytitle">{{ selectedCosplay.nombre }}</div>
+            <div class="kanbanDisplay">
+                <div class="kabanBox">
+                    <div class="kanbanBox-titleBox">
+                        <h3 class="kanbanBox-titleBox-title">SIN EMPEZAR</h3>
+                        <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
+                    </div>
+                    <div class="kanbanBox-taskBox" v-for="task in taskStartList" :key="task.id">
+                        <div class="kanbanBox-card" @click="setTaskSelected(task.id); toggleTaskOptionsModal()">
+                            <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="kabanBox">
-                <div class="kanbanBox-titleBox">
-                    <h3 class="kanbanBox-titleBox-title">EN PROCESO</h3>
-                    <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
-                </div>
-                <div class="kanbanBox-taskBox" v-for="task in taskInProcessList" :key="task.id">
-                    <div class="kanbanBox-card">
-                        <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+                <div class="kabanBox">
+                    <div class="kanbanBox-titleBox">
+                        <h3 class="kanbanBox-titleBox-title">EN PROCESO</h3>
+                        <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
+                    </div>
+                    <div class="kanbanBox-taskBox" v-for="task in taskInProcessList" :key="task.id">
+                        <div class="kanbanBox-card">
+                            <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="kabanBox">
-                <div class="kanbanBox-titleBox">
-                    <h3 class="kanbanBox-titleBox-title">FINALIZADO</h3>
-                    <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
-                </div>
-                <div class="kanbanBox-taskBox" v-for="task in taskFinishList" :key="task.id">
-                    <div class="kanbanBox-card">
-                        <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+                <div class="kabanBox">
+                    <div class="kanbanBox-titleBox">
+                        <h3 class="kanbanBox-titleBox-title">FINALIZADO</h3>
+                        <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
+                    </div>
+                    <div class="kanbanBox-taskBox" v-for="task in taskFinishList" :key="task.id">
+                        <div class="kanbanBox-card">
+                            <span class="kanbanBox-card-title">{{ task.nombre }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,6 +72,7 @@ import showOptions from '../components/taskDetails.vue';
 import CosplayOptionsModal from '../components/CosplayOptionsModal.vue';
 import CosplayDetails from '../views/CosplayDetails.vue';
 
+const selectedCosplay = ref([]);
 
 const taskStartList = ref([]);
 const taskInProcessList = ref([]);
@@ -88,7 +92,7 @@ const router = useRouter();
 onMounted(async () => {
 
     recoverTasks();
-
+    recoverCosplay();
 });
 
 const toggleAddTaskModal = () => {
@@ -100,6 +104,17 @@ const toggleTaskOptionsModal = () => {
     showTaskOptionsModal.value = !showTaskOptionsModal.value;
     console.log('Estado del modal (showTaskOptionsModal.value):', showTaskOptionsModal.value);
 };
+
+async function recoverCosplay() {
+
+    try {
+        const response = await axios.get(`http://localhost:3000/api/cosplays/${localStorage.selectedCosplay}`);
+        selectedCosplay.value = response.data[0];
+    } catch (error) {
+        console.error('Error al cargar el cosplay del usuario:', error);
+        // Manejar el error
+    }
+}
 
 async function recoverTasks() {
     //Recuperar las tareas sin empezar
@@ -156,6 +171,7 @@ const goToDetails = (id) => {
     height: 100%;
     width: 100%;
 
+
 }
 
 .cl {
@@ -169,21 +185,45 @@ const goToDetails = (id) => {
 .kanban {
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    width: 100vw;
+    min-height: 43rem;
+    height: auto;
+    margin-top: 2rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+
+}
+
+.cosplayTitle {
+    font-size: 2rem;
+    background-color: var(--mainColor);
+    border-radius: 10px;
+    width: 80%;
+    min-width: 20rem;
+    text-align: center;
+    color: var(--secondaryColor);
+    border: 2px solid var(--secondaryColor);
+    margin-top: 5rem;
+}
+
+.kanbanDisplay {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
     align-items: flex-start;
-    width: 80vw;
-    min-height: 53rem;
+    width: 80%;
+    min-height: 100%;
     height: auto;
     gap: 6rem;
-
-
 }
 
 .kabanBox {
     background-color: var(--mainColor);
     width: 20rem;
-    min-height: 50rem;
-    height: auto;
+    height: 43rem;
 
     border: 2px solid var(--secondaryColor);
     margin-top: 2rem;
@@ -193,10 +233,36 @@ const goToDetails = (id) => {
     flex-direction: column;
 
     border-radius: 10px;
+    overflow: auto;
+}
+
+/* Estilo del scroll */
+.kabanBox::-webkit-scrollbar {
+    width: 10px;
+    /* ancho vertical */
+}
+
+/* Fondo del scroll */
+.kabanBox::-webkit-scrollbar-track {
+    background: none;
+}
+
+/* Parte móvil del scroll */
+.kabanBox::-webkit-scrollbar-thumb {
+    background-color: var(--secondaryColor);
+    border-radius: 0 6px 6px 0;
+    border: 2px solid var(--mainColor);
+}
+
+/* Cuando pasas el mouse encima */
+.kabanBox::-webkit-scrollbar-thumb:hover {
+    background-color: var(--mainColor);
+    border: 2px solid var(--secondaryColor);
 }
 
 .kanbanBox-titleBox {
     width: 100%;
+    min-height: 3rem;
     height: 3rem;
 
     display: flex;
@@ -249,6 +315,7 @@ const goToDetails = (id) => {
 .kanbanBox-taskBox {
     width: 100%;
     display: flex;
+    object-fit: cover;
 }
 
 .kanbanBox-card {
@@ -259,8 +326,9 @@ const goToDetails = (id) => {
 
     background-color: var(--modalNuevo);
     border-radius: 10px;
-    border-color: var();
+    border: 2px solid var(--secondaryColor);
 
+    color: var(--secondaryColor);
     display: flex;
     flex-direction: column;
 
@@ -268,6 +336,7 @@ const goToDetails = (id) => {
 
     font-size: 1.25rem;
     transition: font-size 0.15s, box-shadow 0.25s;
+    object-fit: cover;
 }
 
 .kanbanBox-card:hover {
