@@ -27,8 +27,7 @@ const eliminarCosplay = async () => {
 
   try {
     await axios.delete(`http://localhost:3000/deleteCosplays/${localStorage.selectedCosplay}`);
-    console.log(`Cosplay con ID ${props.cosplayId} eliminado.`);
-    emit('cosplay-eliminado', props.cosplayId); // Emitir evento al padre
+    emit('cosplay-eliminado', localStorage.selectedCosplay); // Emitir evento al padre
     emit('close'); // Cerrar el modal después de la eliminación
     location.reload();
   } catch (error) {

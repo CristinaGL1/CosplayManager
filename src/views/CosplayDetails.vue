@@ -7,16 +7,42 @@
         <div v-if="!editando" class="cosplay-info">
           <div class="cosplay-header">
             <div v-if="cosplay.imagenURL" class="cosplay-main-image">
-              <img :src="'backend' + cosplay.imagenURL" alt="Imagen principal del cosplay"
-                style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; margin-right: 20px;">
+              <img :src="'backend' + cosplay.imagenURL" alt="Imagen principal del cosplay">
+            </div>
+            <div v-else="cosplay.imagenURL" class="cosplay-main-image">
+              <img>
             </div>
             <div class="header-info">
-              <p class="info-label">Estado:</p>
-              <p class="info-value">{{ cosplay.estado }}</p>
-              <p class="info-label">Fecha de Inicio:</p>
-              <p class="info-value">{{ cosplay.fechaInicio ? formatFecha(cosplay.fechaInicio) : '.' }}</p>
-              <p class="info-label">Fecha de Fin:</p>
-              <p class="info-value">{{ cosplay.fechaFin ? formatFecha(cosplay.fechaFin) : '.' }}</p>
+              <div class="header-info-colum">
+                <div>
+                  <p class="info-label">Estado:</p>
+                  <p class="info-value">{{ cosplay.estado }}</p>
+                </div>
+                <div>
+                  <p class="info-label">Fecha de Inicio:</p>
+                  <p class="info-value">{{ cosplay.fechaInicio ? formatFecha(cosplay.fechaInicio) : '.' }}</p>
+                </div>
+                <div>
+                  <p class="info-label">Fecha de Fin:</p>
+                  <p class="info-value">{{ cosplay.fechaFin ? formatFecha(cosplay.fechaFin) : '.' }}</p>
+                </div>
+
+
+              </div>
+              <div class="header-info-colum">
+                <div>
+                  <p class="info-label">Tareas totales:</p>
+                  <p class="info-value">2</p>
+                </div>
+                <div>
+                  <p class="info-label">Tareas completadas:</p>
+                  <p class="info-value">5</p>
+                </div>
+                <div>
+                  <p class="info-label">Coste total:</p>
+                  <p class="info-value">40€</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -24,11 +50,6 @@
             <h3 class="body-title">Descripción</h3>
             <p class="info-value" v-if="cosplay?.descripcion">{{ cosplay.descripcion }}</p>
             <p class="info-value" v-else>No hay descripción.</p>
-
-            <h3 class="body-title">Elementos del Cosplay</h3>
-            <div class="cosplay-elements">
-              <p class="info-value">Aquí iría la lista de elementos (funcionalidad a implementar).</p>
-            </div>
           </div>
         </div>
 
@@ -292,7 +313,7 @@ onMounted(() => {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: 'Arial', sans-serif;
   /* Consistente con otros modales */
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   width: 102%;
   height: 99%;
   max-width: 1200px;
@@ -305,16 +326,19 @@ onMounted(() => {
 }
 
 .detail-title {
-  font-size: 25px;
+  font-size: 40px;
   font-weight: bolder;
   /* Más fuerte */
   color: var(--mainColor);
   /* Color principal */
-  margin-bottom: 20px;
+  margin: 10px 0 20px 0;
   border-bottom: 1px solid var(--complementaryColor3);
   /* Borde sutil */
   padding-bottom: 5px;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Estilos de información del cosplay (cuando NO se está editando) */
@@ -328,18 +352,18 @@ onMounted(() => {
 
 .cosplay-info .info-value {
   color: var(--mainColor);
-  /* Color de valores oscuro */
+  font-size: 1.5rem;
+
 }
 
 .detail-body .body-title {
-  font-size: 1.5em;
-  font-weight: bolder;
-  /* Más fuerte */
+  font-size: 1.75em;
+  font-weight: 600;
+
   color: var(--mainColor);
-  /* Color principal */
+
   margin-bottom: 10px;
-  border-bottom: 1px solid var(--complementaryColor3);
-  /* Borde sutil */
+
   padding-bottom: 5px;
 }
 
@@ -348,7 +372,6 @@ onMounted(() => {
 }
 
 .button-group {
-  margin-top: 20px;
   display: flex;
   gap: 15px;
   justify-content: flex-end;
@@ -575,16 +598,58 @@ onMounted(() => {
 
 /* Otros estilos para la información visual */
 .cosplay-header {
+  font-size: 1.5rem;
   display: flex;
-  gap: 20px;
+  gap: 2rem;
+  height: 20rem;
   margin-bottom: 20px;
   align-items: flex-start;
   /* Alinea la parte superior de la imagen y el texto */
 }
 
-.header-info {
-  flex-grow: 1;
+
+.cosplay-main-image {
+  display: flex;
+  align-items: center;
+  height: 20rem;
+  min-width: 20rem;
+  width: 20rem;
+  overflow: hidden;
 }
+
+/* Pequeños ajustes para la imagen */
+.cosplay-main-image img {
+  border: 2px solid var(--complementaryColor3);
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.header-info {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  gap: 2rem;
+}
+
+.header-info-colum {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-info-colum div {
+
+  border-bottom: 1px solid var(--complementaryColor3);
+  height: 100%;
+  width: 100%;
+}
+
+
 
 /* Asegurar que las etiquetas y valores se alineen bien */
 .info-label {
@@ -612,11 +677,5 @@ onMounted(() => {
   color: var(--complementaryColor);
   margin-top: 50px;
   font-size: 1.2em;
-}
-
-/* Pequeños ajustes para la imagen */
-.cosplay-main-image img {
-  border: 1px solid var(--complementaryColor3);
-  /* Borde sutil alrededor de la imagen */
 }
 </style>
