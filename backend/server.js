@@ -263,6 +263,18 @@ app.delete('/deleteCosplays/:id', async (req, res) => {
     }
 });
 
+//  Recueprar todas las task
+app.get('/api/getTasks/:id', async (req, res) => {
+    const cosplayId = req.params.id;
+    connection.query('SELECT * FROM tasks WHERE cosplayID = ?', [cosplayId], (error, results) => {
+        if (error) {
+            console.error('Error al obtener las tareas:', error);
+            res.status(500).json({ error: 'Error al obtener las tareas' });
+            return;
+        }
+        res.json(results);
+    });
+});
 
 // Recuperar las task sin empezar de un cosplay
 app.get('/api/getTask0/:id', async (req, res) => {

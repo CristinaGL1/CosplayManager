@@ -32,15 +32,15 @@
               <div class="header-info-colum">
                 <div>
                   <p class="info-label">Tareas totales:</p>
-                  <p class="info-value">2</p>
+                  <p class="info-value">{{ selectedCosplay.taskTotal }}</p>
                 </div>
                 <div>
                   <p class="info-label">Tareas completadas:</p>
-                  <p class="info-value">5</p>
+                  <p class="info-value">{{ selectedCosplay.taskFinished }}</p>
                 </div>
                 <div>
                   <p class="info-label">Coste total:</p>
-                  <p class="info-value">40€</p>
+                  <p class="info-value">{{ selectedCosplay.taskTotalCost + "€"}}</p>
                 </div>
               </div>
             </div>
@@ -109,6 +109,7 @@
         <button v-if="cosplay && !editando" @click="iniciarEdicion" class="button registerButton">
           Editar
         </button>
+        
       </div>
     </div>
   </div>
@@ -126,14 +127,18 @@ const editando = ref(false);
 const uploadedImage = ref(null); // Para almacenar el archivo de imagen seleccionado
 
 
-const selectedCosplay = {
+const selectedCosplay = reactive({
   nombre: "",
   estado: "",
   descripcion: "",
   fechaInicio: "",
   fechaFin: "",
-  imagenURL: ""
-}
+  imagenURL: "",
+  taskTotal: 0,
+  taskFinished: 0,
+  taskTotalCost: 0,
+
+});
 
 const formNombre = ref('');
 const formEstado = ref('');
@@ -141,6 +146,11 @@ const formDescripcion = ref('');
 const formFechaInicio = ref('');
 const formFechaFin = ref('');
 const formImagenURL = ref('');
+
+const taskTotal = ref('');
+const taskFinished = ref('');
+const taskTotalCost = ref('');
+
 
 // Nuevas refs para la gestión de la imagen
 const newImagenArchivo = ref(null); // Para guardar el nuevo archivo seleccionado
@@ -170,6 +180,7 @@ const formatFecha = (fechaStr) => {
 
 const loadCosplayDetailsFromBackend = async () => {
 
+  // RECUPERAR COSPLAYS
   try {
     const response = await axios.get(`http://localhost:3000/api/cosplays/${localStorage.selectedCosplay}`);
     cosplay.value = response.data[0];
@@ -181,10 +192,40 @@ const loadCosplayDetailsFromBackend = async () => {
     selectedCosplay.fechaFin = cosplay.value.fechaFin;
     selectedCosplay.imagenURL = cosplay.value.imagenURL;
 
+    console.log("selectedCosplay")
     console.log(selectedCosplay)
   } catch (error) {
     console.error('Error al obtener el cosplay desde el backend:', error);
   }
+
+  // RECUPERAR TODAS LAS TASK
+  try {
+    const response = await axios.get(`http://localhost:3000/api/getTasks/${localStorage.selectedCosplay}`);
+    taskTotal.value = response.data.length;
+
+    selectedCosplay.taskTotal = taskTotal.value;
+    console.log(`Task Total: ${selectedCosplay.taskTotal}`)
+
+    taskTotalCost.value = response.data.reduce((suma, tarea) => suma + (tarea.coste || 0), 0);
+
+    selectedCosplay.taskTotalCost = taskTotalCost.value;
+    console.log(`Task Cost: ${selectedCosplay.taskTotalCost}`)
+  } catch (error) {
+    console.error('Error al obtener LA TAREA desde el backend:', error);
+  }
+
+  // RECUPERAR TODAS LAS TASK FINALIZADAS
+  try {
+    const response = await axios.get(`http://localhost:3000/api/getTask2/${localStorage.selectedCosplay}`);
+    taskFinished.value = response.data.length;
+
+    selectedCosplay.taskFinished = taskFinished.value;
+    console.log(`Task Total: ${selectedCosplay.taskFinished}`)
+  } catch (error) {
+    console.error('Error al obtener el cosplay desde el backend:', error);
+  }
+
+
 
 };
 
@@ -310,7 +351,6 @@ onMounted(() => {
   background-color: var(--mainColor);
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  font-family: 'Arial', sans-serif;
   padding: 0 20px 20px 20px;
   width: 102%;
   height: 99%;
@@ -321,7 +361,7 @@ onMounted(() => {
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
-    border: 2px solid var(--secondaryColor);
+  border: 2px solid var(--secondaryColor);
 }
 
 .detail-title {
@@ -352,7 +392,7 @@ onMounted(() => {
 
 }
 
-.detail-body{
+.detail-body {
   border-top: 1px solid var(--secondaryColor);
   margin-top: 1.5rem;
   padding-top: 1rem;
@@ -592,7 +632,7 @@ onMounted(() => {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  
+
 }
 
 .header-info {
@@ -647,10 +687,10 @@ onMounted(() => {
   color: var(--complementaryColor);
   margin-top: 50px;
   font-size: 1.2em;
-  
+
 }
 
-.marginButtons{
+.marginButtons {
   padding-top: 4.45rem;
 }
 </style>

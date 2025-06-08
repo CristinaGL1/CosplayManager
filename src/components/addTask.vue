@@ -1,6 +1,6 @@
 <template>
     <section class="addTaskBox">
-        <div>
+        <div class="modalBox">
             <form @submit.prevent="addTask">
                 <label for="">Nombre</label>
                 <input type="text" v-model="nombre" required maxlength="50">
@@ -10,7 +10,7 @@
                     <option value="1">En proceso</option>
                     <option value="2">Finalizado</option>
                 </select>
-                <input type="submit" value="enviar">
+                <input type="submit" value="Enviar" class="sendButton">
             </form>
             <button @click="emit('close')">Cerrar</button>
         </div>
@@ -50,48 +50,63 @@ async function addTask() {
 
 <style scoped>
 .addTaskBox {
-    position: fixed; /* Cambiado a fixed para cubrir toda la ventana */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
-    display: flex; /* Para centrar el div interno */
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    z-index: 1010;
+    padding-left: 18vw;
+    padding-right: 1vw;
+    padding-top: 10vh;
+    padding-bottom: 3vh;
+    box-sizing: border-box;
 }
 
-/* Este es el 'div' interno del addTaskBox */
-.addTaskBox > div {
-    background-color: var(--modalColor); /* Color de fondo sólido para la caja del modal */
-    padding: 30px; /* Un poco más de padding */
-    border-radius: 12px; /* Bordes más redondeados */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada y suave */
-    text-align: center; /* Centra el contenido dentro del modal */
+
+.modalBox {
+    background-color: var(--mainColor);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
     width: 100%;
-    max-width: 400px; /* Ancho máximo para el modal (ajustable) */
-    box-sizing: border-box; /* Incluye padding en el ancho */
-    display: flex; /* Para organizar elementos internos */
+    max-width: 400px;
+    box-sizing: border-box;
+    display: flex;
     flex-direction: column;
-    position: relative; /* Para el posicionamiento interno si fuera necesario */
+    position: relative;
+    color: var(--secondaryColor);
+    border: 2px solid var(--secondaryColor);
+
 }
 
 /* Estilos para el formulario interno */
 .addTaskBox div form {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Espacio entre los elementos del formulario (label-input/select) */
-    align-items: stretch; /* Asegura que los elementos se estiren */
-    margin-top: 15px; /* Espacio superior para el formulario */
-    margin-bottom: 5px; /* Espacio inferior antes del botón de cerrar */
+    gap: 15px;
+    /* Espacio entre los elementos del formulario (label-input/select) */
+    align-items: stretch;
+    /* Asegura que los elementos se estiren */
+    margin-top: 15px;
+    /* Espacio superior para el formulario */
+    margin-bottom: 5px;
+    /* Espacio inferior antes del botón de cerrar */
 }
 
 /* Estilos para las etiquetas */
 .addTaskBox div form label {
-    color: var(--mainColor); /* Color del texto de las etiquetas */
-    text-align: left; /* Alinea el texto de la etiqueta a la izquierda */
-    margin-bottom: -10px; /* Ajuste para acercar label al input */
+    color: var(--secondaryColor);
+    /* Color del texto de las etiquetas */
+    text-align: left;
+    /* Alinea el texto de la etiqueta a la izquierda */
+    margin-bottom: -10px;
+    /* Ajuste para acercar label al input */
     font-weight: 500;
 }
 
@@ -99,50 +114,45 @@ async function addTask() {
 .addTaskBox div form input[type="text"],
 .addTaskBox div form select {
     width: 100%;
-    padding: 12px; /* Padding para hacer los inputs más grandes */
-    border: 2px solid var(--secondaryColor); /* Un borde sutil, con fallback */
-    border-radius: 8px; /* Bordes redondeados */
+    padding: 12px;
+    /* Padding para hacer los inputs más grandes */
+    border: 2px solid var(--secondaryColor);
+    /* Un borde sutil, con fallback */
+    border-radius: 8px;
+    /* Bordes redondeados */
     box-sizing: border-box;
     font-size: 1em;
-    background-color: var(--modalColor);    
-    color: var(--mainColor); /* Color del texto dentro del input */
-    outline: none; /* Quita el contorno al hacer focus */
+    background-color: var(--modalNuevo);
+    color: var(--secondaryColor);
+    /* Color del texto dentro del input */
+    outline: none;
+    /* Quita el contorno al hacer focus */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 5px; /* Ajuste para separar del label */
+    margin-top: 5px;
+    /* Ajuste para separar del label */
 }
 
 .addTaskBox div form input[type="text"]:focus,
 .addTaskBox div form select:focus {
-    border-color: var(--complementaryColor); /* Cambia el borde al enfocar */
-    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2); /* Un suave brillo al enfocar */
+    border-color: var(--complementaryColor);
+    /* Cambia el borde al enfocar */
+    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2);
+    /* Un suave brillo al enfocar */
 }
 
-
-/* Estilo para el botón de "Enviar" (input type="submit") */
-.addTaskBox div form input[type="submit"] {
-    background-color: var(--complementaryColor); /* Color de tus botones principales */
-    color: var(--secondaryColor); /* Color de texto claro */
-    padding: 12px 20px; /* Padding para hacer los botones más grandes */
-    border: none;
-    border-radius: 8px; /* Bordes redondeados */
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    width: 100%; /* Ocupa todo el ancho */
-    margin-top: 10px; /* Espacio superior para separar del último input/select */
-}
 
 .addTaskBox div form input[type="submit"]:hover {
-    background-color: var(--complementaryColor); /* Tono más oscuro al pasar el ratón */
+    background-color: var(--complementaryColor);
+    /* Tono más oscuro al pasar el ratón */
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(106, 13, 173, 0.2);
 }
 
 /* Estilo para el botón "Cerrar" */
-.addTaskBox div > button { /* Apuntamos al botón directamente dentro del div */
-    background-color: var(--secondaryColor); /* Fondo más claro */
-    color: var(--complementaryColor3); /* Color de texto oscuro */
+.addTaskBox div>button {
+
+    background-color: var(--secondaryColor);
+    color: var(--mainColor);
     border: 1px solid var(--complementaryColor3);
     padding: 12px 20px;
     border-radius: 8px;
@@ -151,14 +161,27 @@ async function addTask() {
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
-    margin-top: 15px; /* Un poco más de espacio arriba */
+    margin-top: 15px;
+
 }
 
-.addTaskBox div > button:hover {
+.addTaskBox div>button:hover {
     background-color: var(--secondaryColor);
     transform: translateY(-1px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-
+.sendButton {
+    background-color: var(--complementaryColor);
+    color: var(--secondaryColor);
+    padding: 12px 20px;
+    border: 2px solid var(--secondaryColor);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    margin-top: 10px;
+}
 </style>

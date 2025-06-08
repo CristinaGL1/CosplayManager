@@ -5,32 +5,36 @@
 
     <lateralNav @openCosplayModal="openModal"></lateralNav>
 
-    <section class="cosplayGrid">
-
-      <!--
+    <div class="display">
+      <CosplayOptionsModal v-if="showOptionsModal" :cosplayId="selectedCosplayIdForModal"
+        @close="showOptionsModal = false" @view-dashboard="goToDashboard" @view-details="goToDetails" />
+      <section class="cosplayGrid">
+        <!--
       --------------- NEW COSPLAY CARD ----------------
       -->
 
-      <div class="new-cosplay-item">
-        <div class="new-cosplay-container" @click="showAddCosplay = true">
-          <span class="plus-icon">+</span>
+        <div class="new-cosplay-item">
+          <div class="new-cosplay-container" @click="showAddCosplay = true">
+            <span class="plus-icon">+</span>
+          </div>
+          <div class="new-cosplay-text">Nuevo Cosplay</div>
         </div>
-        <div class="new-cosplay-text">Nuevo Cosplay</div>
-      </div>
 
-      <!--
+        <!--
       ----------------- COSPLAY CARD ------------------
       -->
 
-      <div v-for="cosplay in cosplays" :key="cosplay.id" class="cosplay-item" @click="; setSelectedCosplay(cosplay.id); openModal()">
-        <div class="cosplay-thumbnail">
-          <img v-if="cosplay.imagenURL" :src="'backend' + cosplay.imagenURL" alt="Imagen del cosplay"
-            class="thumbnail-image">
-          <div v-else class="no-image">Sin imagen</div>
+        <div v-for="cosplay in cosplays" :key="cosplay.id" class="cosplay-item"
+          @click="; setSelectedCosplay(cosplay.id); openModal()">
+          <div class="cosplay-thumbnail">
+            <img v-if="cosplay.imagenURL" :src="'backend' + cosplay.imagenURL" alt="Imagen del cosplay"
+              class="thumbnail-image">
+            <div v-else class="no-image">Sin imagen</div>
+          </div>
+          <div class="cosplay-name">{{ cosplay.nombre }}</div>
         </div>
-        <div class="cosplay-name">{{ cosplay.nombre }}</div>
-      </div>
-    </section>
+      </section>
+    </div>
 
     <div class="cosplay-area">
       <AddCosplay v-if="showAddCosplay" @cosplay-agregado="refetchCosplays"
@@ -38,13 +42,12 @@
     </div>
 
     <div v-if="showDetailsModal" class="details-modal-overlay">
-      <CosplayDetails :id="selectedCosplayIdForDetails" @close="showDetailsModal = false"/>
+      <CosplayDetails :id="selectedCosplayIdForDetails" @close="showDetailsModal = false" />
     </div>
 
   </div>
 
-  <CosplayOptionsModal v-if="showOptionsModal" :cosplayId="selectedCosplayIdForModal" @close="showOptionsModal = false"
-    @view-dashboard="goToDashboard" @view-details="goToDetails"/>
+
 </template>
 
 <script setup>
@@ -124,6 +127,12 @@ const setSelectedCosplay = (id) => {
   box-sizing: border-box;
 }
 
+.display {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .gridScroll {
   width: 10vw;
   background-color: var(--mainColor);
@@ -144,13 +153,13 @@ const setSelectedCosplay = (id) => {
   width: 80vw;
   padding: 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 220px);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 25px;
   background-color: transparent;
   overflow-y: auto;
-  justify-content: center;
-  align-items: start;
+  align-content: start;
   flex-grow: 1;
+
 }
 
 /* Estilos para la tarjeta de detalles */
@@ -164,6 +173,8 @@ const setSelectedCosplay = (id) => {
   padding: 20px;
   margin-left: 20px;
   /* Espacio entre la grid y la tarjeta */
+
+
 }
 
 .new-cosplay-item {
@@ -193,6 +204,7 @@ const setSelectedCosplay = (id) => {
   text-align: center;
   border: 2px solid var(--secondaryColor);
 
+
   /* Añadimos un borde gris claro */
 
 }
@@ -208,6 +220,7 @@ const setSelectedCosplay = (id) => {
   background-color: var(--secondaryColor);
   overflow: hidden;
   /* Importante para que la imagen no se salga */
+
 }
 
 .thumbnail-image {
@@ -217,6 +230,7 @@ const setSelectedCosplay = (id) => {
   /* Hace que la imagen cubra el contenedor */
   border-radius: 20px;
   /* Para que coincida con el borde del cuadrado */
+
 }
 
 .no-image {
@@ -268,6 +282,7 @@ const setSelectedCosplay = (id) => {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.1);
+
   /* Fondo oscuro semitransparente */
   display: flex;
   justify-content: center;
