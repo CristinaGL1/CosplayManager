@@ -80,7 +80,6 @@ app.post('/register', async (req, res) => {
     }
 
     try {
-
         // Insertar el nuevo usuario en la base de datos
         const sql = 'INSERT INTO usuarios (email, password) VALUES (?, ?)';
         connection.query(sql, [email, password], (err, result) => {
