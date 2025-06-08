@@ -34,7 +34,7 @@
                         <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
                     </div>
                     <div class="kanbanBox-taskBox" v-for="task in taskInProcessList" :key="task.id">
-                        <div class="kanbanBox-card">
+                        <div class="kanbanBox-card" @click="setTaskSelected(task.id); toggleTaskOptionsModal()">
                             <span class="kanbanBox-card-title">{{ task.nombre }}</span>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                         <button class="kanbanBox-titleBox-addButton" @click="toggleAddTaskModal">+</button>
                     </div>
                     <div class="kanbanBox-taskBox" v-for="task in taskFinishList" :key="task.id">
-                        <div class="kanbanBox-card">
+                        <div class="kanbanBox-card" @click="setTaskSelected(task.id); toggleTaskOptionsModal()">
                             <span class="kanbanBox-card-title">{{ task.nombre }}</span>
                         </div>
                     </div>
@@ -335,14 +335,14 @@ const goToDetails = (id) => {
     box-shadow: 0 0 0px 0px var(--secondaryColor);
 
     font-size: 1.25rem;
-    transition: font-size 0.15s, box-shadow 0.25s;
+    transition: background-color 0.15s,color 0.15s, box-shadow 0.25s;
     object-fit: cover;
 }
 
 .kanbanBox-card:hover {
     cursor: pointer;
-    font-size: 1.5rem;
-
+    background-color: var(--secondaryColor);
+    color: var(--mainColor);
     box-shadow: 0 0 5px 0px var(--secondaryColor);
 }
 

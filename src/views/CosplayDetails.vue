@@ -92,7 +92,7 @@
               </small>
             </label>
 
-            <div class="edit-button-group">
+            <div class="edit-button-group marginButtons">
               <button @click="cancelarEdicion" class="registerButton">Cancelar</button>
               <input type="submit" @click="guardarEdicion" class="registerButton" value="Guardar"></input>
             </div>
@@ -647,5 +647,10 @@ onMounted(() => {
   color: var(--complementaryColor);
   margin-top: 50px;
   font-size: 1.2em;
+  
+}
+
+.marginButtons{
+  padding-top: 4.45rem;
 }
 </style>

@@ -6,8 +6,8 @@
       <h1>CosplayManager</h1>
     </div>
 
-    <div class="navbar-actions">
-      <button @click="home" class="logout-icon">
+    <div class="navbar-actions" v-if=(isLogged)>
+      <button @click="home" class="logout-icon" >
         <img src="/src/icons/casa.svg" alt="Home" class="navbar-icon" />
       </button>
       <button @click="logout" class="logout-icon">
@@ -23,6 +23,8 @@ import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie'
 
 const router = useRouter();
+const isLogged = Cookies.get('userID');
+console.log(isLogged)
 
 //Funcion para borrar el Local Storage y salir al login
 function logout() {

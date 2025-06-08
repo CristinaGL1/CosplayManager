@@ -346,6 +346,29 @@ app.get('/api/getTask/:id', async (req, res) => {
     });
 });
 
+app.put('/saveTaskEdit/:id', async (req, res) => {
+    const id = req.params.id;
+    const { nombre, estado, descripcion, coste, progreso } = req.body;
+
+    try {
+        const sql = 'UPDATE tasks SET nombre = ?, estado = ?, descripcion = ?, coste = ?, progreso = ? WHERE id = ?';
+        connection.query(sql, [nombre, estado, descripcion, coste, progreso, id], (err, result) => {
+            if (err) {
+                console.error('Error al actualizar la tarea:', err);
+                return res.status(500).json({ message: 'Error interno del servidor.' });
+            }
+            if (result.affectedRows > 0) {
+                res.status(200).json({ message: 'Tarea actualizada exitosamente.' });
+            } else {
+                res.status(404).json({ message: 'Tarea no encontrada.' });
+            }
+        });
+    } catch (error) {
+        console.error('Error en el proceso de actualización:', error);
+        res.status(500).json({ message: 'Error interno del servidor.' });
+    }
+});
+
 // Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor Node.js escuchando en http://localhost:${port}`);

@@ -1,7 +1,6 @@
 <template>
     <section class="lateralNav">
         <h1>Lista de Cosplays</h1>
-        <input type="text" placeholder="Buscar cosplay"></input>
         <div v-for="cosplay in cosplays" :key="cosplay.id" class="lateralCosplayBox" >
             <div class="lateralCosplayButton" @click="setSelectedCosplay(cosplay.id); emit('openCosplayModal')">
                 <h4>{{ cosplay.nombre }}</h4>
@@ -65,7 +64,7 @@ function setSelectedCosplay(id) {
 
 .lateralNav h1 {
     margin-top: 0;
-    margin-bottom: 5px;
+    margin-bottom: 2rem;
     font-size: 1.75rem;
 }
 

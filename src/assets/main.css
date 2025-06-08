@@ -4,7 +4,7 @@
 body {
   margin: 0;
   background: linear-gradient(to left, #4D4566,#4D4566);
-  font-family: 'Poppins', sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   color: black;
   min-height: 100vh;
   display: flex;
